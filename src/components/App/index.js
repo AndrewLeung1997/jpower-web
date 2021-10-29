@@ -28,7 +28,7 @@ export default function App() {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Registration} />
                     <Route exact path="/UploadFile" component={FileUpload} />
-                    <Route exact path="/" component={Home}></Route>
+                    <Route exact path="/" component={FileUpload}></Route>
                     <Route exact path="/Player" component={Player}></Route>
                 </Switch>
             </Router>
