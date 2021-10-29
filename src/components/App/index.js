@@ -30,6 +30,7 @@ export default function App() {
                     <Route exact path="/UploadFile" component={FileUpload} />
                     <Route exact path="/" component={FileUpload}></Route>
                     <Route exact path="/Player" component={Player}></Route>
+                    <Route exact path="/Home" component={Home}></Route>
                 </Switch>
             </Router>
         </MuiThemeProvider>
