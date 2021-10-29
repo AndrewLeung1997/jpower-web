@@ -33,7 +33,7 @@ const styles = theme => ({
 
     },
     Tag: {
-        width: theme.spacing.unit * 7,
+        width: theme.spacing.unit * 10,
         backgroundColor: "#FFC0CB",
         textAlign: 'center',
         borderRadius: '10px',
