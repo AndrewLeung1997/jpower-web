@@ -29,7 +29,7 @@ export default function App() {
                     <Route exact path="/register" component={Registration} />
                     <Route exact path="/UploadFile" component={FileUpload} />
                     <Route exact path="/" component={Home}></Route>
-                    <Route exact path="/Player/videoURL/:videoURL" component={Player}></Route>
+                    <Route exact path="/Player" component={Player}></Route>
                 </Switch>
             </Router>
         </MuiThemeProvider>

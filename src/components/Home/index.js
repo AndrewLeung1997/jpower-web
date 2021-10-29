@@ -77,7 +77,7 @@ function Home(props) {
                         return (
                             <div className="col-md-3">
                                 <Card className={classes.Card}>
-                                    <CardActionArea component={Link} to={{pathname: `/Player/videoURL/${value.url}`}}>
+                                    <CardActionArea component={Link} to={{pathname: `/Player`}}>
                                         <CardMedia
                                             className={classes.CardMedia}
                                             component="video"

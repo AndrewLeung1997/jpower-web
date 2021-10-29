@@ -43,7 +43,7 @@ function Player(props) {
                     className="react-player"
                     config={{ file: { attributes: { controlsList: 'nodownload' } } }}
                     onContextMenu={e => e.preventDefault()}
-                    url={url}
+                    url="https://firebasestorage.googleapis.com/v0/b/jpower-8c20e.appspot.com/o/folder%2F15333670.mp4?alt=media&token=4739825a-13b9-4da7-b4fc-15d5f5f98344"
                     controls={true}
                     width="100%">
                 </ReactPlayer>
