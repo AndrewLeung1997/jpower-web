@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Paper, Card, CardActionArea, CardMedia, CardContent } from '@material-ui/core'
+import { Typography, Paper, Card, CardActionArea, CardMedia, CardContent, Button } from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
 import firebase from '../../firebase'
@@ -19,8 +19,20 @@ const styles = theme => ({
             marginRight: 'auto',
         },
     },
+
+    relatedVideoPaper:{
+        
+            marginTop: theme.spacing.unit * 3,
+            marginBottom: theme.spacing.unit *6,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
+        
+    },
     paper: {
         marginTop: theme.spacing.unit * 8,
+        marginBottom: theme.spacing.unit *6,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -28,8 +40,8 @@ const styles = theme => ({
     },
 
     videoName: {
-        paddingTop: '20px',
-        paddingBottom: '10px',
+        marginTop: theme.spacing.unit * 3,
+
         fontSize: '20px'
     },
     Tag: {
@@ -46,11 +58,30 @@ const styles = theme => ({
         height: theme.spacing.unit * 40
 
     },
+    VideoCard: {
+
+        marginTop: theme.spacing.unit * 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'left',
+        padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
+        height: theme.spacing.unit * 60
+    },
     CardMedia: {
         paddingLeft: theme.spacing.unit * 1,
         paddingRight: theme.spacing.unit * 1,
         paddingTop: theme.spacing.unit * 1
-    }
+    },
+    titleBar: {
+        display: 'block',
+        width: '100%',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        lineHeight: 'normal'
+    },
+    submit: {
+        marginTop: theme.spacing.unit * 3,
+    },
 
 })
 
@@ -58,6 +89,7 @@ function Player(props) {
 
     const { classes } = props
     const [relatedVideo, setRelatedVideo] = useState([])
+    const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
         getVideoByTag()
@@ -67,38 +99,65 @@ function Player(props) {
 
         <main className={classes.main}>
             <Bar></Bar>
-            <Paper className={classes.paper}>
-                <Typography className={classes.videoName} component="h2" variant="h5" align='left'>
-                    {props.location.state.videoName}
-                </Typography>
-                <ReactPlayer
-                    className="react-player"
-                    config={{ file: { attributes: { controlsList: 'nodownload' } } }}
-                    onContextMenu={e => e.preventDefault()}
-                    url={props.location.state.url}
-                    controls={true}
-                    width="100%">
-                </ReactPlayer>
-                {/* <div className="row">
-                    <div className="col-md-4">
-                        <label>Category</label>
-                    </div>
-                    <div className="col-md-8">
 
-                    </div>
+            <div className="row">
+                <div className="col-md-6">
+                    <Card className={classes.VideoCard}>
+                        <CardMedia
+                            className={classes.CardMedia}
+                            component="video"
+                            alt="video"
+                            width="50%"
+                            height='300'
+                            title={props.location.state.videoName}
+                            src={props.location.state.url}
+                            controls={true}
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                {props.location.state.videoName}
+                            </Typography>
+                            <Typography gutterBottom variant="h8" component="div">
+                                {convertTimeStamp(props.location.state.timestamp)}
+                            </Typography>
+                            <Button type="submit"
+                                variant="contained"
+                                color="secondary"
+                                component
+                                ={Link} to={{pathname: `/filter/category/${props.location.state.category}`,
+                                state: {
+                                    category: props.location.state.category
+                                }
+                            }}
+                                className={classes.submit}>
+                                {props.location.state.category}
+                            </Button>
+                        </CardContent>
+                    </Card>
                 </div>
-                <div className="row">
-                    <div className="col-md-4">
-                        <div className={classes.Tag}>
-                        {props.location.state.category}
+                <div className="col-md-6">
+                    <Paper className={classes.paper}>
+                        <Typography component="h1" variant="h5">所有標籤</Typography>
+                        <div className="well" >
+                            {categoryArray.map(function (value, index) {
+                                return (
+                                    <Button className={classes.submit}
+                                        id={index} component={Link} to={{
+                                            pathname: `/filter/category/${value}`,
+                                            state: {
+                                                category: value
+                                            }
+                                        }}>{value}</Button>
+                                )
+                            })}
                         </div>
-                    </div>
-                    <div className="col-md-8">
+                    </Paper>
 
-                    </div>
-                </div> */}
-            </Paper>
-            <Paper className={classes.paper}>
+                </div>
+            </div>
+
+
+            <Paper className={classes.relatedVideoPaper}>
                 <Typography className={classes.videoName} component="h2" variant="h5" align='left'>相關影片</Typography>
                 <div className="row">
                     {relatedVideo.map(function (value, index) {
@@ -138,7 +197,6 @@ function Player(props) {
                                             </Typography>
                                         </CardContent>
                                     </CardActionArea>
-
                                 </Card>
                             </div>
                         )

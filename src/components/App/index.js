@@ -8,6 +8,7 @@ import Login from '../Login'
 import Registration from '../Registration'
 import Home from '../Home'
 import Player from '../Player'
+import Filter from '../Filter'
 const theme = createTheme()
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
                     <Route exact path="/file" component={FileUpload}></Route>
                     <Route exact path="/player" component={Player}></Route>
                     <Route exact path="/" component={Home}></Route>
+                    <Route exact path="/filter/category/:category" component={Filter}></Route>
                 </Switch>
             </Router>
         </MuiThemeProvider>

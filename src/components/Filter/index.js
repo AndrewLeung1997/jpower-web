@@ -58,7 +58,7 @@ const styles = theme => ({
     }
 })
 
-function Home(props) {
+function Filter(props) {
 
     const { classes } = props
     const [videoList, setVideoList] = useState([])
@@ -70,14 +70,15 @@ function Home(props) {
 
     useEffect(() => {
         getAllMedia()
-    }, [pageNumber, totalDataCount])
+        filterVideoByCategory()
+    }, [pageNumber, totalDataCount,])
 
     return (
         <main className={classes.main}>
             <Bar></Bar>
             <Paper className={classes.paper}>
                 <Typography component="h1" variant="h5" align={'left'}>
-                    所有視頻
+                   關於 {props.location.state.category} 的視頻
                 </Typography>
                 <div className="row">
                     {videoList.map(function (value, index) {
@@ -162,6 +163,23 @@ function Home(props) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
 
+    function filterVideoByCategory(){
+        const filterArray = []
+        firebase.database().ref("VideoList/").orderByChild('category').equalTo(props.location.state.category).on('value', function (snapshot) {
+            if (snapshot.exists()) {
+                var keys = Object.keys(snapshot.val())
+                setTotalDataCount(keys.length)
+                snapshot.forEach(function (result) {
+                    filterArray.push(result.val())
+                })
+                setVideoList(paginate(filterArray, dataRange, pageNumber + 1))
+            } else {
+                setVideoList(filterArray)
+                setTotalDataCount(0)
+            }
+        })
+
+    }
 
     function getAllMedia() {
         firebase.database().ref('VideoList/').on('value', function (snapshot) {
@@ -184,6 +202,7 @@ function Home(props) {
     }
 
 
+
     function convertTimeStamp(timestamp) {
         var date = new Date(timestamp)
         var year = date.getFullYear()
@@ -204,4 +223,4 @@ function Home(props) {
 
 }
 
-export default withRouter(withStyles(styles)(Home))
+export default withRouter(withStyles(styles)(Filter))

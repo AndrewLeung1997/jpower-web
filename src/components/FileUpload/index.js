@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, LinearProgress } from '@material-ui/core'
+import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, LinearProgress,Select, MenuItem } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
@@ -54,6 +54,7 @@ function FileUpload(props) {
     const [uploadStatus, setUploadStatus] = useState(false)
     const [category, setCategory] = useState('')
     const [fileName, setFileName] = useState('')
+    const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
 
     return (
         <main className={classes.main}>
@@ -79,7 +80,7 @@ function FileUpload(props) {
                                     <Button variant="contained" color="primary" component="span">
                                         Upload
                                     </Button>
-                                    <label style={{ marginLeft: '10px', fontWeight:'bold'}} htmlFor="filename">{file !== '' ? file.name : '請上傳你的影片'}</label>
+                                    <label style={{ marginLeft: '10px', fontWeight: 'bold' }} htmlFor="filename">{file !== '' ? file.name : '請上傳你的影片'}</label>
                                 </label>
                             </FormControl>
                         </div>
@@ -87,15 +88,21 @@ function FileUpload(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="category">標籤</InputLabel>
-                                <Input type="text" id="category" name="category" autoComplete="off" autoFocus onChange={(e) => setCategory(e.target.value)}></Input>
+                                <InputLabel htmlFor="category">AV 類型</InputLabel>
+                                <Select name="category" id="category" autoComplete="off" value={category} onChange={e => setCategory(e.target.value)}>
+                                    {categoryArray.map(function (value) {
+                                        return (
+                                            <MenuItem value={value}>{value}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
                             </FormControl>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="fileName">影片標題</InputLabel>
+                                <InputLabel htmlFor="fileName">AV標題</InputLabel>
                                 <Input type="text" id="fileName" name="fileName" autoComplete="off" autoFocus onChange={(e) => setFileName(e.target.value)}></Input>
                             </FormControl>
                         </div>
