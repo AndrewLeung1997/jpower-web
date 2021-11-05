@@ -27,6 +27,7 @@ const styles = theme => ({
         alignItems: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
     },
+
     Card: {
         marginTop: theme.spacing.unit * 2,
         height: theme.spacing.unit * 40
@@ -34,6 +35,7 @@ const styles = theme => ({
     },
     Tag: {
         width: theme.spacing.unit * 10,
+
         backgroundColor: "#FFC0CB",
         textAlign: 'center',
         borderRadius: '10px',
@@ -55,11 +57,11 @@ function Home(props) {
     const { classes } = props
     const [videoList, setVideoList] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(20)
+    const [dataRange] = useState(15)
     const [pageNumber, setPageNumber] = useState(0)
     const [data, setData] = useState('')
     const [selected, setSelected] = useState(props)
-   
+
 
     useEffect(() => {
         getAllMedia()
@@ -77,7 +79,15 @@ function Home(props) {
                         return (
                             <div className="col-md-3">
                                 <Card className={classes.Card}>
-                                    <CardActionArea component={Link} to={{pathname: `/Player`}}>
+                                    <CardActionArea component={Link} to={{
+                                        pathname: "/player",
+                                        state: {
+                                            url: value.url,
+                                            videoName : value.fileName,
+                                            category: value.category,
+                                            timestamp: value.timestamp
+                                        } 
+                                    }}>
                                         <CardMedia
                                             className={classes.CardMedia}
                                             component="video"
@@ -91,7 +101,6 @@ function Home(props) {
                                         <CardContent>
                                             <Typography gutterBottom variant="h8" component="div">
                                                 {value.fileName}
-                                                {console.log(value.fileName.length)}
                                             </Typography>
                                             <Typography gutterBottom variant="h8" component="div">
                                                 {convertTimeStamp(value.timestamp)}
@@ -134,8 +143,15 @@ function Home(props) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
 
-    function partentToChild(){
-        setData("This is data from parent component to the child component")
+    function getVideoTag() {
+        var mediaTagArray = []
+        firebase.database().ref('VideoList/').orderByChild('category').on('value', function (snapshot) {
+            if (snapshot.val()) {
+                snapshot.forEach(function (video) {
+
+                })
+            }
+        })
     }
 
     function getAllMedia() {

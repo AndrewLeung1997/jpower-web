@@ -68,8 +68,19 @@ function FileUpload(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="file">文件</InputLabel>
-                                <Input type="file" id="file" name="file" autoComplete="off" autoFocus onChange={(e) => { setFile(e.target.files[0]) }}></Input>
+                                <input
+                                    style={{ display: "none" }}
+                                    id="contained-button-file"
+                                    onChange={(e) => { setFile(e.target.files[0]) }}
+                                    type="file"
+                                />
+
+                                <label htmlFor="contained-button-file">
+                                    <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                    </Button>
+                                    <label style={{ marginLeft: '10px', fontWeight:'bold'}} htmlFor="filename">{file !== '' ? file.name : '請上傳你的影片'}</label>
+                                </label>
                             </FormControl>
                         </div>
                     </div>
@@ -103,7 +114,7 @@ function FileUpload(props) {
                         className={classes.submit}>
                         上傳
                     </Button>
-                    
+
                 </form>
             </Paper>
         </main>
@@ -138,9 +149,9 @@ function FileUpload(props) {
                         })
                     })
                     alert("成功上傳")
-                    
+
                     setUploadStatus(false)
-                    
+
                 }
             )
 
