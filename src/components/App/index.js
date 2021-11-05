@@ -28,9 +28,9 @@ export default function App() {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Registration} />
                     <Route exact path="/upload" component={FileUpload} />
-                    <Route exact path="/" component={FileUpload}></Route>
+                    <Route exact path="/file" component={FileUpload}></Route>
                     <Route exact path="/player" component={Player}></Route>
-                    <Route exact path="/home" component={Home}></Route>
+                    <Route exact path="/" component={Home}></Route>
                 </Switch>
             </Router>
         </MuiThemeProvider>
