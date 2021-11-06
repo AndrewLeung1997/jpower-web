@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Paper, Card, CardActionArea, CardMedia, CardContent, Button } from '@material-ui/core'
+import { Typography, Paper, Card, CardActionArea, CardMedia, CardContent, Button, CardActions } from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
 import firebase from '../../firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
-import ReactPlayer from 'react-player'
 import Bar from '../Bar'
+import bcmaster from '../../file/bcmaster.gif'
+import bc from '../../file/bc.mp4'
 
 const styles = theme => ({
     main: {
@@ -20,19 +21,19 @@ const styles = theme => ({
         },
     },
 
-    relatedVideoPaper:{
-        
-            marginTop: theme.spacing.unit * 3,
-            marginBottom: theme.spacing.unit *6,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
-        
+    relatedVideoPaper: {
+
+        marginTop: theme.spacing.unit * 3,
+        marginBottom: theme.spacing.unit * 6,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
+
     },
     paper: {
         marginTop: theme.spacing.unit * 8,
-        marginBottom: theme.spacing.unit *6,
+        marginBottom: theme.spacing.unit * 6,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -82,6 +83,13 @@ const styles = theme => ({
     submit: {
         marginTop: theme.spacing.unit * 3,
     },
+    adView: {
+        position: 'absolute',
+        left: 50,
+        top: 50,
+
+
+    }
 
 })
 
@@ -90,8 +98,34 @@ function Player(props) {
     const { classes } = props
     const [relatedVideo, setRelatedVideo] = useState([])
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
+    const [displayAD, setDisplayAD] = useState(true)
+    const [controlVideo, setControlVideo] = useState(true)
+    const [url, setUrl] = useState('')
+    const [count, setCount] = useState(0)
+    const [intervalID, setIntervalID] = useState(-1)
+
+    function startInterval() {
+        setIntervalID(setInterval(() => {
+            setCount(prev => (prev + 1))
+            setUrl(bc)
+            setControlVideo(true)
+        }, 1000))
+
+    }
+
+    function stopInterval() {
+
+        if (count >= 10) {
+            clearInterval(intervalID)
+            setIntervalID(-1)
+            setCount(0)
+            setUrl(props.location.state.url)
+            setControlVideo(false)
+        }
+    }
 
     useEffect(() => {
+        startInterval()
         getVideoByTag()
     }, [])
 
@@ -99,20 +133,23 @@ function Player(props) {
 
         <main className={classes.main}>
             <Bar></Bar>
-
             <div className="row">
                 <div className="col-md-6">
                     <Card className={classes.VideoCard}>
-                        <CardMedia
-                            className={classes.CardMedia}
-                            component="video"
-                            alt="video"
-                            width="50%"
-                            height='300'
-                            title={props.location.state.videoName}
-                            src={props.location.state.url}
-                            controls={true}
-                        />
+                        <CardActions>
+                            <CardMedia
+                                className={classes.CardMedia}
+                                component="video"
+                                alt="video"
+                                width="50%"
+                                height='300'
+                                title={props.location.state.videoName}
+                                src={url}
+                                controls={true}
+                                autoPlay={controlVideo}
+
+                            />
+                        </CardActions>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 {props.location.state.videoName}
@@ -124,14 +161,25 @@ function Player(props) {
                                 variant="contained"
                                 color="secondary"
                                 component
-                                ={Link} to={{pathname: `/filter/category/${props.location.state.category}`,
-                                state: {
-                                    category: props.location.state.category
-                                }
-                            }}
+                                ={Link} to={{
+                                    pathname: `/filter/category/${props.location.state.category}`,
+                                    state: {
+                                        category: props.location.state.category
+                                    }
+                                }}
                                 className={classes.submit}>
                                 {props.location.state.category}
                             </Button>
+                            {controlVideo ? <Button type="submit"
+                                variant="contained"
+                                color="primary"
+                                onClick={stopInterval}
+                                className={classes.submit}
+                                style={{ marginLeft: '20px' }}
+                            >
+                                略過廣告
+                            </Button> : <div></div>}
+
                         </CardContent>
                     </Card>
                 </div>
@@ -152,7 +200,13 @@ function Player(props) {
                             })}
                         </div>
                     </Paper>
-
+                    <div className="row">
+                        <div className="col-md-12">
+                            <a href="http://www.bcmvip.com/index.php?intr=2377" target="_blank">
+                                <img src={bcmaster} style={{ width: '70%', height: '250px' }}></img>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 

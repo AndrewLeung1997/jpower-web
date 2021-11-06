@@ -6,6 +6,7 @@ import { Link, withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
+import moment from 'moment'
 
 const styles = theme => ({
     main: {
@@ -63,7 +64,7 @@ function Home(props) {
     const { classes } = props
     const [videoList, setVideoList] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(15)
+    const [dataRange] = useState(20)
     const [pageNumber, setPageNumber] = useState(0)
     
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
@@ -164,6 +165,7 @@ function Home(props) {
 
 
     function getAllMedia() {
+        
         firebase.database().ref('VideoList/').on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()

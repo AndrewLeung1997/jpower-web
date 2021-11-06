@@ -65,13 +65,15 @@ function Filter(props) {
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange] = useState(15)
     const [pageNumber, setPageNumber] = useState(0)
+    const [category, setCategory] = useState('')
     
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
+        console.log("!!")
         getAllMedia()
         filterVideoByCategory()
-    }, [pageNumber, totalDataCount,])
+    }, [pageNumber, totalDataCount, category])
 
     return (
         <main className={classes.main}>
@@ -83,7 +85,7 @@ function Filter(props) {
                 <div className="row">
                     {videoList.map(function (value, index) {
                         return (
-                            <div className="col-sm-4 col-md-3 col-lg-3">
+                            <div className="col-md-3">
                                 <Card className={classes.Card}>
                                     <CardActionArea component={Link} to={{
                                         pathname: "/player",
@@ -147,10 +149,7 @@ function Filter(props) {
                     {categoryArray.map(function (value, index) {
                         return (
                             <Button className={classes.submit} 
-                             id={index} component={Link} to={{pathname: `/filter/category/${value}`,
-                            state: {
-                                category: value
-                            }}}>{value}</Button>
+                             id={index} onClick={e=> setCategory(e.target.value)}>{value}</Button>
                         )
                     })}
                 </div>
