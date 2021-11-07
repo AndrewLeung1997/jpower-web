@@ -86,12 +86,13 @@ function Home(props) {
                             <div className="col-sm-4 col-md-3 col-lg-3">
                                 <Card className={classes.Card}>
                                     <CardActionArea component={Link} to={{
-                                        pathname: "/player",
+                                        pathname: `/player/id/${value.id}`,
                                         state: {
                                             url: value.url,
                                             videoName: value.fileName,
                                             category: value.category,
-                                            timestamp: value.timestamp
+                                            timestamp: value.timestamp,
+                                            id: value.id
                                         }
                                     }}>
                                         <CardMedia

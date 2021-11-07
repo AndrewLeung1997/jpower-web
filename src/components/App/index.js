@@ -30,7 +30,7 @@ export default function App() {
                     <Route exact path="/register" component={Registration} />
                     <Route exact path="/upload" component={FileUpload} />
                     <Route exact path="/file" component={FileUpload}></Route>
-                    <Route exact path="/player" component={Player}></Route>
+                    <Route exact path="/player/id/:id" component={Player}></Route>
                     <Route exact path="/" component={Home}></Route>
                     <Route exact path="/filter/category/:category" component={Filter}></Route>
                 </Switch>

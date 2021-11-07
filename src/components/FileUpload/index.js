@@ -54,6 +54,7 @@ function FileUpload(props) {
     const [uploadStatus, setUploadStatus] = useState(false)
     const [category, setCategory] = useState('')
     const [fileName, setFileName] = useState('')
+    const [id, setID] = useState('')
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
 
     return (
@@ -103,7 +104,15 @@ function FileUpload(props) {
                         <div className="col-sm-12">
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="fileName">AV標題</InputLabel>
-                                <Input type="text" id="fileName" name="fileName" autoComplete="off" autoFocus onChange={(e) => setFileName(e.target.value)}></Input>
+                                <Input type="text" id="fileName" name="fileName" autoComplete="off" value={fileName} onChange={(e) => setFileName(e.target.value)}></Input>
+                            </FormControl>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="fileName">視頻 ID</InputLabel>
+                                <Input type="text" id="fileName" name="fileName" autoComplete="off" value={id} onChange={(e) => setID(e.target.value)} onBlur={onVerifyVideoID}></Input>
                             </FormControl>
                         </div>
                     </div>
@@ -126,6 +135,13 @@ function FileUpload(props) {
             </Paper>
         </main>
     )
+
+    async function onVerifyVideoID(){
+		if(memberID.length < 5){
+			alert("Member ID must be 5 digits")
+			return 
+		}
+	}
 
     async function uploadFile() {
         if (file == null) {
@@ -152,13 +168,19 @@ function FileUpload(props) {
                             url,
                             category,
                             timestamp,
-                            fileName
+                            fileName,
+                            id
                         })
                     })
                     alert("成功上傳")
 
                     setUploadStatus(false)
-
+                    setFile('')
+                    setFileName('')
+                    setID('')
+                    setCategory('')
+                    setUrl('')
+                    
                 }
             )
 
