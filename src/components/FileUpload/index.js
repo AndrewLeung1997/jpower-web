@@ -137,7 +137,7 @@ function FileUpload(props) {
     )
 
     async function onVerifyVideoID(){
-		if(memberID.length < 5){
+		if(id.length < 5){
 			alert("Member ID must be 5 digits")
 			return 
 		}
