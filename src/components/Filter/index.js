@@ -150,7 +150,12 @@ function Filter(props) {
                     {categoryArray.map(function (value, index) {
                         return (
                             <Button className={classes.submit} 
-                             id={index} onClick={e=> setCategory(e.target.value)}>{value}</Button>
+                             id={index}  component={Link} to={{
+                                pathname: `/filter/category/${value}`,
+                                state: {
+                                    category: value
+                                }
+                            }}>{value}</Button>
                         )
                     })}
                 </div>

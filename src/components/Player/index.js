@@ -98,11 +98,18 @@ function Player(props) {
     const { classes } = props
     const [relatedVideo, setRelatedVideo] = useState([])
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
-    const [displayAD, setDisplayAD] = useState(true)
+    const [video, setVideo] = useState([])
     const [controlVideo, setControlVideo] = useState(true)
     const [url, setUrl] = useState('')
     const [count, setCount] = useState(0)
     const [intervalID, setIntervalID] = useState(-1)
+    const [category, setCategory] = useState('')
+    const [videoUrl, setVideoUrl] = useState('')
+    const [videoName, setVideoName] = useState('')
+    const [timestamp, setTimeStamp] = useState('')
+    const id = props.match.params.id
+
+    console.log(id)
 
     function startInterval() {
         setIntervalID(setInterval(() => {
@@ -119,15 +126,17 @@ function Player(props) {
             clearInterval(intervalID)
             setIntervalID(-1)
             setCount(0)
-            setUrl(props.location.state.url)
+            setUrl(videoUrl)
             setControlVideo(false)
         }
     }
 
     useEffect(() => {
         startInterval()
-        getVideoByTag()
+        getVideoByID()
+
     }, [])
+
 
     return (
 
@@ -143,7 +152,7 @@ function Player(props) {
                                 alt="video"
                                 width="50%"
                                 height='300'
-                                title={props.location.state.videoName}
+                                title={videoName}
                                 src={url}
                                 controls={true}
                                 autoPlay={controlVideo}
@@ -152,23 +161,23 @@ function Player(props) {
                         </CardActions>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
-                                {props.location.state.videoName}
+                                {videoName}
                             </Typography>
                             <Typography gutterBottom variant="h8" component="div">
-                                {convertTimeStamp(props.location.state.timestamp)}
+                                {convertTimeStamp(timestamp)}
                             </Typography>
                             <Button type="submit"
                                 variant="contained"
                                 color="secondary"
                                 component
                                 ={Link} to={{
-                                    pathname: `/filter/category/${props.location.state.category}`,
+                                    pathname: `/filter/category/${category}`,
                                     state: {
-                                        category: props.location.state.category
+                                        category: category
                                     }
                                 }}
                                 className={classes.submit}>
-                                {props.location.state.category}
+                                {category}
                             </Button>
                             {controlVideo ? <Button type="submit"
                                 variant="contained"
@@ -179,11 +188,11 @@ function Player(props) {
                             >
                                 略過廣告
                             </Button> : <div></div>}
-
                         </CardContent>
                     </Card>
                 </div>
-                <div className="col-md-6">
+
+                < div className="col-md-6" >
                     <Paper className={classes.paper}>
                         <Typography component="h1" variant="h5">所有標籤</Typography>
                         <div className="well" >
@@ -208,8 +217,8 @@ function Player(props) {
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div >
 
             <Paper className={classes.relatedVideoPaper}>
                 <Typography className={classes.videoName} component="h2" variant="h5" align='left'>相關影片</Typography>
@@ -219,15 +228,8 @@ function Player(props) {
                             <div className="col-md-3">
                                 <Card className={classes.Card}>
                                     <CardActionArea component={Link} to={{
-                                        pathname: `/player/id/${value.id}`,
-                                        state: {
-                                            url: value.url,
-                                            videoName: value.fileName,
-                                            category: value.category,
-                                            timestamp: value.timestamp,
-                                            id: value.id
-                                        }
-                                    }}>
+                                        pathname: `/player/id/${value.id}`
+                                    }} target="_blank">
                                         <CardMedia
                                             className={classes.CardMedia}
                                             component="video"
@@ -262,6 +264,7 @@ function Player(props) {
 
     )
 
+
     function convertTimeStamp(timestamp) {
         var date = new Date(timestamp)
         var year = date.getFullYear()
@@ -280,10 +283,34 @@ function Player(props) {
         return newDate
     }
 
+    function getVideoByID() {
 
-    function getVideoByTag() {
+        const videoArray = []
+        firebase.db.ref("VideoList/").orderByChild('id').equalTo(id).on('value', function (snapshot) {
+            if (snapshot.exists()) {
+
+                snapshot.forEach(function (result) {
+                    videoArray.push(result.val())
+                })
+                setVideo(videoArray)
+                videoArray.map(function (value, index) {
+                    setVideoUrl(value.url)
+                    setCategory(value.category)
+                    setVideoName(value.fileName)
+                    setTimeStamp(value.timestamp)
+
+                    getVideoByTag(value.category)
+                })
+            }
+        })
+    }
+
+
+    function getVideoByTag(category) {
+
+
         var filterArray = []
-        firebase.db.ref("VideoList/").orderByChild('category').equalTo(props.location.state.category).limitToFirst(20).on('value', function (snapshot) {
+        firebase.db.ref("VideoList/").orderByChild('category').equalTo(category).limitToFirst(20).on('value', function (snapshot) {
             if (snapshot.exists()) {
 
                 snapshot.forEach(function (result) {
