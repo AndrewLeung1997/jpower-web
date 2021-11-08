@@ -6,14 +6,14 @@ import 'firebase/firebase-storage'
 
 
 const config = {
-    apiKey: "AIzaSyAAQpegNRtJBkq0dNxqtVrfo6qVsl0dAz4",
-    authDomain: "jpower-8c20e.firebaseapp.com",
-    databaseURL : "https://jpower-8c20e-default-rtdb.firebaseio.com",
-    projectId: "jpower-8c20e",
-    storageBucket: "jpower-8c20e.appspot.com",
-    messagingSenderId: "37696400857",
-    appId: "1:37696400857:web:73f50fe3cbd218a38e7dc8",
-    measurementId: "G-6Q2EEV94JZ"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    databaseURL : process.env.DATABASE_URL,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    appId: process.env.APP_ID,
+    measurementId: process.env.MEASUREMENT_ID
 }
 
 class Firebase {
