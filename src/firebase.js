@@ -6,7 +6,7 @@ import 'firebase/firebase-storage'
 
 
 const config = {
-    apiKey: process.env.API_KEY,
+    apiKey: "AIzaSyAAQpegNRtJBkq0dNxqtVrfo6qVsl0dAz4",
     authDomain: "jpower-8c20e.firebaseapp.com",
     databaseURL : "https://jpower-8c20e-default-rtdb.firebaseio.com",
     projectId: "jpower-8c20e",
