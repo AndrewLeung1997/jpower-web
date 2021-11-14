@@ -1,7 +1,17 @@
-var TelegramBot = require('node-telegram-bot-api')
-var token = '2123149644:AAHZ3vigrWnFYZmi58sVaaNcJ79bPKjP5NY'
+const { BorderStyle } = require('@material-ui/icons');
+const Bot = require('node-telegram-bot-api')
+const token = '2123149644:AAHZ3vigrWnFYZmi58sVaaNcJ79bPKjP5NY'
 
-var bot = new TelegramBot(token,{ polling: true })
+let bot;
+
+if(process.env.NODE_ENV === 'production'){
+    bot = new Bot(token)
+    bot.setWebHook('https://www.jpower.tv'+ bot.token)
+}else{
+    bit = new Bot(token, {polling: true})
+}
+
+console.log('Bot server started in the ' + process.env.NODE_ENV +' mode')
 
 var options = {
     reply_markup: JSON.stringify({
@@ -26,3 +36,4 @@ bot.on('new_chat_members', function (message) {
     })
 })
 
+module.exports = TelegramBot
