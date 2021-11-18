@@ -7,6 +7,9 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
 import bcmaster from '../../file/bcmaster.gif'
 import bc from '../../file/bc.mp4'
+import huangchao from '../../file/new.jpeg'
+import huangchaoNew from '../../file/new1.jpeg'
+import draw from '../../file/draw.jpeg'
 
 const styles = theme => ({
     main: {
@@ -66,7 +69,7 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'left',
         padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
-        height: theme.spacing.unit * 60
+        height: theme.spacing.unit * 80
     },
     CardMedia: {
         paddingLeft: theme.spacing.unit * 1,
@@ -160,6 +163,14 @@ function Player(props) {
                             />
                         </CardActions>
                         <CardContent>
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                                        <img src={draw} style={{ width: '100%', height: '180px', paddingTop: '20px', paddingLeft:'50px',paddingRight:'40px' }}></img>
+                                    </a>
+
+                                </div>
+                            </div>
                             <Typography gutterBottom variant="h5" component="div">
                                 {videoName}
                             </Typography>
@@ -211,8 +222,15 @@ function Player(props) {
                     </Paper>
                     <div className="row">
                         <div className="col-md-12">
-                            <a href="http://www.bcmvip.com/index.php?intr=2377" target="_blank">
-                                <img src={bcmaster} style={{ width: '70%', height: '250px' }}></img>
+                            <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
+                                <img src={huangchao} style={{ width: '70%', height: '150px' }}></img>
+                            </a>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <a href="https://www.dc8880.com/?uagt=jpower666&path=root" target="_blank">
+                                <img src={huangchaoNew} style={{ width: '70%', height: '150px', paddingTop: '20px' }}></img>
                             </a>
                         </div>
                     </div>

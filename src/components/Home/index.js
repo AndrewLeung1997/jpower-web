@@ -7,6 +7,7 @@ import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
 import moment from 'moment'
+import give from '../../file/give.jpeg'
 
 const styles = theme => ({
     main: {
@@ -66,7 +67,7 @@ function Home(props) {
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange] = useState(20)
     const [pageNumber, setPageNumber] = useState(0)
-    
+
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
@@ -81,6 +82,14 @@ function Home(props) {
                     所有視頻
                 </Typography>
                 <div className="row">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                                <img src={give} style={{ width: '100%', height: '180px', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                            </a>
+
+                        </div>
+                    </div>
                     {videoList.map(function (value, index) {
                         return (
                             <div className="col-sm-4 col-md-3 col-lg-3">
@@ -147,11 +156,13 @@ function Home(props) {
                 <div className="well" >
                     {categoryArray.map(function (value, index) {
                         return (
-                            <Button className={classes.submit} 
-                             id={index} component={Link} to={{pathname: `/filter/category/${value}`,
-                            state: {
-                                category: value
-                            }}}>{value}</Button>
+                            <Button className={classes.submit}
+                                id={index} component={Link} to={{
+                                    pathname: `/filter/category/${value}`,
+                                    state: {
+                                        category: value
+                                    }
+                                }}>{value}</Button>
                         )
                     })}
                 </div>
@@ -166,7 +177,7 @@ function Home(props) {
 
 
     function getAllMedia() {
-        
+
         firebase.database().ref('VideoList/').on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
