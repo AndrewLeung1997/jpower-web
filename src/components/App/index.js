@@ -9,6 +9,8 @@ import Registration from '../Registration'
 import Home from '../Home'
 import Player from '../Player'
 import Filter from '../Filter'
+import File from '../File'
+import Dashboard from '../Dashboard'
 const theme = createTheme()
 
 export default function App() {
@@ -29,10 +31,12 @@ export default function App() {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Registration} />
                     <Route exact path="/upload" component={FileUpload} />
-                    <Route exact path="/file" component={FileUpload}></Route>
+                    <Route exact path="/file" component={File}></Route>
                     <Route exact path="/player/id/:id" component={Player}></Route>
                     <Route exact path="/" component={Home}></Route>
                     <Route exact path="/filter/category/:category" component={Filter}></Route>
+                    <Route exact path="/uploads" component={File}></Route>
+                    <Route exact path="/dashboard" component={Dashboard}></Route>
                 </Switch>
             </Router>
         </MuiThemeProvider>
