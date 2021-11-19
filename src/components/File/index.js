@@ -57,13 +57,13 @@ function File(props) {
     const [id, setID] = useState('')
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
 
-    if (!firebase.auth().currentUser && firebase.auth().currentUser.displayName) {
+    if (!getCurrentUsername) {
 		// not logged in
 		alert('Please login first')
 		props.history.replace('/login')
 		return null
 	}
-    
+
     return (
         <main className={classes.main}>
             <Paper className={classes.paper}>
@@ -211,6 +211,11 @@ function File(props) {
             )
 
         }
+    }
+
+    function getCurrentUsername(){
+       
+       return firebase.auth().currentUser && firebase.auth().currentUser.displayName
     }
 }
 

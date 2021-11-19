@@ -61,7 +61,7 @@ function Dashboard(props) {
         fetchAllVideo()
     }, [pageNumber, totalDataCount])
 
-    if (!firebase.auth().currentUser && firebase.auth().currentUser.displayName) {
+    if (!getCurrentUsername) {
 		// not logged in
 		alert('Please login first')
 		props.history.replace('/login')
@@ -175,6 +175,10 @@ function Dashboard(props) {
         return newDate
     }
 
+    function getCurrentUsername(){
+       
+        return firebase.auth().currentUser && firebase.auth().currentUser.displayName
+     }
 }
 
 
