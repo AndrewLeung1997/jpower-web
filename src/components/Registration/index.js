@@ -58,7 +58,6 @@ function Register(props) {
 	const [agreement, setAgreement] = useState({
 		agreement: false,
 	})
-
 	
 
 	return (
