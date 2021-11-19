@@ -11,6 +11,7 @@ import Player from '../Player'
 import Filter from '../Filter'
 import File from '../File'
 import Dashboard from '../Dashboard'
+import UpdateVideoInfo from '../UpdateVideoInfo'
 const theme = createTheme()
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
                     <Route exact path="/filter/category/:category" component={Filter}></Route>
                     <Route exact path="/uploads" component={File}></Route>
                     <Route exact path="/dashboard" component={Dashboard}></Route>
+                    <Route exact path="/updateVideoInfo" component={UpdateVideoInfo}></Route>
                 </Switch>
             </Router>
         </MuiThemeProvider>

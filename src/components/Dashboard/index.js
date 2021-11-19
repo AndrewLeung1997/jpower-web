@@ -55,6 +55,7 @@ function Dashboard(props) {
     const [category, setCategory] = useState('')
     const [id, setId] = useState('')
     const [fileName, setFileName] = useState('')
+    const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
 
     useEffect(() => {
         fetchAllVideo()
@@ -64,24 +65,7 @@ function Dashboard(props) {
     return (
         <main className={classes.main}>
             <Bar></Bar>
-            <div style={{ paddingTop: "80px" }}>
-                <nav>
-                    <ul className="pagination justify-content-end">
-                        {
-                            Array(Math.ceil(totalDataCount/dataRange)).fill().map(function (_, i) {
-                                return (
-                                    <div className="pangination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
-                                        <li className="page-item" key={i} onClick={() => setPageNumber(i)}>
-                                            <a className="page-link" href="#">{i + 1}</a>
-                                        </li>
-                                    </div>
-                                )
-                            })
-                        }
-                    </ul>
-                </nav>
-            </div>
-            <TableContainer component={Paper} style={{ marginTop: '30px' }}>
+            <TableContainer component={Paper} style={{ marginTop: '80px' }}>
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
@@ -98,7 +82,7 @@ function Dashboard(props) {
                         {video.map(function (value, key) {
                             return (
                                 <TableRow key={key}>
-                                    <TableCell align="center" contentEditable={true} onChange={e=> setId(e.target.value)}>{value.id}</TableCell>
+                                    <TableCell align="center">{value.id}</TableCell>
                                     <TableCell align="center">{convertTimeStamp(value.timestamp)}</TableCell>
                                     <TableCell align="center" value={value.url}>
                                         <IconButton
@@ -110,11 +94,15 @@ function Dashboard(props) {
                                             <InsertLinkIcon color="primary" />
                                         </IconButton>
                                     </TableCell>
-                                    <TableCell align="center" contentEditable={true} onChange={e=>setFileName(e.target.value)}>{value.fileName}</TableCell>
-                                    <TableCell align="center" contentEditable={true} onChange={e=>setCategory(e.target.value)}>{value.category}</TableCell>
+                                    <TableCell align="center">{value.fileName}</TableCell>
+                                    <TableCell align="center">{value.category}</TableCell>
                                     <TableCell align="center" >
-                                        <IconButton>
-                                            <PublishIcon color="primary" onClick={handleSubmitChange}/>
+                                        <IconButton component={Link} to={{pathname: `/updateVideoInfo`,
+                                            state:{
+                                                url: value.url
+                                            }
+                                        }}>
+                                            <PublishIcon color="primary"/>
                                         </IconButton>
                                     </TableCell>
 
@@ -124,12 +112,25 @@ function Dashboard(props) {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <div style={{ paddingTop: "50px" }}>
+                <nav>
+                    <ul className="pagination justify-content-end">
+                        {
+                            Array(Math.ceil(totalDataCount/dataRange)).fill().map(function (_, i) {
+                                return (
+                                    <div className="pangination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
+                                        <li className="page-item" key={i} onClick={() => setPageNumber(i)}>
+                                            <a className="page-link" href="#">{i + 1}</a>
+                                        </li>
+                                    </div>
+                                )
+                            })
+                        }
+                    </ul>
+                </nav>
+            </div>
         </main>
     )
-
-    function onPageChange() {
-        console.log("fuck you matai")
-    }
 
     function fetchAllVideo() {
         firebase.database().ref('VideoList/').on('value', function (snapshot) {
@@ -148,23 +149,6 @@ function Dashboard(props) {
                 })
             }
         })
-    }
-
-    function handleSubmitChange(){
-        try {
-            var query = firebase.database().ref("VideoList/").orderByChild("url").equalTo()
-            query.once("child_added", function (snapshot) {
-
-                snapshot.ref.update({
-                    id: id,
-                    category: category,
-                    fileName: fileName
-                })
-                alert("Data Saved Successfully")
-            })
-        } catch (error) {
-            console.error(error)
-        }
     }
 
     function convertTimeStamp(timestamp) {
