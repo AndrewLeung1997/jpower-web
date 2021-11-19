@@ -61,6 +61,12 @@ function Dashboard(props) {
         fetchAllVideo()
     }, [pageNumber, totalDataCount])
 
+    if (!firebase.auth().currentUser && firebase.auth().currentUser.displayName) {
+		// not logged in
+		alert('Please login first')
+		props.history.replace('/login')
+		return null
+	}
 
     return (
         <main className={classes.main}>

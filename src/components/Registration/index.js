@@ -59,6 +59,8 @@ function Register(props) {
 		agreement: false,
 	})
 
+	
+
 	return (
 		<main className={classes.main}>
 			<Paper className={classes.paper}>
