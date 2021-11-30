@@ -55,9 +55,9 @@ function File(props) {
     const [category, setCategory] = useState('')
     const [fileName, setFileName] = useState('')
     const [id, setID] = useState('')
-    const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
+    
 
-    if (!getCurrentUsername) {
+    if (!firebase.auth().currentUser) {
 		// not logged in
 		alert('Please login first')
 		props.history.replace('/login')
@@ -98,36 +98,6 @@ function File(props) {
                             </FormControl>
                         </div>
                     </div>
-                    {/* <div className="row">
-                        <div className="col-sm-12">
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="category">AV 類型</InputLabel>
-                                <Select name="category" id="category" autoComplete="off" value={category} onChange={e => setCategory(e.target.value)}>
-                                    {categoryArray.map(function (value) {
-                                        return (
-                                            <MenuItem value={value}>{value}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div> */}
-                    {/* <div className="row">
-                        <div className="col-sm-12">
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="fileName">AV標題</InputLabel>
-                                <Input type="text" id="fileName" name="fileName" autoComplete="off" value={fileName} onChange={(e) => setFileName(e.target.value)}></Input>
-                            </FormControl>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="fileName">視頻 ID</InputLabel>
-                                <Input type="text" id="fileName" name="fileName" autoComplete="off" value={id} onChange={(e) => setID(e.target.value)} onBlur={onVerifyVideoID}></Input>
-                            </FormControl>
-                        </div>
-                    </div> */}
                     {uploadStatus == true ? <div className="row">
                         <div className="col-sm-12">
                             <LinearProgress variant="determinate" value={process} />
@@ -160,13 +130,6 @@ function File(props) {
            uploadFile(value)
        })
     }
-
-    async function onVerifyVideoID(){
-		if(id.length < 5){
-			alert("Member ID must be 5 digits")
-			return 
-		}
-	}
 
     async function uploadFile(file) {
         if (file == null) {
@@ -213,10 +176,7 @@ function File(props) {
         }
     }
 
-    function getCurrentUsername(){
-       
-       return firebase.auth().currentUser && firebase.auth().currentUser.displayName
-    }
+    
 }
 
 export default withRouter(withStyles(styles)(File))
