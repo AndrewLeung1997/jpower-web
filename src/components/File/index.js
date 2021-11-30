@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, LinearProgress } from '@material-ui/core'
+import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel, LinearProgress,Select, MenuItem } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
@@ -44,17 +44,18 @@ const styles = theme => ({
 })
 
 
-function FileUpload(props) {
+function File(props) {
 
     const { classes } = props
 
-    const [file, setFile] = useState('')
+    const [file, setFile] = useState([])
     const [url, setUrl] = useState('')
     const [process, setProcess] = useState(0)
     const [uploadStatus, setUploadStatus] = useState(false)
     const [category, setCategory] = useState('')
     const [fileName, setFileName] = useState('')
-    
+    const [id, setID] = useState('')
+    const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
 
     if (!getCurrentUsername) {
 		// not logged in
@@ -75,39 +76,58 @@ function FileUpload(props) {
                 <form className={classes.form} onSubmit={e => e.preventDefault() && false}>
                     <div className="row">
                         <div className="col-sm-12">
-                        <FormControl margin="normal" required fullWidth>
-                                    <input
-                                        style={{ display: "none" }}
-                                        id="contained-button-file"
-                                        onChange={(e) => { setFile(e.target.files[0]) }}
-                                        type="file"
-                                    />
+                            <FormControl margin="normal" required fullWidth>
+                                <input
+                                    style={{ display: "none" }}
+                                    id="contained-button-file"
+                                    onChange={(e) => { onChangeFile(e) }}
+                                    type="file"
+                                />
 
-                                    <label htmlFor="contained-button-file">
-                                        <Button variant="contained" color="primary" component="span">
-                                            Upload
-                                        </Button>
-                                        <label style={{ marginLeft: '5px' }} htmlFor="filename">{file !== '' ? file.name : 'File'}</label>
-                                    </label>
-                                </FormControl>
+                                <label htmlFor="contained-button-file">
+                                    <Button variant="contained" color="primary" component="span">
+                                        Upload
+                                    </Button>
+                                    {file.map(function(value, index){
+                                        console.log(value)
+                                        return(
+                                            <label style={{ marginLeft: '10px', fontWeight: 'bold' }} htmlFor="filename">{file !== '' ? value.name : '請上傳你的影片'}</label>
+                                        )
+                                    })}
+                                </label>
+                            </FormControl>
                         </div>
                     </div>
-                    <div className="row">
+                    {/* <div className="row">
                         <div className="col-sm-12">
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="category">標籤</InputLabel>
-                                <Input type="text" id="category" name="category" autoComplete="off" autoFocus onChange={(e) => setCategory(e.target.value)}></Input>
+                                <InputLabel htmlFor="category">AV 類型</InputLabel>
+                                <Select name="category" id="category" autoComplete="off" value={category} onChange={e => setCategory(e.target.value)}>
+                                    {categoryArray.map(function (value) {
+                                        return (
+                                            <MenuItem value={value}>{value}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </div>
+                    </div> */}
+                    {/* <div className="row">
+                        <div className="col-sm-12">
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="fileName">AV標題</InputLabel>
+                                <Input type="text" id="fileName" name="fileName" autoComplete="off" value={fileName} onChange={(e) => setFileName(e.target.value)}></Input>
                             </FormControl>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-sm-12">
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="fileName">影片標題</InputLabel>
-                                <Input type="text" id="fileName" name="fileName" autoComplete="off" autoFocus onChange={(e) => setFileName(e.target.value)}></Input>
+                                <InputLabel htmlFor="fileName">視頻 ID</InputLabel>
+                                <Input type="text" id="fileName" name="fileName" autoComplete="off" value={id} onChange={(e) => setID(e.target.value)} onBlur={onVerifyVideoID}></Input>
                             </FormControl>
                         </div>
-                    </div>
+                    </div> */}
                     {uploadStatus == true ? <div className="row">
                         <div className="col-sm-12">
                             <LinearProgress variant="determinate" value={process} />
@@ -118,20 +138,41 @@ function FileUpload(props) {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        onClick={uploadFile}
+                        onClick={uploadFiles}
                         className={classes.submit}>
                         上傳
                     </Button>
-                    
+
                 </form>
             </Paper>
         </main>
     )
 
-    async function uploadFile() {
+    function onChangeFile(e){
+        for(var i=0; i<e.target.files.length; i++){
+            const video = e.target.files[i]
+            setFile(prevState => [...prevState, video])
+        }
+    }
+
+    function uploadFiles(){
+       file.map(function(value, index){
+           uploadFile(value)
+       })
+    }
+
+    async function onVerifyVideoID(){
+		if(id.length < 5){
+			alert("Member ID must be 5 digits")
+			return 
+		}
+	}
+
+    async function uploadFile(file) {
         if (file == null) {
             return
         } else {
+
             setUploadStatus(true)
             var storage = firebase.storage()
             var storageRef = storage.ref()
@@ -153,12 +194,18 @@ function FileUpload(props) {
                             url,
                             category,
                             timestamp,
-                            fileName
+                            fileName,
+                            id
                         })
                     })
                     alert("成功上傳")
-                    
+
                     setUploadStatus(false)
+                    setFile([])
+                    setFileName('')
+                    setID('')
+                    setCategory('')
+                    setUrl('')
                     
                 }
             )
@@ -168,8 +215,8 @@ function FileUpload(props) {
 
     function getCurrentUsername(){
        
-        return firebase.auth().currentUser && firebase.auth().currentUser.displayName
-     }
+       return firebase.auth().currentUser && firebase.auth().currentUser.displayName
+    }
 }
 
-export default withRouter(withStyles(styles)(FileUpload))
+export default withRouter(withStyles(styles)(File))

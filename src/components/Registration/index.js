@@ -58,6 +58,7 @@ function Register(props) {
 	const [agreement, setAgreement] = useState({
 		agreement: false,
 	})
+	
 
 	return (
 		<main className={classes.main}>
