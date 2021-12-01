@@ -15,7 +15,7 @@ function Bar(props) {
 
         <div>
             <Navbar expand="md" dark bg="dark" fixed="top">
-                <Navbar.Brand href="/" style={{paddingLeft:'50px', paddingRight:'60px'}}>JPower TV</Navbar.Brand>
+                <Navbar.Brand href="/" style={{ paddingLeft: '50px', paddingRight: '60px' }}>JPower TV</Navbar.Brand>
                 <Navbar.Toggler target="#navbarsExampleDefault" />
 
                 <Navbar.Collapse id="navbarsExampleDefault">

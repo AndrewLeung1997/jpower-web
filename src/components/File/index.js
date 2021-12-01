@@ -139,6 +139,7 @@ function File(props) {
         } else {
 
             setUploadStatus(true)
+            setFileName(file.name)
             var storage = firebase.storage()
             var storageRef = storage.ref()
             var uploadTask = storageRef.child('folder/' + file.name).put(file);

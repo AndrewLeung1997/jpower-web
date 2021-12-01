@@ -52,9 +52,6 @@ function Dashboard(props) {
     const [pageNumber, setPageNumber] = useState(0)
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange] = useState(10)
-    const [category, setCategory] = useState('')
-    const [id, setId] = useState('')
-    const [fileName, setFileName] = useState('')
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
 
     useEffect(() => {
@@ -138,21 +135,22 @@ function Dashboard(props) {
         </main>
     )
 
+    function paginate(array, page_size, page_number) {
+
+        return array.slice((page_number - 1) * page_size, page_number * page_size);
+    }
+
     function fetchAllVideo() {
+        var videoArray = []
         firebase.database().ref('VideoList/').on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
                 setTotalDataCount(keys.length)
-                const dataArray = []
                 var key = keys[pageNumber * dataRange]
-                firebase.database().ref('VideoList/').orderByKey().limitToFirst(dataRange).startAt(key).on('value', function (snapshot) {
-                    if (snapshot.val()) {
-                        snapshot.forEach(function (result) {
-                            dataArray.push(result.val())
-                        })
-                        setVideo(dataArray)
-                    }
+                snapshot.forEach(function(video){
+                    videoArray.push(video.val())
                 })
+                setVideo(paginate(videoArray, dataRange, pageNumber+1))
             }
         })
     }

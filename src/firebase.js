@@ -8,7 +8,7 @@ import 'firebase/firebase-storage'
 const config = {
     apiKey: "AIzaSyAAQpegNRtJBkq0dNxqtVrfo6qVsl0dAz4",
     authDomain: "jpower-8c20e.firebaseapp.com",
-    databaseURL : "https://jpower-8c20e-default-rtdb.firebaseio.com",
+    databaseURL: "https://jpower-8c20e-default-rtdb.firebaseio.com",
     projectId: "jpower-8c20e",
     storageBucket: "jpower-8c20e.appspot.com",
     messagingSenderId: "37696400857",
@@ -57,8 +57,8 @@ class Firebase {
         })
     }
 
-    addMetaData(url, category, uploadDate, videoName){
-        if(!this.auth.currentUser){
+    addMetaData(url, category, uploadDate, videoName) {
+        if (!this.auth.currentUser) {
             return ('Not authorized User')
         }
         return this.db.ref('VideoList/').push({

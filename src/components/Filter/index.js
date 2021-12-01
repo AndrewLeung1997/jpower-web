@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button } from '@material-ui/core'
+import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button, IconButton } from '@material-ui/core'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
+import give from '../../file/give.jpeg'
 
 const styles = theme => ({
     root: {
@@ -22,6 +24,7 @@ const styles = theme => ({
         display: 'block', // Fix IE 11 issue.
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 5,
         [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
             width: 'auto',
             marginLeft: 'auto',
@@ -35,20 +38,18 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-        backgroundColor: 'black',
-        color:'white'
-
+        backgroundColor: 'black'
     },
 
     Card: {
         marginTop: theme.spacing.unit * 2,
         height: theme.spacing.unit * 40,
-        backgroundColor: 'black',
-        color: 'white'
+        backgroundColor: 'black'
 
     },
     Tag: {
         width: theme.spacing.unit * 10,
+
         backgroundColor: "#FFC0CB",
         textAlign: 'center',
         borderRadius: '10px',
@@ -65,26 +66,23 @@ const styles = theme => ({
     },
     submit: {
         marginTop: theme.spacing.unit * 3,
-        color:'white'
+        color: 'white'
     },
-    button: {
-
-    }
+    
 })
 
-function Filter(props) {
+function Home(props) {
 
     const { classes } = props
     const [videoList, setVideoList] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange] = useState(15)
     const [pageNumber, setPageNumber] = useState(0)
-    const [category, setCategory] = useState('')
 
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
-        filterVideoByCategory()
+        getAllMedia()
     }, [pageNumber, totalDataCount])
 
     return (
@@ -92,9 +90,17 @@ function Filter(props) {
             <Bar></Bar>
             <main className={classes.main}>
                 <div className="row">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                                <img src={give} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                            </a>
+
+                        </div>
+                    </div>
                     {videoList.map(function (value, index) {
                         return (
-                            <div className="col-md-3">
+                            <div className="col-sm-4 col-md-3 col-lg-3">
                                 <Card className={classes.Card}>
                                     <CardActionArea component={Link} to={{
                                         pathname: `/player/id/${value.id}`,
@@ -116,7 +122,7 @@ function Filter(props) {
                                             src={value.url}
 
                                         />
-                                        <CardContent>
+                                        <CardContent style={{ color: 'white' }}>
                                             <Typography gutterBottom variant="h8" component="div">
                                                 {value.fileName}
                                             </Typography>
@@ -141,6 +147,7 @@ function Filter(props) {
                         {
                             Array(Math.ceil(totalDataCount / dataRange)).fill().map(function (_, i) {
                                 return (
+
                                     <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
                                         <li className="page-item" key={i} onClick={() => setPageNumber(i)}>
                                             <a className="page-link" href="#">{i + 1}</a>
@@ -153,7 +160,7 @@ function Filter(props) {
                 </nav>
 
                 <Paper className={classes.paper}>
-                    <Typography component="h1" variant="h5">所有標籤</Typography>
+                    <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
                     <div className="well" >
                         {categoryArray.map(function (value, index) {
                             return (
@@ -163,7 +170,7 @@ function Filter(props) {
                                         state: {
                                             category: value
                                         }
-                                    }}>{value}</Button>
+                                    }} target="_blank">{value}</Button>
                             )
                         })}
                     </div>
@@ -177,24 +184,22 @@ function Filter(props) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
 
-    function filterVideoByCategory() {
-        const filterArray = []
-        firebase.database().ref("VideoList/").orderByChild('category').equalTo(props.location.state.category).on('value', function (snapshot) {
-            if (snapshot.exists()) {
-                var keys = Object.keys(snapshot.val())
+
+    function getAllMedia() {
+
+        var videoArray = []
+        firebase.database().ref('VideoList/').orderByChild("category").equalTo(props.match.params.category).on('value', function (snapshot) {
+            if (snapshot.val()) {
+                var keys = Object.keys(snapshot.val()).sort()
                 setTotalDataCount(keys.length)
-                snapshot.forEach(function (result) {
-                    filterArray.push(result.val())
+                var key = keys[pageNumber * dataRange]
+                snapshot.forEach(function(video){
+                    videoArray.push(video.val())
                 })
-                setVideoList(paginate(filterArray, dataRange, pageNumber + 1))
-            } else {
-                setVideoList(filterArray)
-                setTotalDataCount(0)
+                setVideoList(paginate(videoArray, dataRange, pageNumber+1))
             }
         })
-
     }
-
 
 
     function convertTimeStamp(timestamp) {
@@ -217,4 +222,4 @@ function Filter(props) {
 
 }
 
-export default withRouter(withStyles(styles)(Filter))
+export default withRouter(withStyles(styles)(Home))

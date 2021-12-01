@@ -6,7 +6,6 @@ import { Link, withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
-import moment from 'moment'
 import give from '../../file/give.jpeg'
 
 const styles = theme => ({
