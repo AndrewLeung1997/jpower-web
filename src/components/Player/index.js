@@ -12,6 +12,17 @@ import huangchaoNew from '../../file/new1.jpeg'
 import draw from '../../file/draw.jpeg'
 
 const styles = theme => ({
+
+    root: {
+        width: 'auto',
+        display: 'block', // Fix IE 11 issue.
+        [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
+            width: 'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        backgroundColor: 'black'
+    },
     main: {
         width: 'auto',
         display: 'block', // Fix IE 11 issue.
@@ -22,16 +33,19 @@ const styles = theme => ({
             marginLeft: 'auto',
             marginRight: 'auto',
         },
+        backgroundColor: 'black'
     },
 
     relatedVideoPaper: {
 
         marginTop: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 6,
+        // marginBottom: theme.spacing.unit * 6,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
+        backgroundColor: 'black',
+        color: 'white'
 
     },
     paper: {
@@ -41,6 +55,7 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
+        backgroundColor: 'black'
     },
 
     videoName: {
@@ -50,7 +65,6 @@ const styles = theme => ({
     },
     Tag: {
         width: theme.spacing.unit * 10,
-
         backgroundColor: "#FFC0CB",
         textAlign: 'center',
         borderRadius: '10px',
@@ -59,7 +73,9 @@ const styles = theme => ({
     },
     Card: {
         marginTop: theme.spacing.unit * 2,
-        height: theme.spacing.unit * 40
+        height: theme.spacing.unit * 42,
+        backgroundColor: 'black',
+        color: 'white'
 
     },
     VideoCard: {
@@ -69,7 +85,8 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'left',
         padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
-        height: theme.spacing.unit * 80
+        height: theme.spacing.unit * 90,
+        backgroundColor: 'black'
     },
     CardMedia: {
         paddingLeft: theme.spacing.unit * 1,
@@ -85,6 +102,7 @@ const styles = theme => ({
     },
     submit: {
         marginTop: theme.spacing.unit * 3,
+        color: 'white'
     },
     adView: {
         position: 'absolute',
@@ -142,143 +160,144 @@ function Player(props) {
 
 
     return (
-
-        <main className={classes.main}>
+        <root className={classes.root}>
             <Bar></Bar>
-            <div className="row">
-                <div className="col-md-6">
-                    <Card className={classes.VideoCard}>
-                        <CardActions>
-                            <CardMedia
-                                className={classes.CardMedia}
-                                component="video"
-                                alt="video"
-                                width="50%"
-                                height='300'
-                                title={videoName}
-                                src={url}
-                                controls={true}
-                                autoPlay={controlVideo}
-
-                            />
-                        </CardActions>
-                        <CardContent>
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                                        <img src={draw} style={{ width: '100%', height: '180px', paddingTop: '20px', paddingLeft:'50px',paddingRight:'40px' }}></img>
-                                    </a>
-
-                                </div>
-                            </div>
-                            <Typography gutterBottom variant="h5" component="div">
-                                {videoName}
-                            </Typography>
-                            <Typography gutterBottom variant="h8" component="div">
-                                {convertTimeStamp(timestamp)}
-                            </Typography>
-                            <Button type="submit"
-                                variant="contained"
-                                color="secondary"
-                                component
-                                ={Link} to={{
-                                    pathname: `/filter/category/${category}`,
-                                    state: {
-                                        category: category
-                                    }
-                                }}
-                                className={classes.submit}>
-                                {category}
-                            </Button>
-                            {controlVideo ? <Button type="submit"
-                                variant="contained"
-                                color="primary"
-                                onClick={stopInterval}
-                                className={classes.submit}
-                                style={{ marginLeft: '20px' }}
-                            >
-                                略過廣告
-                            </Button> : <div></div>}
-                        </CardContent>
-                    </Card>
-                </div>
-
-                < div className="col-md-6" >
-                    <Paper className={classes.paper}>
-                        <Typography component="h1" variant="h5">所有標籤</Typography>
-                        <div className="well" >
-                            {categoryArray.map(function (value, index) {
-                                return (
-                                    <Button className={classes.submit}
-                                        id={index} component={Link} to={{
-                                            pathname: `/filter/category/${value}`,
-                                            state: {
-                                                category: value
-                                            }
-                                        }}>{value}</Button>
-                                )
-                            })}
-                        </div>
-                    </Paper>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
-                                <img src={huangchao} style={{ width: '70%', height: '150px' }}></img>
-                            </a>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <a href="https://www.dc8880.com/?uagt=jpower666&path=root" target="_blank">
-                                <img src={huangchaoNew} style={{ width: '70%', height: '150px', paddingTop: '20px' }}></img>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div >
-
-            <Paper className={classes.relatedVideoPaper}>
-                <Typography className={classes.videoName} component="h2" variant="h5" align='left'>相關影片</Typography>
+            <main className={classes.main}>
                 <div className="row">
-                    {relatedVideo.map(function (value, index) {
-                        return (
-                            <div className="col-md-3">
-                                <Card className={classes.Card}>
-                                    <CardActionArea component={Link} to={{
-                                        pathname: `/player/id/${value.id}`
-                                    }} target="_blank">
-                                        <CardMedia
-                                            className={classes.CardMedia}
-                                            component="video"
-                                            alt="video"
-                                            width="100%"
-                                            height='200'
-                                            title={value.fileName}
-                                            src={value.url}
+                    <div className="col-md-6">
+                        <Card className={classes.VideoCard}>
+                            <CardActions>
+                                <CardMedia
+                                    className={classes.CardMedia}
+                                    component="video"
+                                    alt="video"
+                                    width="50%"
+                                    height='300'
+                                    title={videoName}
+                                    src={url}
+                                    controls={true}
+                                    autoPlay={controlVideo}
 
-                                        />
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h8" component="div">
-                                                {value.fileName}
-                                            </Typography>
-                                            <Typography gutterBottom variant="h8" component="div">
-                                                {convertTimeStamp(value.timestamp)}
-                                            </Typography>
-                                            <Typography gutterBottom variant="h8" component="div">
-                                                <div className={classes.Tag}>
-                                                    {value.category}
-                                                </div>
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
+                                />
+                            </CardActions>
+                            <CardContent style={{ color: 'white' }}>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                                            <img src={draw} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <Typography gutterBottom variant="h5" component="div">
+                                    {videoName}
+                                </Typography>
+                                <Typography gutterBottom variant="h8" component="div">
+                                    {convertTimeStamp(timestamp)}
+                                </Typography>
+                                <Button type="submit"
+                                    variant="contained"
+                                    color="secondary"
+                                    component
+                                    ={Link} to={{
+                                        pathname: `/filter/category/${category}`,
+                                        state: {
+                                            category: category
+                                        }
+                                    }}
+                                    className={classes.submit}>
+                                    {category}
+                                </Button>
+                                {controlVideo ? <Button type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={stopInterval}
+                                    className={classes.submit}
+                                    style={{ marginLeft: '20px' }}
+                                >
+                                    略過廣告
+                                </Button> : <div></div>}
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    < div className="col-md-6" >
+                        <Paper className={classes.paper}>
+                            <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
+                            <div className="well" >
+                                {categoryArray.map(function (value, index) {
+                                    return (
+                                        <Button className={classes.submit}
+                                            id={index} component={Link} to={{
+                                                pathname: `/filter/category/${value}`,
+                                                state: {
+                                                    category: value
+                                                }
+                                            }}>{value}</Button>
+                                    )
+                                })}
                             </div>
-                        )
-                    })}
-                </div>
-            </Paper>
-        </main>
+                        </Paper>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
+                                    <img src={huangchao} style={{ width: '100%', height: 'auto' }}></img>
+                                </a>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <a href="https://www.dc8880.com/?uagt=jpower666&path=root" target="_blank">
+                                    <img src={huangchaoNew} style={{ width: '100%', height: 'auto', paddingTop: '20px' }}></img>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div >
+
+                <Paper className={classes.relatedVideoPaper}>
+                    <Typography className={classes.videoName} component="h2" variant="h5" align='left'>相關影片</Typography>
+                    <div className="row">
+                        {relatedVideo.map(function (value, index) {
+                            return (
+                                <div className="col-md-3">
+                                    <Card className={classes.Card}>
+                                        <CardActionArea component={Link} to={{
+                                            pathname: `/player/id/${value.id}`
+                                        }} target="_blank">
+                                            <CardMedia
+                                                className={classes.CardMedia}
+                                                component="video"
+                                                alt="video"
+                                                width="100%"
+                                                height='200'
+                                                title={value.fileName}
+                                                src={value.url}
+
+                                            />
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {value.fileName}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {convertTimeStamp(value.timestamp)}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    <div className={classes.Tag}>
+                                                        {value.category}
+                                                    </div>
+                                                </Typography>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </Paper>
+            </main>
+        </root>
 
     )
 

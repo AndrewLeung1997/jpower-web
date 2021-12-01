@@ -10,17 +10,28 @@ import moment from 'moment'
 import give from '../../file/give.jpeg'
 
 const styles = theme => ({
-    main: {
+    root: {
         width: 'auto',
         display: 'block', // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 3,
         [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
             width: 'auto',
             marginLeft: 'auto',
             marginRight: 'auto',
         },
+        backgroundColor: 'black'
+    },
+    main: {
+        width: 'auto',
+        display: 'block', // Fix IE 11 issue.
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 5,
+        [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
+            width: 'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+        backgroundColor: 'black'
     },
     paper: {
         marginTop: theme.spacing.unit * 8,
@@ -28,11 +39,13 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+        backgroundColor: 'black'
     },
 
     Card: {
         marginTop: theme.spacing.unit * 2,
-        height: theme.spacing.unit * 40
+        height: theme.spacing.unit * 40,
+        backgroundColor: 'black'
 
     },
     Tag: {
@@ -54,10 +67,9 @@ const styles = theme => ({
     },
     submit: {
         marginTop: theme.spacing.unit * 3,
+        color: 'white'
     },
-    button: {
-
-    }
+    
 })
 
 function Home(props) {
@@ -65,7 +77,7 @@ function Home(props) {
     const { classes } = props
     const [videoList, setVideoList] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(20)
+    const [dataRange] = useState(15)
     const [pageNumber, setPageNumber] = useState(0)
 
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
@@ -75,17 +87,14 @@ function Home(props) {
     }, [pageNumber, totalDataCount])
 
     return (
-        <main className={classes.main}>
+        <root className={classes.root}>
             <Bar></Bar>
-            <Paper className={classes.paper}>
-                <Typography component="h1" variant="h5" align={'left'}>
-                    所有視頻
-                </Typography>
+            <main className={classes.main}>
                 <div className="row">
                     <div className="row">
                         <div className="col-md-12">
                             <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                                <img src={give} style={{ width: '100%', height: '180px', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                                <img src={give} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
                             </a>
 
                         </div>
@@ -114,7 +123,7 @@ function Home(props) {
                                             src={value.url}
 
                                         />
-                                        <CardContent>
+                                        <CardContent style={{ color: 'white' }}>
                                             <Typography gutterBottom variant="h8" component="div">
                                                 {value.fileName}
                                             </Typography>
@@ -150,24 +159,25 @@ function Home(props) {
                         }
                     </ul>
                 </nav>
-            </Paper>
-            <Paper className={classes.paper}>
-                <Typography component="h1" variant="h5">所有標籤</Typography>
-                <div className="well" >
-                    {categoryArray.map(function (value, index) {
-                        return (
-                            <Button className={classes.submit}
-                                id={index} component={Link} to={{
-                                    pathname: `/filter/category/${value}`,
-                                    state: {
-                                        category: value
-                                    }
-                                }}>{value}</Button>
-                        )
-                    })}
-                </div>
-            </Paper>
-        </main>
+
+                <Paper className={classes.paper}>
+                    <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
+                    <div className="well" >
+                        {categoryArray.map(function (value, index) {
+                            return (
+                                <Button className={classes.submit}
+                                    id={index} component={Link} to={{
+                                        pathname: `/filter/category/${value}`,
+                                        state: {
+                                            category: value
+                                        }
+                                    }}>{value}</Button>
+                            )
+                        })}
+                    </div>
+                </Paper>
+            </main>
+        </root>
     )
 
     function paginate(array, page_size, page_number) {
@@ -178,21 +188,16 @@ function Home(props) {
 
     function getAllMedia() {
 
+        var videoArray = []
         firebase.database().ref('VideoList/').on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
                 setTotalDataCount(keys.length)
-                var videoArray = []
                 var key = keys[pageNumber * dataRange]
-                firebase.database().ref('VideoList/').orderByKey().limitToFirst(dataRange).startAt(key).on('value', function (snapshot) {
-                    if (snapshot.val()) {
-                        console.log(snapshot.val())
-                        snapshot.forEach(function (video) {
-                            videoArray.push(video.val())
-                        })
-                        setVideoList(videoArray)
-                    }
+                snapshot.forEach(function(video){
+                    videoArray.push(video.val())
                 })
+                setVideoList(paginate(videoArray, dataRange, pageNumber+1))
             }
         })
     }
