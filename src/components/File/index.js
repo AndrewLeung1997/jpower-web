@@ -133,6 +133,13 @@ function File(props) {
        })
     }
 
+    function generateVideoID(){
+        var unix = Math.round(new Date()/1000000000)
+        var randomDigit = (Math.floor(Math.random()*90000) + 10000).toString()
+        var videoID =  unix + randomDigit
+        setID(videoID)
+    }
+
     async function uploadFile(file) {
         if (file == null) {
             return
@@ -140,6 +147,7 @@ function File(props) {
 
             setUploadStatus(true)
             setFileName(file.name)
+            generateVideoID()
             var storage = firebase.storage()
             var storageRef = storage.ref()
             var uploadTask = storageRef.child('folder/' + file.name).put(file);

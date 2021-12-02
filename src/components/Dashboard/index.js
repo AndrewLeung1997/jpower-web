@@ -16,8 +16,8 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
         marginBottom: theme.spacing.unit * 3,
-        [theme.breakpoints.up(900 + theme.spacing.unit * 3 * 2)]: {
-            width: 900,
+        [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
+            width: 'auto',
             marginLeft: 'auto',
             marginRight: 'auto',
         },
@@ -51,7 +51,7 @@ function Dashboard(props) {
     const [video, setVideo] = useState([])
     const [pageNumber, setPageNumber] = useState(0)
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(10)
+    const [dataRange, setDataRange] = useState(10)
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
 
     useEffect(() => {
@@ -114,26 +114,28 @@ function Dashboard(props) {
                         })}
                     </TableBody>
                 </Table>
+                <TablePagination
+                    component="div"
+                    count={totalDataCount}
+                    onChangePage={handlePageChange}
+                    onChangeRowsPerPage={(e) => handleRowsPerPageChange(e)}
+                    page={pageNumber}
+                    rowsPerPage={dataRange}
+                    rowsPerPageOptions={[5, 10]}
+                />
             </TableContainer>
-            <div style={{ paddingTop: "50px" }}>
-                <nav>
-                    <ul className="pagination justify-content-end">
-                        {
-                            Array(Math.ceil(totalDataCount/dataRange)).fill().map(function (_, i) {
-                                return (
-                                    <div className="pangination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
-                                        <li className="page-item" key={i} onClick={() => setPageNumber(i)}>
-                                            <a className="page-link" href="#">{i + 1}</a>
-                                        </li>
-                                    </div>
-                                )
-                            })
-                        }
-                    </ul>
-                </nav>
-            </div>
+           
         </main>
     )
+
+    function handlePageChange(event, page) {
+        setPageNumber(page);
+    }
+
+    function handleRowsPerPageChange(event) {
+        setDataRange(event.target.value)
+    }
+
 
     function paginate(array, page_size, page_number) {
 

@@ -49,6 +49,10 @@ function UpdateProfile(props) {
     const [id, setId] = useState('')
     const [fileName, setFileName] = useState('')
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '女子校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
+    
+    useEffect(()=>{
+        getVideoInfo()
+    },[])
 
     if (!firebase.auth().currentUser) {
 		// not logged in
@@ -94,8 +98,7 @@ function UpdateProfile(props) {
                         </div>
                         <div className="col-sm-4">
                             <div className="form-group">
-                                <FormControl margin="normal" required fullWidth>
-
+                                <label htmlFor="fileName">Tag</label>
                                     <select className="form-select" name="category" id="category" autoComplete="off" value={category} onChange={e => setCategory(e.target.value)}>
                                         {categoryArray.map(function (value) {
                                             return (
@@ -103,7 +106,7 @@ function UpdateProfile(props) {
                                             )
                                         })}
                                     </select>
-                                </FormControl>
+                                
                             </div>
                         </div>
                     </div>
@@ -132,6 +135,20 @@ function UpdateProfile(props) {
             </Paper>
         </main>
     )
+
+    function getVideoInfo(){
+        firebase.database().ref('VideoList/').orderByChild("url").equalTo(props.location.state.url).on('value', function (snapshot) {
+            if (snapshot.val()) {
+                
+                snapshot.forEach(function(video){
+                   setId(video.val().id)
+                   setFileName(video.val().fileName)
+                   setCategory(video.val().category)
+                })
+                
+            }
+        })
+    }
 
     function UpadateUserProfile() {
         var url = props.location.state.url
