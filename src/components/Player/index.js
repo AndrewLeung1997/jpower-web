@@ -134,27 +134,28 @@ function Player(props) {
     console.log(id)
 
     function startInterval() {
-        setIntervalID(setInterval(() => {
-            setCount(prev => (prev + 1))
-            setUrl('')
-            setControlVideo(true)
-        }, 1000))
+        // setIntervalID(setInterval(() => {
+        //     setCount(prev => (prev + 1))
+        //     setUrl('')
+        //     setControlVideo(true)
+        // }, 1000))
 
     }
 
-    function stopInterval() {
+    // function stopInterval() {
 
-        if (count >= 10) {
-            clearInterval(intervalID)
-            setIntervalID(-1)
-            setCount(0)
-            setUrl(videoUrl)
-            setControlVideo(false)
-        }
-    }
+    //     if (count >= 10) {
+    //         clearInterval(intervalID)
+    //         setIntervalID(-1)
+    //         setCount(0)
+    //         setUrl(videoUrl)
+    //         setControlVideo(false)
+    //     }
+    // }
 
     useEffect(() => {
-        startInterval()
+        // startInterval()
+        window.open("https://www.dc8880.com/?uagt=jpower666&path=promotions", '_blank', 'noopener,noreferrer')
         getVideoByID()
 
     }, [])
@@ -175,9 +176,10 @@ function Player(props) {
                                     width="50%"
                                     height='300'
                                     title={videoName}
-                                    src={url}
+                                    src={videoUrl}
                                     controls={true}
-                                    autoPlay={controlVideo}
+                                    // controls={true}
+                                    // autoPlay={controlVideo}
 
                                 />
                                 
@@ -221,7 +223,7 @@ function Player(props) {
                                     className={classes.submit}>
                                     {category}
                                 </Button>
-                                {controlVideo ? <Button type="submit"
+                                {/* {controlVideo ? <Button type="submit"
                                     variant="contained"
                                     color="primary"
                                     onClick={stopInterval}
@@ -229,7 +231,7 @@ function Player(props) {
                                     style={{ marginLeft: '20px' }}
                                 >
                                     略過廣告
-                                </Button> : <div></div>}
+                                </Button> : <div></div>} */}
                             </CardContent>
                         </Card>
                     </div>
