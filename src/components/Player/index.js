@@ -10,6 +10,7 @@ import bc from '../../file/huangchao.mp4'
 import huangchao from '../../file/new.jpeg'
 import huangchaoNew from '../../file/new1.jpeg'
 import draw from '../../file/draw.jpeg'
+import '../Player/style.css'
 
 const styles = theme => ({
 
@@ -119,7 +120,6 @@ function Player(props) {
     const { classes } = props
     const [relatedVideo, setRelatedVideo] = useState([])
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
-    const [video, setVideo] = useState([])
     const [controlVideo, setControlVideo] = useState(true)
     const [url, setUrl] = useState('')
     const [count, setCount] = useState(0)
@@ -128,6 +128,7 @@ function Player(props) {
     const [videoUrl, setVideoUrl] = useState('')
     const [videoName, setVideoName] = useState('')
     const [timestamp, setTimeStamp] = useState('')
+    const [tags, setTags] = useState([])
     const id = props.match.params.id
 
     console.log(id)
@@ -155,7 +156,7 @@ function Player(props) {
     useEffect(() => {
         startInterval()
         getVideoByID()
-
+        
     }, [])
 
 
@@ -195,6 +196,17 @@ function Player(props) {
                                 <Typography gutterBottom variant="h8" component="div">
                                     {convertTimeStamp(timestamp)}
                                 </Typography>
+                                <div className="box">
+                                    {tags.map(function (value, index) {
+                                        return (
+                                            <div>
+                                                <div className="tag">
+                                                    <button style={{paddingLeft:'2px'}}>{value}</button>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
                                 <Button type="submit"
                                     variant="contained"
                                     color="secondary"
@@ -322,30 +334,28 @@ function Player(props) {
 
     function getVideoByID() {
 
-        const videoArray = []
         firebase.db.ref("VideoList/").orderByChild('id').equalTo(id).on('value', function (snapshot) {
             if (snapshot.exists()) {
 
-                snapshot.forEach(function (result) {
-                    videoArray.push(result.val())
-                })
-                setVideo(videoArray)
-                videoArray.map(function (value, index) {
-                    setVideoUrl(value.url)
-                    setCategory(value.category)
-                    setVideoName(value.fileName)
-                    setTimeStamp(value.timestamp)
+                snapshot.forEach(function (value) {
+                    setVideoUrl(value.val().url)
+                    setCategory(value.val().category)
+                    setVideoName(value.val().fileName)
+                    setTimeStamp(value.val().timestamp)
 
-                    getVideoByTag(value.category)
+                    if (value.val().tag) {
+                        setTags(value.val().tag)
+                    }
+
+                    getVideoByCategory(value.val().category)
                 })
+
             }
         })
     }
 
 
-    function getVideoByTag(category) {
-
-
+    function getVideoByCategory(category) {
         var filterArray = []
         firebase.db.ref("VideoList/").orderByChild('category').equalTo(category).limitToFirst(20).on('value', function (snapshot) {
             if (snapshot.exists()) {

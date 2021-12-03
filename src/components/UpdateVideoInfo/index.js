@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import ReactPlayer from 'react-player'
+import '../UpdateVideoInfo/style.css'
 
 const styles = theme => ({
     main: {
@@ -12,15 +13,15 @@ const styles = theme => ({
         display: 'block', // Fix IE 11 issue.
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit *2,
-        [theme.breakpoints.up(800 + theme.spacing.unit * 3 * 2)]: {
-            width: 800,
+        marginBottom: theme.spacing.unit * 2,
+        [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
+            width: 'auto',
             marginLeft: 'auto',
             marginRight: 'auto',
         },
     },
     paper: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: theme.spacing.unit * 3,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -42,24 +43,24 @@ const styles = theme => ({
 function UpdateProfile(props) {
 
     const { classes } = props
-
-
-    const [url, setUrl] = useState('')
     const [category, setCategory] = useState('')
     const [id, setId] = useState('')
     const [fileName, setFileName] = useState('')
+    const [tags, setTags] = useState([])
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '女子校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
-    
-    useEffect(()=>{
+    const [inputTag, setInputTag] = useState('')
+    const [isKeyReleased, setIsKeyReleased] = useState(false);
+
+    useEffect(() => {
         getVideoInfo()
-    },[])
+    }, [])
 
     if (!firebase.auth().currentUser) {
-		// not logged in
-		alert('Please login first')
-		props.history.replace('/login')
-		return null
-	}
+        // not logged in
+        alert('Please login first')
+        props.history.replace('/login')
+        return null
+    }
 
     return (
         <main className={classes.main}>
@@ -67,7 +68,6 @@ function UpdateProfile(props) {
                 <Typography component="h1" variant="h5" style={{ paddingBottom: '15px' }}>
                     更新影片資料
                 </Typography>
-
                 <ReactPlayer
                     width='100%'
                     controls={true}
@@ -76,37 +76,55 @@ function UpdateProfile(props) {
 
                 <form className={classes.form} onSubmit={e => e.preventDefault() && false}>
                     <div className="row">
-                        <div className="col-sm-12">
+                        <div className="col-md-12">
                             <div className="form-group">
-                                <label htmlFor="url">AV 連結</label>
+                                <label htmlFor="url">影片連結</label>
                                 <input className="form-control" id="url" disabled={true} value={props.location.state.url || ''} />
                             </div>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-sm-4">
+                        <div className="col-md-4">
                             <div className="form-group">
                                 <label htmlFor="id">ID</label>
                                 <input className="form-control" id="id" name="id" value={id} onChange={e => setId(e.target.value)} />
                             </div>
                         </div>
-                        <div className="col-sm-4">
+                        <div className="col-md-4">
                             <div className="form-group">
-                                <label htmlFor="fileName">AV 標題</label>
+                                <label htmlFor="fileName">標題</label>
                                 <input className="form-control" id="fileName" name="fileName" value={fileName} onChange={e => setFileName(e.target.value)} />
                             </div>
                         </div>
-                        <div className="col-sm-4">
+                        <div className="col-md-4">
                             <div className="form-group">
-                                <label htmlFor="fileName">Tag</label>
-                                    <select className="form-select" name="category" id="category" autoComplete="off" value={category} onChange={e => setCategory(e.target.value)}>
-                                        {categoryArray.map(function (value) {
-                                            return (
-                                                <option value={value}>{value}</option>
-                                            )
-                                        })}
-                                    </select>
-                                
+                                <label htmlFor="fileName">類別</label>
+                                <select className="form-select" name="category" id="category" autoComplete="off" value={category} onChange={e => setCategory(e.target.value)}>
+                                    {categoryArray.map(function (value) {
+                                        return (
+                                            <option value={value}>{value}</option>
+                                        )
+                                    })}
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="form-group">
+                                <label htmlFor="tags">Tags</label>
+                                <div className="container">
+                                    {tags.map(function (value, index) {
+                                        return (
+                                            <div className="tag">
+                                                {value}
+                                                <button onClick={() => deleteTag(index)}>x</button>
+                                            </div>
+                                        )
+                                    })}
+                                    <input className="form-control" id="tags" type="text" value={inputTag} onKeyDown={(e) => onKeyDown(e)} onKeyUp={onKeyUp} onChange={(e) => handleTextFieldInput(e)} />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,16 +154,54 @@ function UpdateProfile(props) {
         </main>
     )
 
-    function getVideoInfo(){
+    function handleTextFieldInput(e) {
+        var inputTag = e.target.value
+        setInputTag(inputTag)
+    }
+
+    function onKeyDown(e) {
+        const { key } = e;
+        const trimmedInput = inputTag.trim();
+
+        if (key === ',' && trimmedInput.length && !tags.includes(trimmedInput)) {
+            e.preventDefault();
+            setTags(prevState => [...prevState, trimmedInput]);
+            setInputTag('');
+        }
+
+        if (key === "Backspace" && !inputTag.length && tags.length) {
+            e.preventDefault();
+            const tagsCopy = [...tags];
+            const poppedTag = tagsCopy.pop();
+
+            setTags(tagsCopy);
+            setInputTag(poppedTag);
+        }
+
+        setIsKeyReleased(false)
+    }
+
+    function onKeyUp() {
+        setIsKeyReleased(true)
+    }
+
+    function deleteTag(index) {
+        setTags(prevState => prevState.filter((tag, i) => i !== index))
+    }
+
+    function getVideoInfo() {
         firebase.database().ref('VideoList/').orderByChild("url").equalTo(props.location.state.url).on('value', function (snapshot) {
             if (snapshot.val()) {
-                
-                snapshot.forEach(function(video){
-                   setId(video.val().id)
-                   setFileName(video.val().fileName)
-                   setCategory(video.val().category)
+
+                snapshot.forEach(function (video) {
+                    setId(video.val().id)
+                    setFileName(video.val().fileName)
+                    setCategory(video.val().category)
+                    if(video.val().tag){
+                        setTags(video.val().tag)
+                    }
                 })
-                
+
             }
         })
     }
@@ -160,6 +216,7 @@ function UpdateProfile(props) {
                     id: id,
                     fileName: fileName,
                     category: category,
+                    tag: tags
 
                 })
                 alert("Data Saved Successfully")

@@ -52,13 +52,13 @@ function Dashboard(props) {
     const [pageNumber, setPageNumber] = useState(0)
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange, setDataRange] = useState(10)
-    const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正','素人', '巨乳', '女子校生', '人妻','熟女','SM','中國','香港','日本','韓國','台灣','亞洲','其他']
+    
 
     useEffect(() => {
         fetchAllVideo()
     }, [pageNumber, totalDataCount])
 
-    if (!getCurrentUsername) {
+    if (!firebase.auth().currentUser) {
 		// not logged in
 		alert('Please login first')
 		props.history.replace('/login')
@@ -175,10 +175,6 @@ function Dashboard(props) {
         return newDate
     }
 
-    function getCurrentUsername(){
-       
-        return firebase.auth().currentUser && firebase.auth().currentUser.displayName
-     }
 }
 
 
