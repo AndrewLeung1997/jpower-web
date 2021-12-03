@@ -143,7 +143,7 @@ function Home(props) {
                     })}
                 </div>
                 <nav className={classes.Pagination}>
-                    <ul className="pagination pagination-sm pg-blue ">
+                    <ul className="pagination pg-blue justify-content-center">
                         {
                             Array(Math.ceil(totalDataCount / dataRange)).fill().map(function (_, i) {
                                 return (

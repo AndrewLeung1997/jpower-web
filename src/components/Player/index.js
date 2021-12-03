@@ -27,8 +27,8 @@ const styles = theme => ({
     main: {
         width: 'auto',
         display: 'block', // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
+        marginLeft: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 2,
         [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
             width: 'auto',
             marginLeft: 'auto',
@@ -136,7 +136,7 @@ function Player(props) {
     function startInterval() {
         setIntervalID(setInterval(() => {
             setCount(prev => (prev + 1))
-            setUrl(bc)
+            setUrl('')
             setControlVideo(true)
         }, 1000))
 
@@ -156,7 +156,7 @@ function Player(props) {
     useEffect(() => {
         startInterval()
         getVideoByID()
-        
+
     }, [])
 
 
@@ -165,7 +165,7 @@ function Player(props) {
             <Bar></Bar>
             <main className={classes.main}>
                 <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-7">
                         <Card className={classes.VideoCard}>
                             <CardActions>
                                 <CardMedia
@@ -180,12 +180,13 @@ function Player(props) {
                                     autoPlay={controlVideo}
 
                                 />
+                                
                             </CardActions>
                             <CardContent style={{ color: 'white' }}>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                                            <img src={draw} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                                            <img src={draw} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '30px', paddingRight: '40px' }}></img>
                                         </a>
 
                                     </div>
@@ -201,7 +202,7 @@ function Player(props) {
                                         return (
                                             <div>
                                                 <div className="tag">
-                                                    <button style={{paddingLeft:'2px'}}>{value}</button>
+                                                    <button style={{ paddingLeft: '2px' }}>{value}</button>
                                                 </div>
                                             </div>
                                         )
@@ -233,7 +234,7 @@ function Player(props) {
                         </Card>
                     </div>
 
-                    < div className="col-md-6" >
+                    < div className="col-md-5" >
                         <Paper className={classes.paper}>
                             <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
                             <div className="well" >
