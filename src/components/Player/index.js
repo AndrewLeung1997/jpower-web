@@ -176,7 +176,7 @@ function Player(props) {
                                 title={videoName}
                                 color='white'
                                 style={{ fontWeight: 'bold' }}
-                                subheader={convertTimeStamp(timestamp)}>
+                                >
                             </CardHeader>
                             <CardActions>
                                 <CardMedia
