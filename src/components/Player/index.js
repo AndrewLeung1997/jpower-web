@@ -115,6 +115,9 @@ const styles = theme => ({
     category:{
         marginTop: theme.spacing.unit * 1,
         color: 'white'
+    },
+    title:{
+        color: 'white'
     }
 
 })
@@ -173,9 +176,9 @@ function Player(props) {
                     <div className="col-md-7">
                         <Card className={classes.VideoCard}>
                             <CardHeader
+                                className={classes.title}
                                 title={videoName}
-                                color='white'
-                                style={{ fontWeight: 'bold' }}
+                                
                                 >
                             </CardHeader>
                             <CardActions>
