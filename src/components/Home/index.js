@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button, IconButton } from '@material-ui/core'
+import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button, IconButton, List, ListItemButton, ListItem } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
@@ -57,7 +57,8 @@ const styles = theme => ({
         borderStyle: 'solid'
     },
     Pagination: {
-        marginTop: theme.spacing.unit * 2
+        marginTop: theme.spacing.unit * 2,
+        marginBottom: theme.spacing.unit * 3
     },
     CardMedia: {
         paddingLeft: theme.spacing.unit * 1,
@@ -68,7 +69,7 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 3,
         color: 'white'
     },
-    
+
 })
 
 function Home(props) {
@@ -90,76 +91,99 @@ function Home(props) {
             <Bar></Bar>
             <main className={classes.main}>
                 <div className="row">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                                <img src={give} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
-                            </a>
+                    <div className="col-md-12">
+                        <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                            <img src={give} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                        </a>
 
-                        </div>
                     </div>
-                    {videoList.map(function (value, index) {
-                        return (
-                            <div className="col-sm-4 col-md-3 col-lg-3">
-                                <Card className={classes.Card}>
-                                    <CardActionArea component={Link} to={{
-                                        pathname: `/player/id/${value.id}`,
-                                        state: {
-                                            url: value.url,
-                                            videoName: value.fileName,
-                                            category: value.category,
-                                            timestamp: value.timestamp,
-                                            id: value.id
-                                        }
-                                    }}>
-                                        <CardMedia
-                                            className={classes.CardMedia}
-                                            component="video"
-                                            alt="video"
-                                            width="100%"
-                                            height='200'
-                                            title={value.fileName}
-                                            src={value.url}
-
-                                        />
-                                        <CardContent style={{ color: 'white' }}>
-                                            <Typography gutterBottom variant="h8" component="div">
-                                                {value.fileName}
-                                            </Typography>
-                                            <Typography gutterBottom variant="h8" component="div">
-                                                {convertTimeStamp(value.timestamp)}
-                                            </Typography>
-                                            <Typography gutterBottom variant="h8" component="div">
-                                                <div className={classes.Tag}>
-                                                    {value.category}
-                                                </div>
-                                            </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-
-                                </Card>
-                            </div>
-                        )
-                    })}
                 </div>
-                <nav className={classes.Pagination}>
-                    <ul className="pagination pg-blue justify-content-center">
-                        {
-                            Array(Math.ceil(totalDataCount / dataRange)).fill().map(function (_, i) {
+                <div className="row">
+                    <div className="col-md-9">
+                        <div className="row" style={{ marginTop: '20px' }}>
+                            {videoList.map(function (value, index) {
                                 return (
+                                    <div className="col-sm-6 col-md-4 col-lg-4">
+                                        <Card className={classes.Card}>
+                                            <CardActionArea component={Link} to={{
+                                                pathname: `/player/id/${value.id}`,
+                                                state: {
+                                                    url: value.url,
+                                                    videoName: value.fileName,
+                                                    category: value.category,
+                                                    timestamp: value.timestamp,
+                                                    id: value.id
+                                                }
+                                            }}>
+                                                <CardMedia
+                                                    className={classes.CardMedia}
+                                                    component="video"
+                                                    alt="video"
+                                                    width="100%"
+                                                    height='200'
+                                                    title={value.fileName}
+                                                    src={value.url}
 
-                                    <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
-                                        <li className="page-item" key={i} onClick={() => setPageNumber(i)}>
-                                            <a className="page-link" href="#">{i + 1}</a>
-                                        </li>
+                                                />
+                                                <CardContent style={{ color: 'white' }}>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        {value.fileName}
+                                                    </Typography>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        {convertTimeStamp(value.timestamp)}
+                                                    </Typography>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        <div className={classes.Tag}>
+                                                            {value.category}
+                                                        </div>
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+
+                                        </Card>
                                     </div>
                                 )
-                            })
-                        }
-                    </ul>
-                </nav>
+                            })}
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <Paper className={classes.paper}>
+                            <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
+                            <div className="well" >
+                                {categoryArray.map(function (value, index) {
+                                    return (
+                                        <Button className={classes.submit}
+                                            id={index} component={Link} to={{
+                                                pathname: `/filter/category/${value}`,
+                                                state: {
+                                                    category: value
+                                                }
+                                            }}>{value}</Button>
+                                    )
+                                })}
+                            </div>
+                        </Paper>
+                    </div>
+                    <nav className={classes.Pagination}>
+                        <ul className="pagination pg-blue justify-content-center">
+                            {
+                                Array(Math.ceil(totalDataCount / dataRange)).fill().map(function (_, i) {
+                                    return (
 
-                <Paper className={classes.paper}>
+                                        <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
+                                            <li className="page-item" key={i} onClick={() => setPageNumber(i)}>
+                                                <a className="page-link" href="#">{i + 1}</a>
+                                            </li>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </nav>
+
+                </div>
+
+                {/* <Paper className={classes.paper}>
                     <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
                     <div className="well" >
                         {categoryArray.map(function (value, index) {
@@ -174,7 +198,7 @@ function Home(props) {
                             )
                         })}
                     </div>
-                </Paper>
+                </Paper> */}
             </main>
         </root>
     )
@@ -193,10 +217,10 @@ function Home(props) {
                 var keys = Object.keys(snapshot.val()).sort()
                 setTotalDataCount(keys.length)
                 var key = keys[pageNumber * dataRange]
-                snapshot.forEach(function(video){
+                snapshot.forEach(function (video) {
                     videoArray.push(video.val())
                 })
-                setVideoList(paginate(videoArray, dataRange, pageNumber+1))
+                setVideoList(paginate(videoArray, dataRange, pageNumber + 1))
             }
         })
     }

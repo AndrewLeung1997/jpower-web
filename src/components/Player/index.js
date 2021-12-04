@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Paper, Card, CardActionArea, CardMedia, CardContent, Button, CardActions } from '@material-ui/core'
+import { Typography, Paper, Card, CardActionArea, CardMedia, CardContent, Button, CardActions, CardHeader } from '@material-ui/core'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
 import firebase from '../../firebase'
@@ -86,7 +86,7 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'left',
         padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
-        height: theme.spacing.unit * 90,
+        height: 'auto',
         backgroundColor: 'black'
     },
     CardMedia: {
@@ -111,6 +111,10 @@ const styles = theme => ({
         top: 50,
 
 
+    },
+    category:{
+        marginTop: theme.spacing.unit * 1,
+        color: 'white'
     }
 
 })
@@ -168,6 +172,12 @@ function Player(props) {
                 <div className="row">
                     <div className="col-md-7">
                         <Card className={classes.VideoCard}>
+                            <CardHeader
+                                title={videoName}
+                                color='white'
+                                style={{ fontWeight: 'bold' }}
+                                subheader={convertTimeStamp(timestamp)}>
+                            </CardHeader>
                             <CardActions>
                                 <CardMedia
                                     className={classes.CardMedia}
@@ -178,38 +188,47 @@ function Player(props) {
                                     title={videoName}
                                     src={videoUrl}
                                     controls={true}
-                                    // controls={true}
-                                    // autoPlay={controlVideo}
+                                    onContextMenu={e => e.preventDefault()}
+                                    config={{ file: { attributes: { controlsList: 'nodownload' } } }}
+                                // controls={true}
+                                // autoPlay={controlVideo}
 
                                 />
-                                
+
                             </CardActions>
                             <CardContent style={{ color: 'white' }}>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                                            <img src={draw} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '30px', paddingRight: '40px' }}></img>
+                                            <img src={draw} style={{ width: '100%', height: 'auto', paddingTop: '10px', paddingLeft: '30px', paddingRight: '40px', paddingBottom: '5px' }}></img>
                                         </a>
 
                                     </div>
                                 </div>
-                                <Typography gutterBottom variant="h5" component="div">
-                                    {videoName}
-                                </Typography>
+
                                 <Typography gutterBottom variant="h8" component="div">
-                                    {convertTimeStamp(timestamp)}
+                                    上載時間： {convertTimeStamp(timestamp)}
                                 </Typography>
                                 <div className="box">
+                                    <Typography gutterBottom variant="h8" component="div" style={{color:'white', paddingTop:'12px', paddingRight: '10px'}}>標籤:</Typography>
                                     {tags.map(function (value, index) {
                                         return (
                                             <div>
                                                 <div className="tag">
-                                                    <button style={{ paddingLeft: '2px' }}>{value}</button>
+                                                    <button id={index} style={{ paddingLeft: '2px' }}
+                                                        component={Link}
+                                                        to={{
+                                                            pathname: `/filter/category/${category}`,
+                                                            state: {
+                                                                tag: value
+                                                            }
+                                                        }}>{value}</button>
                                                 </div>
                                             </div>
                                         )
                                     })}
                                 </div>
+                                <Typography gutterBottom variant="h8" component="div" style={{color:'white', paddingTop:'12px', paddingRight: '10px'}}>類別:</Typography>
                                 <Button type="submit"
                                     variant="contained"
                                     color="secondary"
@@ -220,7 +239,7 @@ function Player(props) {
                                             category: category
                                         }
                                     }}
-                                    className={classes.submit}>
+                                    className={classes.category}>
                                     {category}
                                 </Button>
                                 {/* {controlVideo ? <Button type="submit"
@@ -360,7 +379,7 @@ function Player(props) {
 
     function getVideoByCategory(category) {
         var filterArray = []
-        firebase.db.ref("VideoList/").orderByChild('category').equalTo(category).limitToFirst(20).on('value', function (snapshot) {
+        firebase.db.ref("VideoList/").orderByChild('category').equalTo(category).limitToLast(20).on('value', function (snapshot) {
             if (snapshot.exists()) {
 
                 snapshot.forEach(function (result) {
