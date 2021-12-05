@@ -7,6 +7,8 @@ import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
 import give from '../../file/give.jpeg'
+import { useHistory, useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 const styles = theme => ({
     root: {
@@ -82,18 +84,25 @@ function Home(props) {
 
     const { classes } = props
     const ref = useRef(null)
+    const location = useLocation();
+    const history = useHistory();
+    const path = window.location.pathname;
+    const initialQueryString = queryString.parse(location.search);
+    const initialPageNumber = Number(initialQueryString.page) || 0;
+
     const [videoList, setVideoList] = useState([])
     const [latestVideo, setLatestVideo] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(20)
-    const [pageNumber, setPageNumber] = useState(0)
-   
+    const [dataRange] = useState(18)
+    const [pageNumber, setPageNumber] = useState(initialPageNumber)
+    
+
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
         getAllMedia()
-       
-        
+        props.history.push(`${path}?page=${pageNumber+1}`);
+
     }, [pageNumber, totalDataCount])
 
     return (
@@ -102,10 +111,11 @@ function Home(props) {
             <main className={classes.main}>
                 <div className="row">
                     <div className="col-md-12">
-                        <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                            <img src={give} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
-                        </a>
-
+                        <div className="text-center">
+                            <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                                <img src={give} style={{ width: '70%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
@@ -141,8 +151,8 @@ function Home(props) {
                                                     title={value.fileName}
                                                     muted={true}
                                                     src={value.url}
-                                                    onMouseOver={(e)=> onMouseOver(e)}
-                                                    onMouseOut={(e)=>onMouseOut(e)}
+                                                    onMouseOver={(e) => onMouseOver(e)}
+                                                    onMouseOut={(e) => onMouseOut(e)}
                                                     loop
                                                 />
                                             </CardActionArea>
@@ -190,8 +200,11 @@ function Home(props) {
                                     return (
 
                                         <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
-                                            <li className="page-item" key={i} onClick={() => setPageNumber(i)}>
-                                                <a className="page-link" href="#">{i + 1}</a>
+                                            <li className="page-item" key={i} onClick={(e) => {
+                                                setPageNumber(i);
+                                                e.preventDefault();
+                                            }}>
+                                                <a className="page-link" href="!#">{i + 1}</a>
                                             </li>
                                         </div>
                                     )
@@ -222,13 +235,13 @@ function Home(props) {
         </root>
     )
 
-   
-    
-    function onMouseOver(e){
+
+
+    function onMouseOver(e) {
         e.target.play()
     }
 
-    function onMouseOut(e){
+    function onMouseOut(e) {
         e.target.pause()
     }
 
@@ -252,6 +265,10 @@ function Home(props) {
     function paginate(array, page_size, page_number) {
 
         return array.slice((page_number - 1) * page_size, page_number * page_size);
+    }
+
+    function pagination(number) {
+
     }
 
 
