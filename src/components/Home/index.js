@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button, IconButton, List, ListItemButton, ListItem } from '@material-ui/core'
+import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
@@ -137,25 +137,21 @@ function Home(props) {
                                                     height='200'
                                                     title={value.fileName}
                                                     src={value.url}
-
-                                                >
-
-                                                </CardMedia>
-                                                <CardContent style={{ color: 'white' }}>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {value.fileName}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {convertTimeStamp(value.timestamp)}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        <div className={classes.Tag}>
-                                                            {value.category}
-                                                        </div>
-                                                    </Typography>
-                                                </CardContent>
+                                                />
                                             </CardActionArea>
-
+                                            <CardContent style={{ color: 'white' }}>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {value.fileName}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {convertTimeStamp(value.timestamp)}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    <div className={classes.Tag}>
+                                                        {value.category}
+                                                    </div>
+                                                </Typography>
+                                            </CardContent>
                                         </Card>
                                     </div>
                                 )

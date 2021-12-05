@@ -39,7 +39,7 @@ const styles = theme => ({
 
     relatedVideoPaper: {
 
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 2,
         // marginBottom: theme.spacing.unit * 6,
         display: 'flex',
         flexDirection: 'column',
@@ -210,10 +210,12 @@ function Player(props) {
                             <CardContent style={{ color: 'white' }}>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                                            <img src={draw} style={{ width: '100%', height: 'auto', paddingTop: '10px', paddingLeft: '30px', paddingRight: '40px', paddingBottom: '5px' }}></img>
-                                        </a>
+                                        <div className="text-center">
+                                            <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                                                <img src={draw} style={{ width: '60%', height: 'auto', paddingTop: '10px', paddingLeft: '30px', paddingRight: '40px', paddingBottom: '5px' }}></img>
+                                            </a>
 
+                                        </div>
                                     </div>
                                 </div>
 
@@ -285,16 +287,20 @@ function Player(props) {
                         </Paper>
                         <div className="row">
                             <div className="col-md-12">
+                                <div className="text-center">
                                 <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
-                                    <img src={huangchao} style={{ width: '100%', height: 'auto' }}></img>
+                                    <img src={huangchao} style={{ width: '60%', height: 'auto' }}></img>
                                 </a>
+                                </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-12">
-                                <a href="https://www.dc8880.com/?uagt=jpower666&path=root" target="_blank">
-                                    <img src={huangchaoNew} style={{ width: '100%', height: 'auto', paddingTop: '20px' }}></img>
+                              <div className="text-center">
+                              <a href="https://www.dc8880.com/?uagt=jpower666&path=root" target="_blank">
+                                    <img src={huangchaoNew} style={{ width: '60%', height: 'auto', paddingTop: '20px' }}></img>
                                 </a>
+                              </div>
                             </div>
                         </div>
                     </div>
