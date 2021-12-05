@@ -420,9 +420,12 @@ function Player(props) {
                     setCategory(value.val().category)
                     setVideoName(value.val().fileName)
                     setTimeStamp(value.val().timestamp)
-                    setWatchCount(value.val().watchCount)
+                    
                     if (value.val().tag) {
                         setTags(value.val().tag)
+                    }
+                    if(value.val().watchCount){
+                        setWatchCount(value.val().watchCount)
                     }
 
                     getVideoByCategory(value.val().category)
