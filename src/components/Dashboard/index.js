@@ -177,6 +177,10 @@ function Dashboard(props) {
         
     }
 
+    function updateWatchingCount(){
+        
+    }
+
     function convertTimeStamp(timestamp) {
         var date = new Date(timestamp)
         var year = date.getFullYear()

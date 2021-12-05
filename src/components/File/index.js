@@ -58,6 +58,7 @@ function File(props) {
     const [category, setCategory] = useState('')
     const [fileName, setFileName] = useState('')
     const [id, setID] = useState('')
+    const [watchCount, setWatchCount] = useState(0)
     
 
     if (!firebase.auth().currentUser) {
@@ -171,7 +172,8 @@ function File(props) {
                             category,
                             timestamp,
                             fileName,
-                            id
+                            id,
+                            watchCount,
                         })
                     })
                     alert("成功上傳")

@@ -144,6 +144,8 @@ function Player(props) {
     const [videoName, setVideoName] = useState('')
     const [timestamp, setTimeStamp] = useState('')
     const [tags, setTags] = useState([])
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [watchCount, setWatchCount] = useState(0)
     const id = props.match.params.id
 
     console.log(id)
@@ -201,6 +203,7 @@ function Player(props) {
                                     controls={true}
                                     onContextMenu={e => e.preventDefault()}
                                     config={{ file: { attributes: { controlsList: 'nodownload' } } }}
+                                    onPlay = {checkVideoIsPlaying}
                                 // controls={true}
                                 // autoPlay={controlVideo}
 
@@ -219,6 +222,9 @@ function Player(props) {
                                     </div>
                                 </div>
 
+                                <Typography gutterBottom variant="h8" component="div">
+                                    觀看次數： {watchCount}
+                                </Typography>
                                 <Typography gutterBottom variant="h8" component="div">
                                     上載時間： {convertTimeStamp(timestamp)}
                                 </Typography>
@@ -372,6 +378,20 @@ function Player(props) {
         return timestamp
     }
 
+    function checkVideoIsPlaying(){
+        setIsPlaying(true)
+        try {
+            var query = firebase.db.ref("VideoList/").orderByChild("id").equalTo(id)
+            query.once("child_added", function (snapshot) {
+                snapshot.ref.update({
+                    watchCount : watchCount + 1
+                })
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     function convertTimeStamp(timestamp) {
         var date = new Date(timestamp)
         var year = date.getFullYear()
@@ -400,7 +420,7 @@ function Player(props) {
                     setCategory(value.val().category)
                     setVideoName(value.val().fileName)
                     setTimeStamp(value.val().timestamp)
-
+                    setWatchCount(value.val().watchCount)
                     if (value.val().tag) {
                         setTags(value.val().tag)
                     }
