@@ -74,7 +74,7 @@ const styles = theme => ({
     },
     Card: {
         marginTop: theme.spacing.unit * 2,
-        height: theme.spacing.unit * 42,
+        height: theme.spacing.unit * 45,
         backgroundColor: 'black',
         color: 'white'
 
@@ -112,13 +112,21 @@ const styles = theme => ({
 
 
     },
-    category:{
+    category: {
         marginTop: theme.spacing.unit * 1,
         color: 'white'
     },
-    title:{
+    title: {
         color: 'white'
-    }
+    },
+    TimeTag: {
+        width: theme.spacing.unit * 8,
+        backgroundColor: "#808080",
+        textAlign: 'center',
+        borderRadius: '6px',
+        borderColor: '#ffffff',
+
+    },
 
 })
 
@@ -178,8 +186,8 @@ function Player(props) {
                             <CardHeader
                                 className={classes.title}
                                 title={videoName}
-                                
-                                >
+
+                            >
                             </CardHeader>
                             <CardActions>
                                 <CardMedia
@@ -213,7 +221,7 @@ function Player(props) {
                                     上載時間： {convertTimeStamp(timestamp)}
                                 </Typography>
                                 <div className="box">
-                                    <Typography gutterBottom variant="h8" component="div" style={{color:'white', paddingTop:'12px', paddingRight: '10px'}}>標籤:</Typography>
+                                    <Typography gutterBottom variant="h8" component="div" style={{ color: 'white', paddingTop: '12px', paddingRight: '10px' }}>標籤:</Typography>
                                     {tags.map(function (value, index) {
                                         return (
                                             <div>
@@ -231,7 +239,7 @@ function Player(props) {
                                         )
                                     })}
                                 </div>
-                                <Typography gutterBottom variant="h8" component="div" style={{color:'white', paddingTop:'12px', paddingRight: '10px'}}>類別:</Typography>
+                                <Typography gutterBottom variant="h8" component="div" style={{ color: 'white', paddingTop: '12px', paddingRight: '10px' }}>類別:</Typography>
                                 <Button type="submit"
                                     variant="contained"
                                     color="secondary"
@@ -300,6 +308,9 @@ function Player(props) {
                             return (
                                 <div className="col-md-3">
                                     <Card className={classes.Card}>
+                                        <div className={classes.TimeTag}>
+                                            {convertTime(value.duration)}
+                                        </div>
                                         <CardActionArea component={Link} to={{
                                             pathname: `/player/id/${value.id}`
                                         }} target="_blank">
@@ -338,6 +349,22 @@ function Player(props) {
 
     )
 
+    function convertTime(num) {
+        var minutes = Math.floor(num / 60)
+        var seconds = Math.round(num % 60)
+
+        if (minutes < 10) {
+            minutes = '0' + minutes
+        }
+
+        if (seconds < 10) {
+            seconds = '0' + seconds
+        }
+
+        var timestamp = minutes + ":" + seconds
+
+        return timestamp
+    }
 
     function convertTimeStamp(timestamp) {
         var date = new Date(timestamp)

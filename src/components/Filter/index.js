@@ -43,7 +43,7 @@ const styles = theme => ({
 
     Card: {
         marginTop: theme.spacing.unit * 2,
-        height: theme.spacing.unit * 40,
+        height: theme.spacing.unit * 45,
         backgroundColor: 'black'
 
     },
@@ -67,6 +67,14 @@ const styles = theme => ({
     submit: {
         marginTop: theme.spacing.unit * 3,
         color: 'white'
+    },
+    TimeTag: {
+        width: theme.spacing.unit * 8,
+        backgroundColor: "#808080",
+        textAlign: 'center',
+        borderRadius: '6px',
+        borderColor: '#ffffff',
+
     },
 
 })
@@ -104,6 +112,9 @@ function Home(props) {
                                 return (
                                     <div className="col-sm-4 col-md-3 col-lg-3">
                                         <Card className={classes.Card}>
+                                            <div className={classes.TimeTag}>
+                                                {convertTime(value.duration)}
+                                            </div>
                                             <CardActionArea component={Link} to={{
                                                 pathname: `/player/id/${value.id}`,
                                                 state: {
@@ -185,6 +196,22 @@ function Home(props) {
         </root>
     )
 
+    function convertTime(num) {
+        var minutes = Math.floor(num / 60)
+        var seconds = Math.round(num % 60)
+
+        if (minutes < 10) {
+            minutes = '0' + minutes
+        }
+
+        if (seconds < 10) {
+            seconds = '0' + seconds
+        }
+
+        var timestamp = minutes + ":" + seconds
+
+        return timestamp
+    }
     function paginate(array, page_size, page_number) {
 
         return array.slice((page_number - 1) * page_size, page_number * page_size);
