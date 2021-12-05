@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -81,17 +81,19 @@ const styles = theme => ({
 function Home(props) {
 
     const { classes } = props
+    const ref = useRef(null)
     const [videoList, setVideoList] = useState([])
     const [latestVideo, setLatestVideo] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange] = useState(20)
     const [pageNumber, setPageNumber] = useState(0)
-    const [duration, setDuration] = useState('')
-
+   
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
         getAllMedia()
+       
+        
     }, [pageNumber, totalDataCount])
 
     return (
@@ -129,6 +131,7 @@ function Home(props) {
                                             }}>
 
                                                 <CardMedia
+                                                    ref={ref}
                                                     id="video"
                                                     className={classes.CardMedia}
                                                     component="video"
@@ -136,7 +139,11 @@ function Home(props) {
                                                     width="100%"
                                                     height='200'
                                                     title={value.fileName}
+                                                    muted={true}
                                                     src={value.url}
+                                                    onMouseOver={(e)=> onMouseOver(e)}
+                                                    onMouseOut={(e)=>onMouseOut(e)}
+                                                    loop
                                                 />
                                             </CardActionArea>
                                             <CardContent style={{ color: 'white' }}>
@@ -214,6 +221,16 @@ function Home(props) {
             </main>
         </root>
     )
+
+   
+    
+    function onMouseOver(e){
+        e.target.play()
+    }
+
+    function onMouseOut(e){
+        e.target.pause()
+    }
 
     function convertTime(num) {
         var minutes = Math.floor(num / 60)
