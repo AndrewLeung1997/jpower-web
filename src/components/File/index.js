@@ -5,6 +5,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
 import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
+import { duration } from 'moment'
 
 const styles = theme => ({
     main: {
@@ -139,6 +140,7 @@ function File(props) {
         var videoID =  unix + randomDigit
         return videoID
     }
+
 
     async function uploadFile(file) {
         if (file == null) {

@@ -74,6 +74,7 @@ function UpdateProfile(props) {
                     width='100%'
                     controls={true}
                     url={props.location.state.url}
+                    
                 />
 
                 <form className={classes.form} onSubmit={e => e.preventDefault() && false}>

@@ -7,7 +7,7 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
 import InsertLinkIcon from '@material-ui/icons/InsertLink'
 import PublishIcon from '@material-ui/icons/Publish';
-
+import '../Player/style.css'
 
 const styles = theme => ({
     main: {
@@ -52,32 +52,33 @@ function Dashboard(props) {
     const [pageNumber, setPageNumber] = useState(0)
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange, setDataRange] = useState(5)
-    
+
 
     useEffect(() => {
         fetchAllVideo()
     }, [pageNumber, totalDataCount, dataRange])
 
     if (!firebase.auth().currentUser) {
-		// not logged in
-		alert('Please login first')
-		props.history.replace('/login')
-		return null
-	}
+        // not logged in
+        alert('Please login first')
+        props.history.replace('/login')
+        return null
+    }
 
     return (
         <main className={classes.main}>
             <Bar></Bar>
-            <a href="/file" type="button" className="btn btn-primary"style={{marginTop:'80px'}} >Upload File</a>
+            <a href="/file" type="button" className="btn btn-primary" style={{ marginTop: '80px' }} >Upload File</a>
             <TableContainer component={Paper} style={{ marginTop: '20px' }}>
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center" >ID</TableCell>
-                            <TableCell align="center">Upload Date</TableCell>
-                            <TableCell align="center">Link</TableCell>
-                            <TableCell align="center" >Video Name</TableCell>
-                            <TableCell align="center" >Category</TableCell>
+                            <TableCell align="center">ID</TableCell>
+                            <TableCell align="center">上載日期</TableCell>
+                            <TableCell align="center">連結</TableCell>
+                            <TableCell align="center">影片標題</TableCell>
+                            <TableCell align="center">類別</TableCell>
+                            <TableCell align="center">標籤</TableCell>
                             <TableCell align="center">Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -93,23 +94,37 @@ function Dashboard(props) {
                                             component={Link}
                                             to={{
                                                 pathname: `${value.url}`
-                                                
+
                                             }}>
                                             <InsertLinkIcon color="primary" />
                                         </IconButton>
                                     </TableCell>
                                     <TableCell align="center">{value.fileName}</TableCell>
                                     <TableCell align="center">{value.category}</TableCell>
+                                    <TableCell align="center">
+                                        <div className="box">
+                                            {value.tag !== undefined ? value.tag.map(function (value, index) {
+                                                return (
+
+                                                    <div className="tag">
+                                                        <button id={index} style={{ paddingLeft: '2px' }}
+                                                        >{value}</button>
+                                                    </div>
+
+                                                )
+                                            }) : <div></div>}
+                                        </div>
+                                    </TableCell>
                                     <TableCell align="center" >
-                                        <IconButton component={Link} to={{pathname: `/updateVideoInfo`,
-                                            state:{
+                                        <IconButton component={Link} to={{
+                                            pathname: `/updateVideoInfo`,
+                                            state: {
                                                 url: value.url
                                             }
                                         }}>
-                                            <PublishIcon color="primary"/>
+                                            <PublishIcon color="primary" />
                                         </IconButton>
                                     </TableCell>
-
                                 </TableRow>
                             )
                         })}
@@ -125,12 +140,13 @@ function Dashboard(props) {
                     rowsPerPageOptions={[5, 10]}
                 />
             </TableContainer>
-           
+
         </main>
     )
 
     function handlePageChange(event, page) {
-        setPageNumber(page);
+        setPageNumber(page)
+        
     }
 
     function handleRowsPerPageChange(event) {
@@ -145,21 +161,42 @@ function Dashboard(props) {
 
     function fetchAllVideo() {
         var videoArray = []
-        firebase.database().ref('VideoList/').on('value', function (snapshot) {
+        var today = getTodayDate()
+        console.log(today)
+        firebase.database().ref('VideoList/').orderByChild('timestamp').on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
                 setTotalDataCount(keys.length)
                 var key = keys[pageNumber * dataRange]
-                snapshot.forEach(function(video){
+                snapshot.forEach(function (video) {
                     videoArray.push(video.val())
                 })
-                setVideo(paginate(videoArray, dataRange, pageNumber+1))
+                setVideo(paginate(videoArray, dataRange, pageNumber + 1))
             }
         })
+        
     }
 
     function convertTimeStamp(timestamp) {
         var date = new Date(timestamp)
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1
+        var day = date.getDate()
+
+        if (day < 10) {
+            day = '0' + day
+        }
+        if (month < 10) {
+            month = '0' + month
+        }
+
+        var newDate = year + '-' + month + '-' + day
+
+        return newDate
+    }
+
+    function getTodayDate() {
+        var date = new Date()
         var year = date.getFullYear()
         var month = date.getMonth() + 1
         var day = date.getDate()
