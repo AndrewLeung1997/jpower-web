@@ -43,18 +43,24 @@ const styles = theme => ({
 
     Card: {
         marginTop: theme.spacing.unit * 2,
-        height: theme.spacing.unit * 40,
+        height: theme.spacing.unit * 42,
         backgroundColor: 'black'
 
     },
     Tag: {
         width: theme.spacing.unit * 10,
-
         backgroundColor: "#FFC0CB",
         textAlign: 'center',
-        borderRadius: '10px',
+        borderRadius: '6px',
         borderColor: '#ffffff',
-        borderStyle: 'solid'
+    },
+    TimeTag: {
+        width: theme.spacing.unit * 8,
+        backgroundColor: "#808080",
+        textAlign: 'center',
+        borderRadius: '6px',
+        borderColor: '#ffffff',
+
     },
     Pagination: {
         marginTop: theme.spacing.unit * 2,
@@ -76,9 +82,11 @@ function Home(props) {
 
     const { classes } = props
     const [videoList, setVideoList] = useState([])
+    const [latestVideo, setLatestVideo] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(15)
+    const [dataRange] = useState(20)
     const [pageNumber, setPageNumber] = useState(0)
+    const [duration, setDuration] = useState('')
 
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
@@ -101,10 +109,14 @@ function Home(props) {
                 <div className="row">
                     <div className="col-md-9">
                         <div className="row" style={{ marginTop: '20px' }}>
+                            <Typography component="h3" variant="h5" style={{ color: 'white' }}>所有視頻</Typography>
                             {videoList.map(function (value, index) {
                                 return (
                                     <div className="col-sm-6 col-md-4 col-lg-4">
                                         <Card className={classes.Card}>
+                                            <div className={classes.TimeTag}>
+                                                {convertTime(value.duration)}
+                                            </div>
                                             <CardActionArea component={Link} to={{
                                                 pathname: `/player/id/${value.id}`,
                                                 state: {
@@ -115,7 +127,9 @@ function Home(props) {
                                                     id: value.id
                                                 }
                                             }}>
+
                                                 <CardMedia
+                                                    id="video"
                                                     className={classes.CardMedia}
                                                     component="video"
                                                     alt="video"
@@ -124,7 +138,9 @@ function Home(props) {
                                                     title={value.fileName}
                                                     src={value.url}
 
-                                                />
+                                                >
+
+                                                </CardMedia>
                                                 <CardContent style={{ color: 'white' }}>
                                                     <Typography gutterBottom variant="h8" component="div">
                                                         {value.fileName}
@@ -203,6 +219,23 @@ function Home(props) {
         </root>
     )
 
+    function convertTime(num) {
+        var minutes = Math.floor(num / 60)
+        var seconds = Math.round(num % 60)
+
+        if (minutes < 10) {
+            minutes = '0' + minutes
+        }
+
+        if (seconds < 10) {
+            seconds = '0' + seconds
+        }
+
+        var timestamp = minutes + ":" + seconds
+
+        return timestamp
+    }
+
     function paginate(array, page_size, page_number) {
 
         return array.slice((page_number - 1) * page_size, page_number * page_size);
@@ -216,11 +249,24 @@ function Home(props) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
                 setTotalDataCount(keys.length)
-                var key = keys[pageNumber * dataRange]
                 snapshot.forEach(function (video) {
                     videoArray.push(video.val())
                 })
                 setVideoList(paginate(videoArray, dataRange, pageNumber + 1))
+            }
+        })
+    }
+
+    function getLatestMedia() {
+        var latestVideoArray = []
+        firebase.database().ref('VideoList').orderByChild("catehory").equalTo("香港").limitToLast(20).on('value', function (snapshot) {
+            if (snapshot.val()) {
+                var keys = Object.keys(snapshot.val()).sort()
+                setTotalDataCount(keys.length)
+                snapshot.forEach(function (video) {
+                    latestVideoArray.push(video.val())
+                })
+                setLatestVideo(paginate(latestVideoArray, dataRange, pageNumber + 1))
             }
         })
     }

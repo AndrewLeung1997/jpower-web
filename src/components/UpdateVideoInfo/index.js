@@ -49,7 +49,8 @@ function UpdateProfile(props) {
     const [tags, setTags] = useState([])
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '女子校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
     const [inputTag, setInputTag] = useState('')
-    const [isKeyReleased, setIsKeyReleased] = useState(false);
+    const [isKeyReleased, setIsKeyReleased] = useState(false)
+    const [duration, setDuration] = useState('')
 
     useEffect(() => {
         getVideoInfo()
@@ -69,6 +70,7 @@ function UpdateProfile(props) {
                     更新影片資料
                 </Typography>
                 <ReactPlayer
+                    onDuration={(duration) => setDuration(duration)}
                     width='100%'
                     controls={true}
                     url={props.location.state.url}
@@ -111,7 +113,7 @@ function UpdateProfile(props) {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-8">
                             <div className="form-group">
                                 <label htmlFor="tags">Tags</label>
                                 <div className="container">
@@ -126,6 +128,13 @@ function UpdateProfile(props) {
                                     <input className="form-control" id="tags" type="text" value={inputTag} onKeyDown={(e) => onKeyDown(e)} onKeyUp={onKeyUp} onChange={(e) => handleTextFieldInput(e)} />
                                 </div>
                             </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form-group">
+                                <label htmlFor="tags">Video Duration</label>
+                                <input className="form-control" id="fileName" disabled={true} name="fileName" value={(duration / 60).toFixed(2)} />
+                            </div>
+
                         </div>
                     </div>
 
@@ -151,8 +160,13 @@ function UpdateProfile(props) {
                     返回
                 </Button>
             </Paper>
-        </main>
+        </main >
     )
+
+    function handleVideoDuration() {
+        var video = document.getElementById("myVideo")
+        console.log(video)
+    }
 
     function handleTextFieldInput(e) {
         var inputTag = e.target.value
@@ -197,7 +211,7 @@ function UpdateProfile(props) {
                     setId(video.val().id)
                     setFileName(video.val().fileName)
                     setCategory(video.val().category)
-                    if(video.val().tag){
+                    if (video.val().tag) {
                         setTags(video.val().tag)
                     }
                 })
@@ -216,7 +230,8 @@ function UpdateProfile(props) {
                     id: id,
                     fileName: fileName,
                     category: category,
-                    tag: tags
+                    tag: tags,
+                    duration : duration
 
                 })
                 alert("Data Saved Successfully")

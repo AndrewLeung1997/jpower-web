@@ -51,12 +51,12 @@ function Dashboard(props) {
     const [video, setVideo] = useState([])
     const [pageNumber, setPageNumber] = useState(0)
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange, setDataRange] = useState(10)
+    const [dataRange, setDataRange] = useState(5)
     
 
     useEffect(() => {
         fetchAllVideo()
-    }, [pageNumber, totalDataCount])
+    }, [pageNumber, totalDataCount, dataRange])
 
     if (!firebase.auth().currentUser) {
 		// not logged in
@@ -68,7 +68,8 @@ function Dashboard(props) {
     return (
         <main className={classes.main}>
             <Bar></Bar>
-            <TableContainer component={Paper} style={{ marginTop: '80px' }}>
+            <a href="/file" type="button" className="btn btn-primary"style={{marginTop:'80px'}} >Upload File</a>
+            <TableContainer component={Paper} style={{ marginTop: '20px' }}>
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>

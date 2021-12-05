@@ -3,7 +3,7 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import { Link, withRouter } from 'react-router-dom'
 import { useTheme } from '@material-ui/core/styles';
 
-import { Navbar, Nav, BSpan } from 'bootstrap-4-react';
+import { Navbar, Nav, BSpan, Form, FormControl, Button } from 'bootstrap-4-react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import Home from '../Home'
 
@@ -23,7 +23,6 @@ function Bar(props) {
                         <Nav.Link href="/">主頁</Nav.Link>
                         <Nav.Link href="/login">登入</Nav.Link>
                     </Navbar.Nav>
-                    <Navbar.Text></Navbar.Text>
                 </Navbar.Collapse>
             </Navbar>
         </div>
