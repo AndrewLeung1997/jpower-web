@@ -153,7 +153,8 @@ function Home(props) {
                                                     src={value.url}
                                                     onMouseOver={(e) => onMouseOver(e)}
                                                     onMouseOut={(e) => onMouseOut(e)}
-                                                    
+                                                    loop
+                                                    playsinline
                                                 />
                                             </CardActionArea>
                                             <CardContent style={{ color: 'white' }}>
