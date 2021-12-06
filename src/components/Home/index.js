@@ -153,7 +153,7 @@ function Home(props) {
                                                     src={value.url}
                                                     onMouseOver={(e) => onMouseOver(e)}
                                                     onMouseOut={(e) => onMouseOut(e)}
-                                                    loop
+                                                    
                                                 />
                                             </CardActionArea>
                                             <CardContent style={{ color: 'white' }}>
@@ -238,10 +238,13 @@ function Home(props) {
 
 
     function onMouseOver(e) {
+        e.preventDefault()
         e.target.play()
+       
     }
 
     function onMouseOut(e) {
+        e.preventDefault()
         e.target.pause()
     }
 
