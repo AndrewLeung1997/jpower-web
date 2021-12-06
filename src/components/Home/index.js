@@ -95,15 +95,18 @@ function Home(props) {
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange] = useState(18)
     const [pageNumber, setPageNumber] = useState(initialPageNumber)
+    const [totalRecommendVideo, setTotalRecommendVideo] = useState(0)
+    const [currentRecommendVideoPage, setCurrentRecommendVideoPage] = useState(initialPageNumber)
 
 
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
         getAllMedia()
+        getLatestMedia()
         props.history.push(`${path}?page=${pageNumber + 1}`);
 
-    }, [pageNumber, totalDataCount])
+    }, [pageNumber, totalDataCount, totalRecommendVideo])
 
     return (
         <root className={classes.root}>
@@ -118,6 +121,83 @@ function Home(props) {
                         </div>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="row" style={{ marginTop: '20px' }}>
+                            <Typography component="h3" variant="h5" style={{ color: 'white' }}>關於香港的最新視頻</Typography>
+                            {latestVideo.map(function (value, index) {
+                                return (
+                                    <div className="col-sm-4 col-md-3 col-lg-3">
+                                        <Card className={classes.Card}>
+                                            <div className={classes.TimeTag}>
+                                                {convertTime(value.duration)}
+                                            </div>
+                                            <CardMedia
+                                                ref={ref}
+                                                id="video"
+                                                className={classes.CardMedia}
+                                                component="video"
+                                                alt="video"
+                                                width="100%"
+                                                height='200'
+                                                title={value.fileName}
+                                                muted={true}
+                                                src={value.url}
+                                                // onMouseOver={(e) => onMouseOver(e)}
+                                                // onMouseOut={(e) => onMouseOut(e)}
+                                                // loop
+                                                // playsinline
+                                            />
+                                            <CardActionArea component={Link} to={{
+                                                pathname: `/player/id/${value.id}`,
+                                                state: {
+                                                    url: value.url,
+                                                    videoName: value.fileName,
+                                                    category: value.category,
+                                                    timestamp: value.timestamp,
+                                                    id: value.id
+                                                }
+                                            }}>
+                                                <CardContent style={{ color: 'white' }}>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        {value.fileName}
+                                                    </Typography>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        {convertTimeStamp(value.timestamp)}
+                                                    </Typography>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        <div className={classes.Tag}>
+                                                            {value.category}
+                                                        </div>
+                                                    </Typography>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                </div>
+                <nav className={classes.Pagination}>
+                        <ul className="pagination pg-blue justify-content-center">
+                            {
+                                Array(Math.ceil(totalRecommendVideo / dataRange)).fill().map(function (_, i) {
+                                    return (
+
+                                        <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
+                                            <li className="page-item" key={i} onClick={(e) => {
+                                                setCurrentRecommendVideoPage(i);
+                                                e.preventDefault();
+                                            }}>
+                                                <a className="page-link" href="!#">{i + 1}</a>
+                                            </li>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </nav>
                 <div className="row">
                     <div className="col-md-9">
                         <div className="row" style={{ marginTop: '20px' }}>
@@ -140,10 +220,10 @@ function Home(props) {
                                                 title={value.fileName}
                                                 muted={true}
                                                 src={value.url}
-                                                onMouseOver={(e) => onMouseOver(e)}
-                                                onMouseOut={(e) => onMouseOut(e)}
-                                                loop
-                                                playsinline
+                                                // onMouseOver={(e) => onMouseOver(e)}
+                                                // onMouseOut={(e) => onMouseOut(e)}
+                                                // loop
+                                                // playsinline
                                             />
                                             <CardActionArea component={Link} to={{
                                                 pathname: `/player/id/${value.id}`,
@@ -287,14 +367,14 @@ function Home(props) {
 
     function getLatestMedia() {
         var latestVideoArray = []
-        firebase.database().ref('VideoList').orderByChild("catehory").equalTo("香港").limitToLast(20).on('value', function (snapshot) {
+        firebase.database().ref('VideoList').orderByChild("category").equalTo("香港").on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
-                setTotalDataCount(keys.length)
+                setTotalRecommendVideo(keys.length)
                 snapshot.forEach(function (video) {
                     latestVideoArray.push(video.val())
                 })
-                setLatestVideo(paginate(latestVideoArray, dataRange, pageNumber + 1))
+                setLatestVideo(paginate(latestVideoArray, dataRange, currentRecommendVideoPage + 1))
             }
         })
     }
