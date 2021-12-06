@@ -95,13 +95,13 @@ function Home(props) {
     const [totalDataCount, setTotalDataCount] = useState(0)
     const [dataRange] = useState(18)
     const [pageNumber, setPageNumber] = useState(initialPageNumber)
-    
+
 
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
         getAllMedia()
-        props.history.push(`${path}?page=${pageNumber+1}`);
+        props.history.push(`${path}?page=${pageNumber + 1}`);
 
     }, [pageNumber, totalDataCount])
 
@@ -129,6 +129,22 @@ function Home(props) {
                                             <div className={classes.TimeTag}>
                                                 {convertTime(value.duration)}
                                             </div>
+                                            <CardMedia
+                                                ref={ref}
+                                                id="video"
+                                                className={classes.CardMedia}
+                                                component="video"
+                                                alt="video"
+                                                width="100%"
+                                                height='200'
+                                                title={value.fileName}
+                                                muted={true}
+                                                src={value.url}
+                                                onMouseOver={(e) => onMouseOver(e)}
+                                                onMouseOut={(e) => onMouseOut(e)}
+                                                loop
+                                                playsinline
+                                            />
                                             <CardActionArea component={Link} to={{
                                                 pathname: `/player/id/${value.id}`,
                                                 state: {
@@ -139,37 +155,20 @@ function Home(props) {
                                                     id: value.id
                                                 }
                                             }}>
-
-                                                <CardMedia
-                                                    ref={ref}
-                                                    id="video"
-                                                    className={classes.CardMedia}
-                                                    component="video"
-                                                    alt="video"
-                                                    width="100%"
-                                                    height='200'
-                                                    title={value.fileName}
-                                                    muted={true}
-                                                    src={value.url}
-                                                    onMouseOver={(e) => onMouseOver(e)}
-                                                    onMouseOut={(e) => onMouseOut(e)}
-                                                    loop
-                                                    playsinline
-                                                />
+                                                <CardContent style={{ color: 'white' }}>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        {value.fileName}
+                                                    </Typography>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        {convertTimeStamp(value.timestamp)}
+                                                    </Typography>
+                                                    <Typography gutterBottom variant="h8" component="div">
+                                                        <div className={classes.Tag}>
+                                                            {value.category}
+                                                        </div>
+                                                    </Typography>
+                                                </CardContent>
                                             </CardActionArea>
-                                            <CardContent style={{ color: 'white' }}>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    {value.fileName}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    {convertTimeStamp(value.timestamp)}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    <div className={classes.Tag}>
-                                                        {value.category}
-                                                    </div>
-                                                </Typography>
-                                            </CardContent>
                                         </Card>
                                     </div>
                                 )
@@ -239,13 +238,11 @@ function Home(props) {
 
 
     function onMouseOver(e) {
-        e.preventDefault()
         e.target.play()
-       
+
     }
 
     function onMouseOut(e) {
-        e.preventDefault()
         e.target.pause()
     }
 
