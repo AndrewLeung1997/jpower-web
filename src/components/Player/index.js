@@ -291,19 +291,19 @@ function Player(props) {
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="text-center">
-                                <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
-                                    <img src={huangchao} style={{ width: '60%', height: 'auto' }}></img>
-                                </a>
+                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
+                                        <img src={huangchao} style={{ width: '60%', height: 'auto' }}></img>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-12">
-                              <div className="text-center">
-                              <a href="https://www.dc8880.com/?uagt=jpower666&path=root" target="_blank">
-                                    <img src={huangchaoNew} style={{ width: '60%', height: 'auto', paddingTop: '20px' }}></img>
-                                </a>
-                              </div>
+                                <div className="text-center">
+                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=root" target="_blank">
+                                        <img src={huangchaoNew} style={{ width: '60%', height: 'auto', paddingTop: '20px' }}></img>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -334,20 +334,20 @@ function Player(props) {
                                                 src={`${value.url}#t=0.5`}
 
                                             />
-                                            <CardContent>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    {value.fileName}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    {convertTimeStamp(value.timestamp)}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    <div className={classes.Tag}>
-                                                        {value.category}
-                                                    </div>
-                                                </Typography>
-                                            </CardContent>
                                         </CardActionArea>
+                                        <CardContent>
+                                            <Typography gutterBottom variant="h8" component="div">
+                                                {value.fileName}
+                                            </Typography>
+                                            <Typography gutterBottom variant="h8" component="div">
+                                                {convertTimeStamp(value.timestamp)}
+                                            </Typography>
+                                            <Typography gutterBottom variant="h8" component="div">
+                                                <div className={classes.Tag}>
+                                                    {value.category}
+                                                </div>
+                                            </Typography>
+                                        </CardContent>
                                     </Card>
                                 </div>
                             )
@@ -405,11 +405,11 @@ function Player(props) {
                     setCategory(value.val().category)
                     setVideoName(value.val().fileName)
                     setTimeStamp(value.val().timestamp)
-                    
+
                     if (value.val().tag) {
                         setTags(value.val().tag)
                     }
-                    if(value.val().watchCount){
+                    if (value.val().watchCount) {
                         setWatchCount(value.val().watchCount)
                     }
 
