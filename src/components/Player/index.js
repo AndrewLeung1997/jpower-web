@@ -421,14 +421,16 @@ function Player(props) {
 
     function getVideoByCategory(category) {
         var filterArray = []
+        var reversedArray = []
         firebase.db.ref("VideoList/").orderByChild('category').equalTo(category).limitToLast(20).on('value', function (snapshot) {
             if (snapshot.exists()) {
 
                 snapshot.forEach(function (result) {
                     filterArray.push(result.val())
                 })
+                reversedArray = [...filterArray].reverse()
                 console.log(filterArray)
-                setRelatedVideo(filterArray)
+                setRelatedVideo(reversedArray)
             }
         })
     }

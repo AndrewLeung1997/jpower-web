@@ -7,6 +7,7 @@ import firebase from 'firebase'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
 import Bar from '../Bar'
 import give from '../../file/give.jpeg'
+import promotion2 from '../../file/promotion2.png'
 
 const styles = theme => ({
     root: {
@@ -99,10 +100,11 @@ function Home(props) {
             <main className={classes.main}>
                 <div className="row">
                     <div className="col-md-12">
-                        <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                            <img src={give} style={{ width: '100%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
-                        </a>
-
+                        <div className="text-center">
+                            <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
+                                <img src={give} style={{ width: '70%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div className="row">
@@ -135,21 +137,21 @@ function Home(props) {
                                                     src={value.url}
 
                                                 />
-                                                <CardContent style={{ color: 'white' }}>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {value.fileName}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {convertTimeStamp(value.timestamp)}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        <div className={classes.Tag}>
-                                                            {value.category}
-                                                        </div>
-                                                    </Typography>
-                                                </CardContent>
-                                            </CardActionArea>
 
+                                            </CardActionArea>
+                                            <CardContent style={{ color: 'white' }}>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {value.fileName}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {convertTimeStamp(value.timestamp)}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    <div className={classes.Tag}>
+                                                        {value.category}
+                                                    </div>
+                                                </Typography>
+                                            </CardContent>
                                         </Card>
                                     </div>
                                 )
@@ -173,6 +175,15 @@ function Home(props) {
                                 })}
                             </div>
                         </Paper>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="text-center">
+                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
+                                        <img src={promotion2} style={{ width: '100%', height: 'auto' }}></img>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <nav className={classes.Pagination}>
                         <ul className="pagination pg-blue justify-content-center">
@@ -221,6 +232,7 @@ function Home(props) {
     function getAllMedia() {
 
         var videoArray = []
+        var reversedArray = []
         firebase.database().ref('VideoList/').orderByChild("category").equalTo(props.match.params.category).on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
@@ -229,7 +241,8 @@ function Home(props) {
                 snapshot.forEach(function (video) {
                     videoArray.push(video.val())
                 })
-                setVideoList(paginate(videoArray, dataRange, pageNumber + 1))
+                reversedArray = [...videoArray].reverse()
+                setVideoList(paginate(reversedArray, dataRange, pageNumber + 1))
             }
         })
     }

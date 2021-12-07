@@ -9,6 +9,8 @@ import Bar from '../Bar'
 import give from '../../file/give.jpeg'
 import { useHistory, useLocation } from "react-router-dom";
 import queryString from "query-string";
+import promotion1 from '../../file/promotion1.png'
+import promotion3 from '../../file/promotion3.png'
 
 const styles = theme => ({
     root: {
@@ -96,7 +98,7 @@ function Home(props) {
     const [dataRange] = useState(18)
     const [pageNumber, setPageNumber] = useState(initialPageNumber)
     const [totalRecommendVideo, setTotalRecommendVideo] = useState(0)
-    const [currentRecommendVideoPage, setCurrentRecommendVideoPage] = useState(initialPageNumber)
+    const [currentRecommendVideoPage, setCurrentRecommendVideoPage] = useState(0)
 
 
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
@@ -104,9 +106,9 @@ function Home(props) {
     useEffect(() => {
         getAllMedia()
         getLatestMedia()
-        props.history.push(`${path}?page=${pageNumber + 1}`);
+        props.history.push(`${path}?page=${pageNumber}`);
 
-    }, [pageNumber, totalDataCount, totalRecommendVideo])
+    }, [pageNumber, totalDataCount, totalRecommendVideo, currentRecommendVideoPage])
 
     return (
         <root className={classes.root}>
@@ -132,22 +134,7 @@ function Home(props) {
                                             <div className={classes.TimeTag}>
                                                 {convertTime(value.duration)}
                                             </div>
-                                            <CardMedia
-                                                ref={ref}
-                                                id="video"
-                                                className={classes.CardMedia}
-                                                component="video"
-                                                alt="video"
-                                                width="100%"
-                                                height='200'
-                                                title={value.fileName}
-                                                muted={true}
-                                                src={value.url}
-                                                // onMouseOver={(e) => onMouseOver(e)}
-                                                // onMouseOut={(e) => onMouseOut(e)}
-                                                // loop
-                                                // playsinline
-                                            />
+
                                             <CardActionArea component={Link} to={{
                                                 pathname: `/player/id/${value.id}`,
                                                 state: {
@@ -158,20 +145,36 @@ function Home(props) {
                                                     id: value.id
                                                 }
                                             }}>
-                                                <CardContent style={{ color: 'white' }}>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {value.fileName}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {convertTimeStamp(value.timestamp)}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        <div className={classes.Tag}>
-                                                            {value.category}
-                                                        </div>
-                                                    </Typography>
-                                                </CardContent>
+                                                <CardMedia
+                                                    ref={ref}
+                                                    id="video"
+                                                    className={classes.CardMedia}
+                                                    component="video"
+                                                    alt="video"
+                                                    width="100%"
+                                                    height='200'
+                                                    title={value.fileName}
+                                                    muted={true}
+                                                    src={value.url}
+                                                // onMouseOver={(e) => onMouseOver(e)}
+                                                // onMouseOut={(e) => onMouseOut(e)}
+                                                // loop
+                                                // playsinline
+                                                />
                                             </CardActionArea>
+                                            <CardContent style={{ color: 'white' }}>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {value.fileName}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {convertTimeStamp(value.timestamp)}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    <div className={classes.Tag}>
+                                                        {value.category}
+                                                    </div>
+                                                </Typography>
+                                            </CardContent>
                                         </Card>
                                     </div>
                                 )
@@ -180,24 +183,24 @@ function Home(props) {
                     </div>
                 </div>
                 <nav className={classes.Pagination}>
-                        <ul className="pagination pg-blue justify-content-center">
-                            {
-                                Array(Math.ceil(totalRecommendVideo / dataRange)).fill().map(function (_, i) {
-                                    return (
+                    <ul className="pagination pg-blue justify-content-center">
+                        {
+                            Array(Math.ceil(totalRecommendVideo / dataRange)).fill().map(function (_, i) {
+                                return (
 
-                                        <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
-                                            <li className="page-item" key={i} onClick={(e) => {
-                                                setCurrentRecommendVideoPage(i);
-                                                e.preventDefault();
-                                            }}>
-                                                <a className="page-link" href="!#">{i + 1}</a>
-                                            </li>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </nav>
+                                    <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
+                                        <li className="page-item" key={i} onClick={(e) => {
+                                            setCurrentRecommendVideoPage(i);
+                                            e.preventDefault();
+                                        }}>
+                                            <a className="page-link" href="!#">{i + 1}</a>
+                                        </li>
+                                    </div>
+                                )
+                            })
+                        }
+                    </ul>
+                </nav>
                 <div className="row">
                     <div className="col-md-9">
                         <div className="row" style={{ marginTop: '20px' }}>
@@ -209,22 +212,6 @@ function Home(props) {
                                             <div className={classes.TimeTag}>
                                                 {convertTime(value.duration)}
                                             </div>
-                                            <CardMedia
-                                                ref={ref}
-                                                id="video"
-                                                className={classes.CardMedia}
-                                                component="video"
-                                                alt="video"
-                                                width="100%"
-                                                height='200'
-                                                title={value.fileName}
-                                                muted={true}
-                                                src={value.url}
-                                                // onMouseOver={(e) => onMouseOver(e)}
-                                                // onMouseOut={(e) => onMouseOut(e)}
-                                                // loop
-                                                // playsinline
-                                            />
                                             <CardActionArea component={Link} to={{
                                                 pathname: `/player/id/${value.id}`,
                                                 state: {
@@ -235,20 +222,36 @@ function Home(props) {
                                                     id: value.id
                                                 }
                                             }}>
-                                                <CardContent style={{ color: 'white' }}>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {value.fileName}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        {convertTimeStamp(value.timestamp)}
-                                                    </Typography>
-                                                    <Typography gutterBottom variant="h8" component="div">
-                                                        <div className={classes.Tag}>
-                                                            {value.category}
-                                                        </div>
-                                                    </Typography>
-                                                </CardContent>
+                                                <CardMedia
+                                                    ref={ref}
+                                                    id="video"
+                                                    className={classes.CardMedia}
+                                                    component="video"
+                                                    alt="video"
+                                                    width="100%"
+                                                    height='200'
+                                                    title={value.fileName}
+                                                    muted={true}
+                                                    src={value.url}
+                                                // onMouseOver={(e) => onMouseOver(e)}
+                                                // onMouseOut={(e) => onMouseOut(e)}
+                                                // loop
+                                                // playsinline
+                                                />
                                             </CardActionArea>
+                                            <CardContent style={{ color: 'white' }}>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {value.fileName}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    {convertTimeStamp(value.timestamp)}
+                                                </Typography>
+                                                <Typography gutterBottom variant="h8" component="div">
+                                                    <div className={classes.Tag}>
+                                                        {value.category}
+                                                    </div>
+                                                </Typography>
+                                            </CardContent>
                                         </Card>
                                     </div>
                                 )
@@ -256,6 +259,15 @@ function Home(props) {
                         </div>
                     </div>
                     <div className="col-md-3">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="text-center">
+                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
+                                        <img src={promotion3} style={{ width: '100%', height: 'auto' }}></img>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         <Paper className={classes.paper}>
                             <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
                             <div className="well" >
@@ -272,6 +284,15 @@ function Home(props) {
                                 })}
                             </div>
                         </Paper>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="text-center">
+                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
+                                        <img src={promotion1} style={{ width: '100%', height: 'auto' }}></img>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <nav className={classes.Pagination}>
                         <ul className="pagination pg-blue justify-content-center">
@@ -351,7 +372,7 @@ function Home(props) {
 
 
     function getAllMedia() {
-
+        var reversedVideoArray = []
         var videoArray = []
         firebase.database().ref('VideoList/').on('value', function (snapshot) {
             if (snapshot.val()) {
@@ -360,21 +381,24 @@ function Home(props) {
                 snapshot.forEach(function (video) {
                     videoArray.push(video.val())
                 })
-                setVideoList(paginate(videoArray, dataRange, pageNumber + 1))
+                reversedVideoArray = [...videoArray].reverse()
+                setVideoList(paginate(reversedVideoArray, dataRange, pageNumber + 1))
             }
         })
     }
 
     function getLatestMedia() {
         var latestVideoArray = []
+        var reversedVideoArray = []
         firebase.database().ref('VideoList').orderByChild("category").equalTo("香港").on('value', function (snapshot) {
             if (snapshot.val()) {
-                var keys = Object.keys(snapshot.val()).sort()
+                var keys = Object.keys(snapshot.val()).sort().reverse()
                 setTotalRecommendVideo(keys.length)
                 snapshot.forEach(function (video) {
                     latestVideoArray.push(video.val())
                 })
-                setLatestVideo(paginate(latestVideoArray, dataRange, currentRecommendVideoPage + 1))
+                reversedVideoArray = [...latestVideoArray].reverse()
+                setLatestVideo(paginate(reversedVideoArray, dataRange, currentRecommendVideoPage + 1))
             }
         })
     }

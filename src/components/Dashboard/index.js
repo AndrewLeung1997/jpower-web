@@ -161,25 +161,23 @@ function Dashboard(props) {
 
     function fetchAllVideo() {
         var videoArray = []
+        var reversedArray = []
         var today = getTodayDate()
         console.log(today)
-        firebase.database().ref('VideoList/').orderByChild('timestamp').on('value', function (snapshot) {
+        firebase.database().ref('VideoList/').on('value', function (snapshot) {
             if (snapshot.val()) {
                 var keys = Object.keys(snapshot.val()).sort()
                 setTotalDataCount(keys.length)
-                var key = keys[pageNumber * dataRange]
                 snapshot.forEach(function (video) {
                     videoArray.push(video.val())
                 })
-                setVideo(paginate(videoArray, dataRange, pageNumber + 1))
+                reversedArray = [...videoArray].reverse()
+                setVideo(paginate(reversedArray, dataRange, pageNumber + 1))
             }
         })
         
     }
 
-    function updateWatchingCount(){
-        
-    }
 
     function convertTimeStamp(timestamp) {
         var date = new Date(timestamp)
