@@ -67,7 +67,7 @@ const styles = theme => ({
 
     },
     Pagination: {
-        marginTop: theme.spacing.unit * 1,
+        marginTop: theme.spacing.unit * 2,
         marginBottom: theme.spacing.unit * 3
     },
     CardMedia: {
@@ -82,7 +82,7 @@ const styles = theme => ({
 
 })
 
-function Home(props) {
+function All(props) {
 
     const { classes } = props
     const ref = useRef(null)
@@ -92,23 +92,19 @@ function Home(props) {
     const initialQueryString = queryString.parse(location.search);
     const initialPageNumber = Number(initialQueryString.page) || 0;
 
-
-    const [latestVideo, setLatestVideo] = useState([])
+    const [videoList, setVideoList] = useState([])
     const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(10)
-
-    const [totalRecommendVideo, setTotalRecommendVideo] = useState(0)
-    const [currentRecommendVideoPage, setCurrentRecommendVideoPage] = useState(initialPageNumber)
+    const [dataRange] = useState(12)
+    const [pageNumber, setPageNumber] = useState(initialPageNumber)
 
 
     const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
 
     useEffect(() => {
+        getAllMedia()
+        props.history.push(`${path}?page=${pageNumber}`);
 
-        getLatestMedia()
-        props.history.push(`${path}?page=${currentRecommendVideoPage}`);
-
-    }, [totalRecommendVideo, currentRecommendVideoPage])
+    }, [pageNumber, totalDataCount])
 
     return (
         <root className={classes.root}>
@@ -123,18 +119,19 @@ function Home(props) {
                         </div>
                     </div>
                 </div>
+
+
                 <div className="row">
                     <div className="col-md-9">
                         <div className="row" style={{ marginTop: '20px' }}>
-                            <Typography component="h3" variant="h5" style={{ color: 'white' }}>關於香港的最新視頻</Typography>
-                            {latestVideo.map(function (value, index) {
+                            <Typography component="h3" variant="h5" style={{ color: 'white' }}>所有視頻</Typography>
+                            {videoList.map(function (value, index) {
                                 return (
-                                    <div className="col-sm-4 col-md-3 col-lg-3">
+                                    <div className="col-sm-6 col-md-4 col-lg-4">
                                         <Card className={classes.Card}>
                                             <div className={classes.TimeTag}>
                                                 {convertTime(value.duration)}
                                             </div>
-
                                             <CardActionArea component={Link} to={{
                                                 pathname: `/player/id/${value.id}`,
                                                 state: {
@@ -221,12 +218,12 @@ function Home(props) {
                     <nav className={classes.Pagination}>
                         <ul className="pagination pg-blue justify-content-center">
                             {
-                                Array(Math.ceil(totalRecommendVideo / dataRange)).fill().map(function (_, i) {
+                                Array(Math.ceil(totalDataCount / dataRange)).fill().map(function (_, i) {
                                     return (
 
                                         <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
                                             <li className="page-item" key={i} onClick={(e) => {
-                                                setCurrentRecommendVideoPage(i);
+                                                setPageNumber(i);
                                                 e.preventDefault();
                                             }}>
                                                 <a className="page-link" href="!#">{i + 1}</a>
@@ -237,12 +234,9 @@ function Home(props) {
                             }
                         </ul>
                     </nav>
-
-
-
                 </div>
             </main>
-        </root >
+        </root>
     )
 
 
@@ -280,20 +274,18 @@ function Home(props) {
 
 
 
-
-
-    function getLatestMedia() {
-        var latestVideoArray = []
+    function getAllMedia() {
         var reversedVideoArray = []
-        firebase.database().ref('VideoList').orderByChild("category").equalTo("香港").on('value', function (snapshot) {
+        var videoArray = []
+        firebase.database().ref('VideoList/').on('value', function (snapshot) {
             if (snapshot.val()) {
-                var keys = Object.keys(snapshot.val()).sort().reverse()
-                setTotalRecommendVideo(keys.length)
+                var keys = Object.keys(snapshot.val()).sort()
+                setTotalDataCount(keys.length)
                 snapshot.forEach(function (video) {
-                    latestVideoArray.push(video.val())
+                    videoArray.push(video.val())
                 })
-                reversedVideoArray = [...latestVideoArray].reverse()
-                setLatestVideo(paginate(reversedVideoArray, dataRange, currentRecommendVideoPage + 1))
+                reversedVideoArray = [...videoArray].reverse()
+                setVideoList(paginate(reversedVideoArray, dataRange, pageNumber + 1))
             }
         })
     }
@@ -319,4 +311,4 @@ function Home(props) {
 
 }
 
-export default withRouter(withStyles(styles)(Home))
+export default withRouter(withStyles(styles)(All))

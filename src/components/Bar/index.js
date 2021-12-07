@@ -21,6 +21,7 @@ function Bar(props) {
                 <Navbar.Collapse id="navbarsExampleDefault">
                     <Navbar.Nav mr="auto">
                         <Nav.Link href="/">主頁</Nav.Link>
+                        <Nav.Link href="/all">所有影片</Nav.Link>
                         <Nav.Link href="/login">登入</Nav.Link>
                     </Navbar.Nav>
                 </Navbar.Collapse>

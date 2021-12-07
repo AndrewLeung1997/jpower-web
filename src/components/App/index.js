@@ -12,6 +12,7 @@ import Filter from '../Filter'
 import File from '../File'
 import Dashboard from '../Dashboard'
 import UpdateVideoInfo from '../UpdateVideoInfo'
+import All from '../All'
 const theme = createTheme()
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
                     <Route exact path="/uploads" component={File}></Route>
                     <Route exact path="/dashboard" component={Dashboard}></Route>
                     <Route exact path="/updateVideoInfo" component={UpdateVideoInfo}></Route>
+                    <Route exact path="/all" component={All}></Route>
                 </Switch>
             </Router>
         </MuiThemeProvider>
