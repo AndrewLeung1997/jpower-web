@@ -196,6 +196,7 @@ function Player(props) {
                                     className={classes.CardMedia}
                                     component="video"
                                     alt="video"
+                                    preload="metadata"
                                     width="50%"
                                     height='300'
                                     title={videoName}
@@ -325,11 +326,12 @@ function Player(props) {
                                             <CardMedia
                                                 className={classes.CardMedia}
                                                 component="video"
+                                                preload="metadata"
                                                 alt="video"
                                                 width="100%"
                                                 height='200'
                                                 title={value.fileName}
-                                                src={value.url}
+                                                src={`${value.url}#t=0.5`}
 
                                             />
                                             <CardContent>

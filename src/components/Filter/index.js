@@ -128,13 +128,14 @@ function Home(props) {
                                                 }
                                             }}>
                                                 <CardMedia
+                                                    preload="metadata"
                                                     className={classes.CardMedia}
                                                     component="video"
                                                     alt="video"
                                                     width="100%"
                                                     height='200'
                                                     title={value.fileName}
-                                                    src={value.url}
+                                                    src={`${value.url}#t=0.5`}
 
                                                 />
 

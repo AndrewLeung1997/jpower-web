@@ -146,6 +146,7 @@ function Home(props) {
                                                 }
                                             }}>
                                                 <CardMedia
+                                                    preload="metadata"
                                                     ref={ref}
                                                     id="video"
                                                     className={classes.CardMedia}
@@ -155,7 +156,7 @@ function Home(props) {
                                                     height='200'
                                                     title={value.fileName}
                                                     muted={true}
-                                                    src={value.url}
+                                                    src={`${value.url}#t=0.5`}
                                                 // onMouseOver={(e) => onMouseOver(e)}
                                                 // onMouseOut={(e) => onMouseOut(e)}
                                                 // loop
