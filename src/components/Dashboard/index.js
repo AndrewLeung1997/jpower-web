@@ -81,14 +81,6 @@ function Dashboard(props) {
     return (
         <main className={classes.main}>
             <Bar></Bar>
-            <a
-                href="/file"
-                type="button"
-                className="btn btn-primary"
-                style={{ marginTop: "80px" }}
-            >
-                Upload File
-            </a>
             <TableContainer component={Paper} style={{ marginTop: "20px" }}>
                 <Table className={classes.table}>
                     <TableHead>
