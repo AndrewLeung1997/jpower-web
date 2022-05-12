@@ -152,12 +152,12 @@ function All(props) {
                                             <CardMedia
                                                 preload="metadata"
                                                 className={classes.CardMedia}
-                                                component="video"
+                                                component={value.previewUrl ? "img" : "video"}
                                                 alt="video"
                                                 width="100%"
                                                 height="200"
                                                 title={value.fileName}
-                                                src={`${value.url}#t=0.5`}
+                                                src={`${value.previewUrl || value.url}#t=0.5`}
                                             />
                                         </CardActionArea>
                                         <CardContent style={{color: "white"}}>
