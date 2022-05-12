@@ -11,6 +11,7 @@ import {
     TableBody,
     TablePagination,
     IconButton,
+    Box,
 } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
@@ -20,6 +21,8 @@ import Bar from "../Bar";
 import InsertLinkIcon from "@material-ui/icons/InsertLink";
 import PublishIcon from "@material-ui/icons/Publish";
 import "../Player/style.css";
+import { db } from "../../firebase";
+import { useCategories } from "../App";
 
 const styles = (theme) => ({
     main: {
@@ -61,11 +64,27 @@ const styles = (theme) => ({
 
 function Dashboard(props) {
     const { classes } = props;
+    const categories = useCategories();
 
     const [video, setVideo] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalDataCount, setTotalDataCount] = useState(0);
     const [dataRange, setDataRange] = useState(5);
+    const [newCategory, setNewCategory] = useState("");
+
+    const createNewCategory = () => {
+        if (newCategory) {
+            db.collection("categories")
+                .add({
+                    id: categories.length + 1,
+                    category_name: newCategory,
+                })
+                .then(() => {
+                    alert("Category added!");
+                });
+            setNewCategory("");
+        }
+    };
 
     useEffect(() => {
         fetchAllVideo();
@@ -81,6 +100,34 @@ function Dashboard(props) {
     return (
         <main className={classes.main}>
             <Bar></Bar>
+            {/* Add category */}
+            <Paper className={classes.paper} style={{ marginTop: 90 }}>
+                <Typography style={{alignSelf: "flex-start"}}>
+                    <h4>Add new category</h4>
+                </Typography>
+                <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
+                    <input
+                        className="form-control"
+                        style={{ marginRight: 10 }}
+                        id="tags"
+                        type="text"
+                        placeholder="Add category"
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") createNewCategory();
+                        }}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            createNewCategory();
+                        }}
+                    >
+                        Add
+                    </Button>
+                </Box>
+            </Paper>
             <TableContainer component={Paper} style={{ marginTop: "20px" }}>
                 <Table className={classes.table}>
                     <TableHead>
