@@ -18,46 +18,46 @@ import All from "../All";
 const theme = createTheme();
 
 export default function App() {
-  const [firebaseInitialized, setFirebaseInitialized] = useState(false);
+    const [firebaseInitialized, setFirebaseInitialized] = useState(false);
 
-  useEffect(() => {
-    firebase.isInitialized().then((val) => {
-      setFirebaseInitialized(val);
+    useEffect(() => {
+        firebase.isInitialized().then((val) => {
+            setFirebaseInitialized(val);
+        });
     });
-  });
 
-  return firebaseInitialized !== false ? (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Registration} />
-          <Route exact path="/upload" component={FileUpload} />
-          <Route exact path="/file" component={File}></Route>
-          <Route exact path="/player/id/:id" component={Player}></Route>
-          <Route exact path="/" component={Home}></Route>
-          <Route
-            exact
-            path="/filter/category/:category"
-            component={Filter}
-          ></Route>
-          <Route exact path="/uploads" component={File}></Route>
-          <Route exact path="/dashboard" component={Dashboard}></Route>
-          <Route
-            exact
-            path="/updateVideoInfo"
-            component={UpdateVideoInfo}
-          ></Route>
-          <Route exact path="/Tags" component={Tags}></Route>
-          <Route exact path="/Search/tag/:tag" component={Search}></Route>
-          <Route exact path="/All" component={All}></Route>
-        </Switch>
-      </Router>
-    </MuiThemeProvider>
-  ) : (
-    <div id="loader">
-      <CircularProgress />
-    </div>
-  );
+    return firebaseInitialized !== false ? (
+        <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <Router>
+                <Switch>
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/register" component={Registration} />
+                    <Route exact path="/upload" component={FileUpload} />
+                    <Route exact path="/file" component={File}></Route>
+                    <Route exact path="/player/id/:id" component={Player}></Route>
+                    <Route exact path="/" component={Home}></Route>
+                    <Route
+                        exact
+                        path="/filter/category/:category"
+                        component={Filter}
+                    ></Route>
+                    <Route exact path="/uploads" component={File}></Route>
+                    <Route exact path="/dashboard" component={Dashboard}></Route>
+                    <Route
+                        exact
+                        path="/updateVideoInfo"
+                        component={UpdateVideoInfo}
+                    ></Route>
+                    <Route exact path="/Tags" component={Tags}></Route>
+                    <Route exact path="/Search/tag/:tag" component={Search}></Route>
+                    <Route exact path="/All" component={All}></Route>
+                </Switch>
+            </Router>
+        </MuiThemeProvider>
+    ) : (
+        <div id="loader">
+            <CircularProgress />
+        </div>
+    );
 }
