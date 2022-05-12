@@ -7,15 +7,14 @@ import {
     CardContent,
     CardActionArea,
     Button,
-    IconButton,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
 import firebase from "firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import "../Bar/index.css";
+import {categories} from "../../constants/category";
 
 const styles = (theme) => ({
     main: {
@@ -85,35 +84,9 @@ function All(props) {
     const [dataRange] = useState(15);
     const [pageNumber, setPageNumber] = useState(0);
 
-    const categoryArray = [
-        "中國",
-        "歐美",
-        "日本",
-        "台灣",
-        "香港",
-        "東南亞",
-        "韓國",
-        "H漫",
-        "有碼",
-        "無碼",
-        "生肉",
-        "熟肉",
-        "巨乳",
-        "SM",
-        "偷拍",
-        "人妻",
-        "學生",
-        "群p",
-        "同性",
-        "露出",
-        "制服",
-        "近親",
-        "其他",
-    ];
-
     useEffect(() => {
         getAllMedia();
-    }, [pageNumber, totalDataCount, categoryArray]);
+    }, [pageNumber, totalDataCount, categories]);
 
     return (
         <div className={classes.main}>
@@ -130,7 +103,7 @@ function All(props) {
                         </Typography>
                         <div className="well">
                             <ul className="list-group">
-                                {categoryArray.map(function (value, index) {
+                                {categories.map(function (value, index) {
                                     return (
                                         <li>
                                             <Button

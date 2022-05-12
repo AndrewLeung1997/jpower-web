@@ -2,22 +2,10 @@ import React, { useState } from "react";
 import {
     Typography,
     Paper,
-    Avatar,
-    Button,
-    FormControl,
-    Input,
-    InputLabel,
-    FormGroup,
-    FormControlLabel,
-    Select,
-    Checkbox,
-    MenuItem,
     Divider,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import firebase from "../../firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
@@ -28,7 +16,7 @@ const styles = (theme) => ({
         display: "block", // Fix IE 11 issue.
         marginLeft: theme.spacing.unit * 4,
         marginRight: theme.spacing.unit * 4,
-        [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+        [theme.breakpoints.up(`auto${(theme.spacing.unit * 3 * 2)}`)]: {
             width: "auto",
             marginLeft: 100,
             marginRight: 100,

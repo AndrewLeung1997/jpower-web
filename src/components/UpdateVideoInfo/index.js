@@ -6,6 +6,7 @@ import firebase from "firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import ReactPlayer from "react-player";
 import "../UpdateVideoInfo/style.css";
+import { categories } from "../../constants/category";
 
 const styles = (theme) => ({
     main: {
@@ -47,25 +48,6 @@ function UpdateProfile(props) {
     const [id, setId] = useState("");
     const [fileName, setFileName] = useState("");
     const [tags, setTags] = useState([]);
-    const categoryArray = [
-        "偷拍",
-        "Deepfake",
-        "JAV",
-        "無修正",
-        "素人",
-        "巨乳",
-        "女子校生",
-        "人妻",
-        "熟女",
-        "SM",
-        "中國",
-        "香港",
-        "日本",
-        "韓國",
-        "台灣",
-        "亞洲",
-        "其他",
-    ];
     const [inputTag, setInputTag] = useState("");
     const [isKeyReleased, setIsKeyReleased] = useState(false);
     const [duration, setDuration] = useState("");
@@ -149,7 +131,7 @@ function UpdateProfile(props) {
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
                                 >
-                                    {categoryArray.map(function (value) {
+                                    {categories.map(function (value) {
                                         return <option value={value}>{value}</option>;
                                     })}
                                 </select>

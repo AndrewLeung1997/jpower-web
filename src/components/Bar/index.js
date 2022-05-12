@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-import { Link, withRouter } from "react-router-dom";
-import { useTheme } from "@material-ui/core/styles";
-import {
-    Navbar,
-    Nav,
-    BSpan,
-    Form,
-    FormControl,
-    Button,
-    Container,
-} from "bootstrap-4-react";
-import { HashRouter, Route, Switch } from "react-router-dom";
-import Home from "../Home";
+import React from "react";
+import { withRouter } from "react-router-dom";
+
+import { Navbar, Nav } from "bootstrap-4-react";
 import "../Bar/index.css";
+import firebase from "firebase";
 
 function Bar(props) {
+    const user = firebase.auth().currentUser;
     return (
         <div>
-            <Navbar expand="md" dark bg="dark" fixed="top">
+            <Navbar
+                expand="md"
+                dark
+                bg="dark"
+                fixed="top"
+                style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)" }}
+            >
                 <Navbar.Brand
                     href="/"
                     style={{
@@ -64,25 +61,38 @@ function Bar(props) {
                             標籤
                         </Nav.Link>
                         <Nav.Link
-                            href="/login"
+                            href={user ? "/" : "/login"}
+                            onClick={(event) => {
+                                if (user) {
+                                    event.preventDefault();
+                                    firebase
+                                        .auth()
+                                        .signOut()
+                                        .then(() => {
+                                            props.history.push("/");
+                                        });
+                                }
+                            }}
                             style={{
                                 color: "white",
                                 fontWeigt: "bold",
                                 fontSize: "17px",
                             }}
                         >
-                            登入
+                            {user ? "登出" : "登入"}
                         </Nav.Link>
-                        <Nav.Link
-                            href="/upload"
-                            style={{
-                                color: "white",
-                                fontWeigt: "bold",
-                                fontSize: "17px",
-                            }}
-                        >
-                            上傳
-                        </Nav.Link>
+                        {user && (
+                            <Nav.Link
+                                href="/upload"
+                                style={{
+                                    color: "white",
+                                    fontWeigt: "bold",
+                                    fontSize: "17px",
+                                }}
+                            >
+                                上傳
+                            </Nav.Link>
+                        )}
                         <Nav.Item>
                             <div className="input-group">
                                 <input
