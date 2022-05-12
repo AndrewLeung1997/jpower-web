@@ -1,24 +1,22 @@
 .tag {
-    display: flex;
-    align-items: center;
-    margin: 7px 0;
-    margin-right: 10px;
-    padding: 0 10px;
-    padding-right: 5px;
-    border: 1px solid orange;
-    border-radius: 6px;
-    background-color: orange;
-    white-space: nowrap;
-    color: white;
-    text-align:  center;
-  }
+  display: flex;
+  align-items: center;
+  margin: 7px 0;
+  margin-right: 10px;
+  padding: 0 10px;
+  padding-right: 5px;
+  border: 1px solid orange;
+  border-radius: 6px;
+  background-color: orange;
+  white-space: nowrap;
+  color: white;
+  text-align: center;
+}
 
-  .box {
-    display: flex;
-    overflow: hidden;
-    width: 100%;
-    max-width: 100%;
-    color: black
-  }
-
-  
+.box {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  color: black;
+}

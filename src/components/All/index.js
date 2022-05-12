@@ -1,314 +1,297 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { Typography, Paper, Card, CardMedia, CardContent, CardActionArea, Button } from '@material-ui/core'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import withStyles from '@material-ui/core/styles/withStyles'
-import { Link, withRouter } from 'react-router-dom'
-import firebase from 'firebase'
-import '../../../node_modules/bootstrap/dist/css/bootstrap.css'
-import Bar from '../Bar'
-import give from '../../file/give.jpeg'
-import { useHistory, useLocation } from "react-router-dom";
-import queryString from "query-string";
-import promotion1 from '../../file/promotion1.png'
-import promotion3 from '../../file/promotion3.png'
+import React, { useEffect, useState } from "react";
+import {
+  Typography,
+  Paper,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActionArea,
+  Button,
+  IconButton,
+} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import withStyles from "@material-ui/core/styles/withStyles";
+import { Link, withRouter } from "react-router-dom";
+import firebase from "firebase";
+import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
+import Bar from "../Bar";
+import "../Bar/index.css";
 
-const styles = theme => ({
-    root: {
-        width: 'auto',
-        display: 'block', // Fix IE 11 issue.
-        [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
-            width: 'auto',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
-        backgroundColor: 'black'
+const styles = (theme) => ({
+  main: {
+    width: "auto",
+    display: "block", // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 5,
+    [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+      width: "auto",
+      marginLeft: "auto",
+      marginRight: "auto",
     },
-    main: {
-        width: 'auto',
-        display: 'block', // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        marginTop: theme.spacing.unit * 5,
-        [theme.breakpoints.up('auto' + theme.spacing.unit * 3 * 2)]: {
-            width: 'auto',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
-        backgroundColor: 'black'
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 8,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-        backgroundColor: 'black'
-    },
+    backgroundColor: "#210548",
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
+      theme.spacing.unit * 3
+    }px`,
+    backgroundColor: "#210548",
+  },
 
-    Card: {
-        marginTop: theme.spacing.unit * 2,
-        height: theme.spacing.unit * 42,
-        backgroundColor: 'black'
+  Card: {
+    marginTop: theme.spacing.unit * 2,
+    height: theme.spacing.unit * 45,
+    backgroundColor: "#210548",
+  },
+  Tag: {
+    width: theme.spacing.unit * 10,
 
-    },
-    Tag: {
-        width: theme.spacing.unit * 10,
-        backgroundColor: "#FFC0CB",
-        textAlign: 'center',
-        borderRadius: '6px',
-        borderColor: '#ffffff',
-    },
-    TimeTag: {
-        width: theme.spacing.unit * 8,
-        backgroundColor: "#808080",
-        textAlign: 'center',
-        borderRadius: '6px',
-        borderColor: '#ffffff',
-
-    },
-    Pagination: {
-        marginTop: theme.spacing.unit * 2,
-        marginBottom: theme.spacing.unit * 3
-    },
-    CardMedia: {
-        paddingLeft: theme.spacing.unit * 1,
-        paddingRight: theme.spacing.unit * 1,
-        paddingTop: theme.spacing.unit * 1
-    },
-    submit: {
-        marginTop: theme.spacing.unit * 3,
-        color: 'white'
-    },
-
-})
+    backgroundColor: "#FFC0CB",
+    textAlign: "center",
+    borderRadius: "10px",
+    borderColor: "#ffffff",
+    borderStyle: "solid",
+  },
+  Pagination: {
+    marginTop: theme.spacing.unit * 2,
+  },
+  CardMedia: {
+    paddingLeft: theme.spacing.unit * 1,
+    paddingRight: theme.spacing.unit * 1,
+    paddingTop: theme.spacing.unit * 1,
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+    color: "white",
+    fontSize: "20px",
+  },
+  TimeTag: {
+    width: theme.spacing.unit * 8,
+    backgroundColor: "#808080",
+    textAlign: "center",
+    borderRadius: "6px",
+    borderColor: "#ffffff",
+  },
+});
 
 function All(props) {
+  const { classes } = props;
+  const [videoList, setVideoList] = useState([]);
+  const [totalDataCount, setTotalDataCount] = useState(0);
+  const [dataRange] = useState(15);
+  const [pageNumber, setPageNumber] = useState(0);
 
-    const { classes } = props
-    const ref = useRef(null)
-    const location = useLocation();
-    const history = useHistory();
-    const path = window.location.pathname;
-    const initialQueryString = queryString.parse(location.search);
-    const initialPageNumber = Number(initialQueryString.page) || 0;
+  const categoryArray = [
+    "中國",
+    "歐美",
+    "日本",
+    "台灣",
+    "香港",
+    "東南亞",
+    "韓國",
+    "H漫",
+    "有碼",
+    "無碼",
+    "生肉",
+    "熟肉",
+    "巨乳",
+    "SM",
+    "偷拍",
+    "人妻",
+    "學生",
+    "群p",
+    "同性",
+    "露出",
+    "制服",
+    "近親",
+    "其他",
+  ];
 
-    const [videoList, setVideoList] = useState([])
-    const [totalDataCount, setTotalDataCount] = useState(0)
-    const [dataRange] = useState(12)
-    const [pageNumber, setPageNumber] = useState(initialPageNumber)
+  useEffect(() => {
+    getAllMedia();
+  }, [pageNumber, totalDataCount, categoryArray]);
 
-
-    const categoryArray = ['偷拍', 'Deepfake', 'JAV', '無修正', '素人', '巨乳', '校生', '人妻', '熟女', 'SM', '中國', '香港', '日本', '韓國', '台灣', '亞洲', '其他']
-
-    useEffect(() => {
-        getAllMedia()
-        props.history.push(`${path}?page=${pageNumber}`);
-
-    }, [pageNumber, totalDataCount])
-
-    return (
-        <root className={classes.root}>
-            <Bar></Bar>
-            <main className={classes.main}>
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="text-center">
-                            <a href="https://www.dc8880.com/?uagt=jpower666&path=promotions" target="_blank">
-                                <img src={give} style={{ width: '70%', height: 'auto', paddingTop: '20px', paddingLeft: '50px', paddingRight: '40px' }}></img>
-                            </a>
-                        </div>
+  return (
+    <div className={classes.main}>
+      <Bar></Bar>
+      <div className="row">
+        <div className="col-md-3">
+          <Paper className={classes.paper}>
+            <Typography
+              component="h1"
+              variant="h5"
+              style={{ color: "#FCFCFC" }}
+            >
+              所有類別
+            </Typography>
+            <div className="well">
+              <ul className="list-group">
+                {categoryArray.map(function (value, index) {
+                  return (
+                    <li>
+                      <Button
+                        className={classes.submit}
+                        id={index}
+                        component={Link}
+                        to={{
+                          pathname: `/filter/category/${value}`,
+                          state: {
+                            category: value,
+                          },
+                        }}
+                      >
+                        {value}
+                      </Button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </Paper>
+        </div>
+        <div className="col-md-9">
+          <div className="row" style={{ marginTop: "20px" }}>
+            {videoList.map(function (value, index) {
+              return (
+                <div className="col-sm-4 col-md-3 col-lg-3">
+                  <Card className={classes.Card}>
+                    <div className={classes.TimeTag}>
+                      {convertTime(value.duration)}
                     </div>
+                    <CardActionArea
+                      component={Link}
+                      to={{
+                        pathname: `/player/id/${value.id}`,
+                        state: {
+                          url: value.url,
+                          videoName: value.fileName,
+                          category: value.category,
+                          timestamp: value.timestamp,
+                          id: value.id,
+                        },
+                      }}
+                    >
+                      <CardMedia
+                        preload="metadata"
+                        className={classes.CardMedia}
+                        component="video"
+                        alt="video"
+                        width="100%"
+                        height="200"
+                        title={value.fileName}
+                        src={`${value.url}#t=0.5`}
+                      />
+                    </CardActionArea>
+                    <CardContent style={{ color: "white" }}>
+                      <Typography gutterBottom variant="h8" component="div">
+                        {value.fileName}
+                      </Typography>
+                      <Typography gutterBottom variant="h8" component="div">
+                        {convertTimeStamp(value.timestamp)}
+                      </Typography>
+                      <Typography gutterBottom variant="h8" component="div">
+                        <div className={classes.Tag}>{value.category}</div>
+                      </Typography>
+                    </CardContent>
+                  </Card>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+        <nav className={classes.Pagination}>
+          <ul className="pagination pg-blue justify-content-center">
+            {Array(Math.ceil(totalDataCount / dataRange))
+              .fill()
+              .map(function (_, i) {
+                return (
+                  <div
+                    className="pagination"
+                    style={{
+                      borderRadius: "20px",
+                      paddingLeft: "5px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <li
+                      className="page-item"
+                      key={i}
+                      onClick={() => setPageNumber(i)}
+                    >
+                      <a className="page-link" href="#">
+                        {i + 1}
+                      </a>
+                    </li>
+                  </div>
+                );
+              })}
+          </ul>
+        </nav>
+      </div>
+    </div>
+  );
 
+  function convertTime(num) {
+    var minutes = Math.floor(num / 60);
+    var seconds = Math.round(num % 60);
 
-                <div className="row">
-                    <div className="col-md-9">
-                        <div className="row" style={{ marginTop: '20px' }}>
-                            <Typography component="h3" variant="h5" style={{ color: 'white' }}>所有視頻</Typography>
-                            {videoList.map(function (value, index) {
-                                return (
-                                    <div className="col-sm-6 col-md-4 col-lg-4">
-                                        <Card className={classes.Card}>
-                                            <div className={classes.TimeTag}>
-                                                {convertTime(value.duration)}
-                                            </div>
-                                            <CardActionArea component={Link} to={{
-                                                pathname: `/player/id/${value.id}`,
-                                                state: {
-                                                    url: value.url,
-                                                    videoName: value.fileName,
-                                                    category: value.category,
-                                                    timestamp: value.timestamp,
-                                                    id: value.id
-                                                }
-                                            }}>
-                                                <CardMedia
-                                                    preload="metadata"
-                                                    ref={ref}
-                                                    id="video"
-                                                    className={classes.CardMedia}
-                                                    component="video"
-                                                    alt="video"
-                                                    width="100%"
-                                                    height='200'
-                                                    title={value.fileName}
-                                                    muted={true}
-                                                    src={`${value.url}#t=0.5`}
-                                                // onMouseOver={(e) => onMouseOver(e)}
-                                                // onMouseOut={(e) => onMouseOut(e)}
-                                                // loop
-                                                // playsinline
-                                                />
-                                            </CardActionArea>
-                                            <CardContent style={{ color: 'white' }}>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    {value.fileName}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    {convertTimeStamp(value.timestamp)}
-                                                </Typography>
-                                                <Typography gutterBottom variant="h8" component="div">
-                                                    <div className={classes.Tag}>
-                                                        {value.category}
-                                                    </div>
-                                                </Typography>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-                    <div className="col-md-3">
-                        <div className="row" style={{marginTop:'20px'}}>
-                            <div className="col-md-12">
-                                <div className="text-center">
-                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
-                                        <img src={promotion3} style={{ width: '100%', height: 'auto' }}></img>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <Paper className={classes.paper}>
-                            <Typography component="h1" variant="h5" style={{ color: 'white' }}>所有標籤</Typography>
-                            <div className="well" >
-                                {categoryArray.map(function (value, index) {
-                                    return (
-                                        <Button className={classes.submit}
-                                            id={index} component={Link} to={{
-                                                pathname: `/filter/category/${value}`,
-                                                state: {
-                                                    category: value
-                                                }
-                                            }}>{value}</Button>
-                                    )
-                                })}
-                            </div>
-                        </Paper>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <div className="text-center">
-                                    <a href="https://www.dc8880.com/?uagt=jpower666&path=signup" target="_blank">
-                                        <img src={promotion1} style={{ width: '100%', height: 'auto' }}></img>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <nav className={classes.Pagination}>
-                        <ul className="pagination pg-blue justify-content-center">
-                            {
-                                Array(Math.ceil(totalDataCount / dataRange)).fill().map(function (_, i) {
-                                    return (
-
-                                        <div className="pagination" style={{ borderRadius: "20px", paddingLeft: "5px", fontWeight: "bold" }}>
-                                            <li className="page-item" key={i} onClick={(e) => {
-                                                setPageNumber(i);
-                                                e.preventDefault();
-                                            }}>
-                                                <a className="page-link" href="!#">{i + 1}</a>
-                                            </li>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </nav>
-                </div>
-            </main>
-        </root>
-    )
-
-
-
-    function onMouseOver(e) {
-        e.target.play()
-
+    if (minutes < 10) {
+      minutes = "0" + minutes;
     }
 
-    function onMouseOut(e) {
-        e.target.pause()
+    if (seconds < 10) {
+      seconds = "0" + seconds;
     }
 
-    function convertTime(num) {
-        var minutes = Math.floor(num / 60)
-        var seconds = Math.round(num % 60)
+    var timestamp = minutes + ":" + seconds;
 
-        if (minutes < 10) {
-            minutes = '0' + minutes
+    return timestamp;
+  }
+  function paginate(array, page_size, page_number) {
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+  }
+
+  function getAllMedia() {
+    var videoArray = [];
+    var reversedArray = [];
+    firebase
+      .database()
+      .ref("VideoList/")
+      .on("value", function (snapshot) {
+        if (snapshot.val()) {
+          var keys = Object.keys(snapshot.val()).sort();
+          setTotalDataCount(keys.length);
+          var key = keys[pageNumber * dataRange];
+          snapshot.forEach(function (video) {
+            videoArray.push(video.val());
+          });
+          reversedArray = [...videoArray].reverse();
+          setVideoList(paginate(reversedArray, dataRange, pageNumber + 1));
         }
+      });
+  }
 
-        if (seconds < 10) {
-            seconds = '0' + seconds
-        }
+  function convertTimeStamp(timestamp) {
+    var date = new Date(timestamp);
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
 
-        var timestamp = minutes + ":" + seconds
-
-        return timestamp
+    if (day < 10) {
+      day = "0" + day;
+    }
+    if (month < 10) {
+      month = "0" + month;
     }
 
-    function paginate(array, page_size, page_number) {
+    var newDate = year + "-" + month + "-" + day;
 
-        return array.slice((page_number - 1) * page_size, page_number * page_size);
-    }
-
-
-
-    function getAllMedia() {
-        var reversedVideoArray = []
-        var videoArray = []
-        firebase.database().ref('VideoList/').on('value', function (snapshot) {
-            if (snapshot.val()) {
-                var keys = Object.keys(snapshot.val()).sort()
-                setTotalDataCount(keys.length)
-                snapshot.forEach(function (video) {
-                    videoArray.push(video.val())
-                })
-                reversedVideoArray = [...videoArray].reverse()
-                setVideoList(paginate(reversedVideoArray, dataRange, pageNumber + 1))
-            }
-        })
-    }
-
-
-    function convertTimeStamp(timestamp) {
-        var date = new Date(timestamp)
-        var year = date.getFullYear()
-        var month = date.getMonth() + 1
-        var day = date.getDate()
-
-        if (day < 10) {
-            day = '0' + day
-        }
-        if (month < 10) {
-            month = '0' + month
-        }
-
-        var newDate = year + '-' + month + '-' + day
-
-        return newDate
-    }
-
+    return newDate;
+  }
 }
 
-export default withRouter(withStyles(styles)(All))
+export default withRouter(withStyles(styles)(All));

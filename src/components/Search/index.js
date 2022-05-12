@@ -78,7 +78,7 @@ const styles = (theme) => ({
   },
 });
 
-function Home(props) {
+function Search(props) {
   const { classes } = props;
   const [videoList, setVideoList] = useState([]);
   const [totalDataCount, setTotalDataCount] = useState(0);
@@ -112,8 +112,8 @@ function Home(props) {
   ];
 
   useEffect(() => {
-    getAllMedia();
-  }, [pageNumber, totalDataCount, categoryArray]);
+    getVideoByTag();
+  }, [pageNumber, totalDataCount]);
 
   return (
     <div className={classes.main}>
@@ -256,24 +256,34 @@ function Home(props) {
     return array.slice((page_number - 1) * page_size, page_number * page_size);
   }
 
-  function getAllMedia() {
+  function getVideoByTag() {
     var videoArray = [];
     var reversedArray = [];
+    var queryTag = props.match.params.tag;
     firebase
       .database()
       .ref("VideoList/")
-      .orderByChild("category")
-      .equalTo(props.match.params.category)
       .on("value", function (snapshot) {
         if (snapshot.val()) {
-          var keys = Object.keys(snapshot.val()).sort();
-          setTotalDataCount(keys.length);
-          var key = keys[pageNumber * dataRange];
-          snapshot.forEach(function (video) {
-            videoArray.push(video.val());
+          snapshot.forEach(function (value) {
+            if (value.val().tag) {
+              var tagList = value.val().tag;
+              tagList.map(function (list, index) {
+                if (list === queryTag) {
+                  var keys = Object.keys(value.val()).sort();
+                  setTotalDataCount(keys.length);
+                  var key = keys[pageNumber * dataRange];
+
+                  videoArray.push(value.val());
+
+                  reversedArray = [...videoArray].reverse();
+                  setVideoList(
+                    paginate(reversedArray, dataRange, pageNumber + 1)
+                  );
+                }
+              });
+            }
           });
-          reversedArray = [...videoArray].reverse();
-          setVideoList(paginate(reversedArray, dataRange, pageNumber + 1));
         }
       });
   }
@@ -297,4 +307,4 @@ function Home(props) {
   }
 }
 
-export default withRouter(withStyles(styles)(Home));
+export default withRouter(withStyles(styles)(Search));
