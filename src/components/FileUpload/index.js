@@ -93,6 +93,7 @@ function FileUpload(props) {
                                 標題
                             </label>
                             <input
+                                disabled={uploadStatus}
                                 className="form-control"
                                 type="text"
                                 onChange={(e) => setFileName(e.target.value)}
@@ -140,6 +141,7 @@ function FileUpload(props) {
                                 <input
                                     className="form-control"
                                     id="tags"
+                                    disabled={uploadStatus}
                                     type="text"
                                     value={inputTag}
                                     onKeyDown={(e) => onKeyDown(e)}
@@ -157,6 +159,7 @@ function FileUpload(props) {
                                 </label>
                                 <input
                                     type="file"
+                                    disabled={uploadStatus}
                                     className="form-control"
                                     onChange={(e) => {
                                         setFile(e.target.files[0]);
@@ -173,6 +176,7 @@ function FileUpload(props) {
                                 </label>
                                 <input
                                     type="file"
+                                    disabled={uploadStatus}
                                     accept="image/png, image/jpg, image/gif"
                                     className="form-control"
                                     onChange={(e) => {
