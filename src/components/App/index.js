@@ -58,6 +58,7 @@ export default function App() {
                         ></Route>
                         <Route exact path="/uploads" component={File}></Route>
                         <Route exact path="/dashboard" component={Dashboard}></Route>
+                        <Route exact path="/search" component={Search}></Route>
                         <Route
                             exact
                             path="/updateVideoInfo"

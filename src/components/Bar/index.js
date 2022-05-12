@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 
 import { Navbar, Nav } from "bootstrap-4-react";
@@ -7,6 +7,7 @@ import firebase from "firebase";
 
 function Bar(props) {
     const user = firebase.auth().currentUser;
+    const [query, setQuery] = useState("");
     return (
         <div>
             <Navbar
@@ -93,16 +94,30 @@ function Bar(props) {
                                 上傳
                             </Nav.Link>
                         )}
+                        <Nav.Link></Nav.Link>
                         <Nav.Item>
                             <div className="input-group">
                                 <input
                                     type="text"
                                     className="form-control"
                                     placeholder="搜尋影片"
-                                    style={{ background: "#210548" }}
+                                    style={{ background: "#210548", color: "white" }}
+                                    onChange={(e) => {
+                                        setQuery(e.target.value);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" && query)
+                                            window.location.replace(`/search?q=${query}`);
+                                    }}
                                 />
                                 <div className="input-group-append">
-                                    <button className="btn btn-secondary" type="button">
+                                    <button
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        onClick={() => {
+                                            window.location.replace(`/search?q=${query}`);
+                                        }}
+                                    >
                                         Search
                                     </button>
                                 </div>

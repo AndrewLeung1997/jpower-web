@@ -9,6 +9,7 @@ import {
     Button,
     IconButton,
 } from "@material-ui/core";
+import queryString from "query-string";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
@@ -87,9 +88,10 @@ function Search(props) {
     const [pageNumber, setPageNumber] = useState(0);
 
     const categoryArray = useCategories();
+    const query = queryString.parse(window.location.search).q || "";
 
     useEffect(() => {
-        getVideoByTag();
+        getVideoByQuery();
     }, [pageNumber, totalDataCount]);
 
     return (
@@ -251,32 +253,25 @@ function Search(props) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
 
-    function getVideoByTag() {
+    function getVideoByQuery() {
         var videoArray = [];
         var reversedArray = [];
-        var queryTag = props.match.params.tag;
         firebase
             .database()
             .ref("VideoList/")
+            .orderByChild("fileName")
+            .startAt(query)
+            .endAt(query + "\uf8ff")
             .on("value", function (snapshot) {
                 if (snapshot.val()) {
                     snapshot.forEach(function (value) {
-                        if (value.val().tag) {
-                            var tagList = value.val().tag;
-                            tagList.map(function (list, index) {
-                                if (list === queryTag) {
-                                    var keys = Object.keys(value.val()).sort();
-                                    setTotalDataCount(keys.length);
-                                    var key = keys[pageNumber * dataRange];
+                        if (value.val()) {
+                            videoArray.push(value.val());
 
-                                    videoArray.push(value.val());
-
-                                    reversedArray = [...videoArray].reverse();
-                                    setVideoList(
-                                        paginate(reversedArray, dataRange, pageNumber + 1)
-                                    );
-                                }
-                            });
+                            reversedArray = [...videoArray].reverse();
+                            setVideoList(
+                                paginate(reversedArray, dataRange, pageNumber + 1)
+                            );
                         }
                     });
                 }
