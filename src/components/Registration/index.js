@@ -63,7 +63,6 @@ function Register(props) {
     const { classes } = props;
 
     const [userName, setUserName] = useState("");
-    const [englishName, setEnglishName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");

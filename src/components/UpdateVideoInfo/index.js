@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
-import {Paper, Button, Typography, FormControl, InputLabel} from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Paper, Button, Typography, FormControl, InputLabel } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import firebase from "firebase";
-import {useCategories} from "../App"
+import { useCategories } from "../App";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import ReactPlayer from "react-player";
 import "../UpdateVideoInfo/style.css";
@@ -43,7 +43,7 @@ const styles = (theme) => ({
 });
 
 function UpdateProfile(props) {
-    const {classes} = props;
+    const { classes } = props;
     const [category, setCategory] = useState("");
     const [id, setId] = useState("");
     const [fileName, setFileName] = useState("");
@@ -52,8 +52,8 @@ function UpdateProfile(props) {
     const [isKeyReleased, setIsKeyReleased] = useState(false);
     const [duration, setDuration] = useState("");
     const [preview, setPreview] = useState("");
-    const [previewUrl, setPreviewUrl] = useState("");
-    const categories = useCategories()
+    let previewUrl = "";
+    const categories = useCategories();
 
     useEffect(() => {
         getVideoInfo();
@@ -69,7 +69,7 @@ function UpdateProfile(props) {
     return (
         <main className={classes.main}>
             <Paper className={classes.paper}>
-                <Typography component="h1" variant="h5" style={{paddingBottom: "15px"}}>
+                <Typography component="h1" variant="h5" style={{ paddingBottom: "15px" }}>
                     更新影片資料
                 </Typography>
                 <ReactPlayer
@@ -183,7 +183,7 @@ function UpdateProfile(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="form-group">
-                                <label htmlFor="preview" style={{color: "white"}}>
+                                <label htmlFor="preview" style={{ color: "white" }}>
                                     預覽圖
                                 </label>
                                 <input
@@ -228,32 +228,14 @@ function UpdateProfile(props) {
         if (preview == null) {
             return;
         } else {
-            var storage = firebase.storage();
-            var storageRef = storage.ref();
-            var uploadTask = storageRef
+            const storage = firebase.storage();
+            const storageRef = storage.ref();
+            const uploadTask = await storageRef
                 .child("previewImage/" + preview.name)
                 .put(preview);
-            uploadTask.on(
-                firebase.storage.TaskEvent.STATE_CHANGED,
-                (snapshot) => {
-                    var progress =
-                        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                },
-                (error) => {
-                    throw error;
-                },
-                () => {
-                    uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-                        setPreviewUrl(url);
-                    });
-                }
-            );
-        }
-    }
 
-    function handleVideoDuration() {
-        var video = document.getElementById("myVideo");
-        console.log(video);
+            previewUrl = await uploadTask.ref.getDownloadURL();
+        }
     }
 
     function handleTextFieldInput(e) {
@@ -262,7 +244,7 @@ function UpdateProfile(props) {
     }
 
     function onKeyDown(e) {
-        const {key} = e;
+        const { key } = e;
         const trimmedInput = inputTag.trim();
 
         if (key === "," && trimmedInput.length && !tags.includes(trimmedInput)) {
@@ -311,17 +293,19 @@ function UpdateProfile(props) {
             });
     }
 
-    function UpadateUserProfile() {
+    async function UpadateUserProfile() {
+        const url = props.location.state.url;
         console.log(previewUrl);
-        var url = props.location.state.url;
-        uploadPreviewImage();
+        await uploadPreviewImage();
+        console.log(previewUrl);
         try {
-            var query = firebase
+            const query = firebase
                 .database()
                 .ref("VideoList/")
                 .orderByChild("url")
                 .equalTo(url);
             query.once("child_added", function (snapshot) {
+                console.log(previewUrl || snapshot.val().previewUrl);
                 snapshot.ref.update({
                     id: id,
                     fileName: fileName,

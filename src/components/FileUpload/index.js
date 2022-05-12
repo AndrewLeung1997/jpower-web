@@ -215,7 +215,7 @@ function FileUpload(props) {
             const uploadPreview = storageRef
                 .child("previewImage/" + preview.name)
                 .put(preview);
-            await uploadPreview.on(
+            uploadPreview.on(
                 "state_changed",
                 (snapshot) => {
                     const progress =
