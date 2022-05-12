@@ -16,6 +16,7 @@ import firebase from "firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import "../Bar/index.css";
+import { useCategories } from "../App";
 
 const styles = (theme) => ({
     main: {
@@ -85,31 +86,7 @@ function Search(props) {
     const [dataRange] = useState(15);
     const [pageNumber, setPageNumber] = useState(0);
 
-    const categoryArray = [
-        "中國",
-        "歐美",
-        "日本",
-        "台灣",
-        "香港",
-        "東南亞",
-        "韓國",
-        "H漫",
-        "有碼",
-        "無碼",
-        "生肉",
-        "熟肉",
-        "巨乳",
-        "SM",
-        "偷拍",
-        "人妻",
-        "學生",
-        "群p",
-        "同性",
-        "露出",
-        "制服",
-        "近親",
-        "其他",
-    ];
+    const categoryArray = useCategories();
 
     useEffect(() => {
         getVideoByTag();

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Paper, Button, Typography, FormControl, InputLabel } from "@material-ui/core";
+import React, {useState, useEffect} from "react";
+import {Paper, Button, Typography, FormControl, InputLabel} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Link, withRouter } from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import firebase from "firebase";
+import {useCategories} from "../App"
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import ReactPlayer from "react-player";
 import "../UpdateVideoInfo/style.css";
-import { categories } from "../../constants/category";
 
 const styles = (theme) => ({
     main: {
@@ -43,7 +43,7 @@ const styles = (theme) => ({
 });
 
 function UpdateProfile(props) {
-    const { classes } = props;
+    const {classes} = props;
     const [category, setCategory] = useState("");
     const [id, setId] = useState("");
     const [fileName, setFileName] = useState("");
@@ -53,6 +53,7 @@ function UpdateProfile(props) {
     const [duration, setDuration] = useState("");
     const [preview, setPreview] = useState("");
     const [previewUrl, setPreviewUrl] = useState("");
+    const categories = useCategories()
 
     useEffect(() => {
         getVideoInfo();
@@ -68,7 +69,7 @@ function UpdateProfile(props) {
     return (
         <main className={classes.main}>
             <Paper className={classes.paper}>
-                <Typography component="h1" variant="h5" style={{ paddingBottom: "15px" }}>
+                <Typography component="h1" variant="h5" style={{paddingBottom: "15px"}}>
                     更新影片資料
                 </Typography>
                 <ReactPlayer
@@ -182,7 +183,7 @@ function UpdateProfile(props) {
                     <div className="row">
                         <div className="col-sm-12">
                             <div className="form-group">
-                                <label htmlFor="preview" style={{ color: "white" }}>
+                                <label htmlFor="preview" style={{color: "white"}}>
                                     預覽圖
                                 </label>
                                 <input
@@ -261,7 +262,7 @@ function UpdateProfile(props) {
     }
 
     function onKeyDown(e) {
-        const { key } = e;
+        const {key} = e;
         const trimmedInput = inputTag.trim();
 
         if (key === "," && trimmedInput.length && !tags.includes(trimmedInput)) {
@@ -327,7 +328,7 @@ function UpdateProfile(props) {
                     category: category,
                     tag: tags,
                     duration: duration,
-                    previewUrl: previewUrl,
+                    previewUrl: previewUrl || snapshot.val().previewUrl,
                 });
                 alert("Data Saved Successfully");
             });

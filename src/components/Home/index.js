@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {
     Typography,
     Paper,
@@ -10,14 +10,15 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Link, withRouter } from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import firebase from "firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import give from "../../file/give.jpeg";
-import { useHistory, useLocation } from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import queryString from "query-string";
 import "../Home/index.css";
+import {useCategories} from "../App"
 
 const styles = (theme) => ({
     main: {
@@ -80,7 +81,7 @@ const styles = (theme) => ({
 });
 
 function Home(props) {
-    const { classes } = props;
+    const {classes} = props;
     const ref = useRef(null);
     const location = useLocation();
     const history = useHistory();
@@ -96,31 +97,7 @@ function Home(props) {
     const [totalRecommendVideo, setTotalRecommendVideo] = useState(0);
     const [currentRecommendVideoPage, setCurrentRecommendVideoPage] = useState(0);
 
-    const categoryArray = [
-        "中國",
-        "歐美",
-        "日本",
-        "台灣",
-        "香港",
-        "東南亞",
-        "韓國",
-        "H漫",
-        "有碼",
-        "無碼",
-        "生肉",
-        "熟肉",
-        "巨乳",
-        "SM",
-        "偷拍",
-        "人妻",
-        "學生",
-        "群p",
-        "同性",
-        "露出",
-        "制服",
-        "近親",
-        "其他",
-    ];
+    const categoryArray = useCategories();
 
     useEffect(() => {
         getAllMedia();
@@ -139,7 +116,7 @@ function Home(props) {
                         <Typography
                             component="h1"
                             variant="h5"
-                            style={{ color: "#FCFCFC" }}
+                            style={{color: "#FCFCFC"}}
                         >
                             所有類別
                         </Typography>
@@ -169,11 +146,11 @@ function Home(props) {
                     </Paper>
                 </div>
                 <div className="col-md-9">
-                    <div className="row" style={{ marginTop: "20px" }}>
+                    <div className="row" style={{marginTop: "20px"}}>
                         <Typography
                             component="h3"
                             variant="h5"
-                            style={{ color: "#FCFCFC", marginTop: "20px" }}
+                            style={{color: "#FCFCFC", marginTop: "20px"}}
                         >
                             最新視頻
                         </Typography>
@@ -220,7 +197,7 @@ function Home(props) {
                                                 // playsinline
                                             />
                                         </CardActionArea>
-                                        <CardContent style={{ color: "#FCFCFC" }}>
+                                        <CardContent style={{color: "#FCFCFC"}}>
                                             <Typography
                                                 gutterBottom
                                                 variant="h8"
@@ -286,11 +263,11 @@ function Home(props) {
             <div className="row">
                 <div className="col-md-3"></div>
                 <div className="col-md-9">
-                    <div className="row" style={{ marginTop: "20px" }}>
+                    <div className="row" style={{marginTop: "20px"}}>
                         <Typography
                             component="h3"
                             variant="h5"
-                            style={{ color: "#FCFCFC" }}
+                            style={{color: "#FCFCFC"}}
                         >
                             所有視頻
                         </Typography>
@@ -328,7 +305,7 @@ function Home(props) {
                                                 src={`${value.url}#t=0.5`}
                                             />
                                         </CardActionArea>
-                                        <CardContent style={{ color: "#FCFCFC" }}>
+                                        <CardContent style={{color: "#FCFCFC"}}>
                                             <Typography
                                                 gutterBottom
                                                 variant="h8"

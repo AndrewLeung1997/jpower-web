@@ -1,5 +1,6 @@
 import app from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 import "firebase/firebase-firestore";
 import "firebase/firebase-database";
 import "firebase/firebase-storage";
@@ -77,3 +78,4 @@ class Firebase {
 }
 
 export default new Firebase();
+export const db = app.firestore();

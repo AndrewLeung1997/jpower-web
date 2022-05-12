@@ -136,31 +136,6 @@ const styles = (theme) => ({
 function Player(props) {
     const { classes } = props;
     const [relatedVideo, setRelatedVideo] = useState([]);
-    const categoryArray = [
-        "中國",
-        "歐美",
-        "日本",
-        "台灣",
-        "香港",
-        "東南亞",
-        "韓國",
-        "H漫",
-        "有碼",
-        "無碼",
-        "生肉",
-        "熟肉",
-        "巨乳",
-        "SM",
-        "偷拍",
-        "人妻",
-        "學生",
-        "群p",
-        "同性",
-        "露出",
-        "制服",
-        "近親",
-        "其他",
-    ];
     const [controlVideo, setControlVideo] = useState(true);
     const [url, setUrl] = useState("");
     const [count, setCount] = useState(0);

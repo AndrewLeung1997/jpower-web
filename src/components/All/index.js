@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Typography,
     Paper,
@@ -9,12 +9,12 @@ import {
     Button,
 } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Link, withRouter } from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import firebase from "firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import "../Bar/index.css";
-import {categories} from "../../constants/category";
+import {useCategories} from "../App"
 
 const styles = (theme) => ({
     main: {
@@ -78,11 +78,12 @@ const styles = (theme) => ({
 });
 
 function All(props) {
-    const { classes } = props;
+    const {classes} = props;
     const [videoList, setVideoList] = useState([]);
     const [totalDataCount, setTotalDataCount] = useState(0);
     const [dataRange] = useState(15);
     const [pageNumber, setPageNumber] = useState(0);
+    const categories = useCategories();
 
     useEffect(() => {
         getAllMedia();
@@ -97,7 +98,7 @@ function All(props) {
                         <Typography
                             component="h1"
                             variant="h5"
-                            style={{ color: "#FCFCFC" }}
+                            style={{color: "#FCFCFC"}}
                         >
                             所有類別
                         </Typography>
@@ -127,7 +128,7 @@ function All(props) {
                     </Paper>
                 </div>
                 <div className="col-md-9">
-                    <div className="row" style={{ marginTop: "20px" }}>
+                    <div className="row" style={{marginTop: "20px"}}>
                         {videoList.map(function (value, index) {
                             return (
                                 <div className="col-sm-4 col-md-3 col-lg-3">
@@ -159,7 +160,7 @@ function All(props) {
                                                 src={`${value.url}#t=0.5`}
                                             />
                                         </CardActionArea>
-                                        <CardContent style={{ color: "white" }}>
+                                        <CardContent style={{color: "white"}}>
                                             <Typography
                                                 gutterBottom
                                                 variant="h8"
@@ -238,6 +239,7 @@ function All(props) {
 
         return timestamp;
     }
+
     function paginate(array, page_size, page_number) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
