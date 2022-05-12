@@ -23,6 +23,7 @@ import PublishIcon from "@material-ui/icons/Publish";
 import "../Player/style.css";
 import { db } from "../../firebase";
 import { useCategories } from "../App";
+import { Delete } from "@material-ui/icons";
 
 const styles = (theme) => ({
     main: {
@@ -102,7 +103,7 @@ function Dashboard(props) {
             <Bar></Bar>
             {/* Add category */}
             <Paper className={classes.paper} style={{ marginTop: 90 }}>
-                <Typography style={{alignSelf: "flex-start"}}>
+                <Typography style={{ alignSelf: "flex-start" }}>
                     <h4>Add new category</h4>
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "row", width: "100%" }}>
@@ -195,6 +196,31 @@ function Dashboard(props) {
                                             }}
                                         >
                                             <PublishIcon color="primary" />
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <IconButton
+                                            onClick={() => {
+                                                if (
+                                                    window.confirm(
+                                                        "Are you sure to delete this video?"
+                                                    )
+                                                ) {
+                                                    const query = firebase
+                                                        .database()
+                                                        .ref("VideoList/")
+                                                        .orderByChild("url")
+                                                        .equalTo(value.url);
+                                                    query.once("value", (snapshot) => {
+                                                        snapshot.ref.remove().then(() => {
+                                                            alert("Video removed.");
+                                                            fetchAllVideo();
+                                                        });
+                                                    });
+                                                }
+                                            }}
+                                        >
+                                            <Delete color="primary" />
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>

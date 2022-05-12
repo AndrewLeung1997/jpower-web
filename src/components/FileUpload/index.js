@@ -213,7 +213,7 @@ function FileUpload(props) {
         let previewUrl;
         if (preview != null) {
             const uploadPreview = storageRef
-                .child("preview/" + preview.name)
+                .child("previewImage/" + preview.name)
                 .put(preview);
             await uploadPreview.on(
                 "state_changed",
