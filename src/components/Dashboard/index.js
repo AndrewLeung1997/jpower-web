@@ -211,7 +211,7 @@ function Dashboard(props) {
                                                         .ref("VideoList/")
                                                         .orderByChild("url")
                                                         .equalTo(value.url);
-                                                    query.once("value", (snapshot) => {
+                                                    query.once("child_added", (snapshot) => {
                                                         snapshot.ref.remove().then(() => {
                                                             alert("Video removed.");
                                                             fetchAllVideo();
