@@ -66,7 +66,11 @@ export default function App() {
                             component={UpdateVideoInfo}
                         ></Route>
                         <Route exact path="/Tags" component={Tags}></Route>
-                        <Route exact path="/Search/tag/:tag" component={SearchByTag}></Route>
+                        <Route
+                            exact
+                            path="/Search/tag/:tag"
+                            component={SearchByTag}
+                        ></Route>
                         <Route exact path="/All" component={All}></Route>
                     </Switch>
                 </Router>

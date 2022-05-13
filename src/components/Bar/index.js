@@ -96,7 +96,7 @@ function Bar(props) {
                             </Nav.Link>
                         )}
                         <Nav.Link></Nav.Link>
-                        <Nav.Item style={{width: 240, marginRight: 10}}>
+                        <Nav.Item style={{width: 240, marginRight: 10, marginBottom: 10}}>
                             <div className="input-group">
                                 <input
                                     type="text"

@@ -75,6 +75,10 @@ class Firebase {
     getCurrentUsername() {
         return this.auth.currentUser && this.auth.currentUser.displayName;
     }
+
+    getCurrentUser() {
+        return this.auth.currentUser;
+    }
 }
 
 export default new Firebase();
