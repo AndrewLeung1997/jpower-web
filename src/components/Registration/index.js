@@ -301,7 +301,7 @@ function Register(props) {
     }
 
     async function onRegister() {
-        if (agreement == true && enoughYear == true) {
+        if (agreement && enoughYear) {
             try {
                 await firebase.register(userName, email, password);
                 await firebase.addData(userName, email, gender, enoughYear, agreement);

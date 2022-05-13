@@ -15,6 +15,7 @@ import UpdateVideoInfo from "../UpdateVideoInfo";
 import Tags from "../Tags";
 import Search from "../Search";
 import All from "../All";
+import SearchByTag from "../SearchByTag";
 
 const theme = createTheme();
 const CategoryContext = createContext({ categories: [] });
@@ -65,7 +66,7 @@ export default function App() {
                             component={UpdateVideoInfo}
                         ></Route>
                         <Route exact path="/Tags" component={Tags}></Route>
-                        <Route exact path="/Search/tag/:tag" component={Search}></Route>
+                        <Route exact path="/Search/tag/:tag" component={SearchByTag}></Route>
                         <Route exact path="/All" component={All}></Route>
                     </Switch>
                 </Router>

@@ -8,6 +8,7 @@ import firebase from "firebase";
 function Bar(props) {
     const user = firebase.auth().currentUser;
     const [query, setQuery] = useState("");
+    const [filter, setFilter] = useState("");
     return (
         <div>
             <Navbar
@@ -95,6 +96,34 @@ function Bar(props) {
                             </Nav.Link>
                         )}
                         <Nav.Link></Nav.Link>
+                        <Nav.Item style={{width: 240, marginRight: 10}}>
+                            <div className="input-group">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="過濾影片"
+                                    style={{ background: "#210548", color: "white" }}
+                                    onChange={(e) => {
+                                        setFilter(e.target.value);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" && filter)
+                                            window.location.replace(`/Search/Tag/${filter}`);
+                                    }}
+                                />
+                                <div className="input-group-append">
+                                    <button
+                                        className="btn btn-secondary"
+                                        type="button"
+                                        onClick={() => {
+                                            window.location.replace(`/Search/Tag/${filter}`);
+                                        }}
+                                    >
+                                        Filter
+                                    </button>
+                                </div>
+                            </div>
+                        </Nav.Item>
                         <Nav.Item>
                             <div className="input-group">
                                 <input
