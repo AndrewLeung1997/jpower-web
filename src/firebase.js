@@ -33,7 +33,7 @@ class Firebase {
         return this.auth.signOut();
     }
 
-    async register(name, email, phoneNumber, password) {
+    async register(name, email, password) {
         await this.auth.createUserWithEmailAndPassword(email, password);
 
         return this.auth.currentUser.updateProfile({

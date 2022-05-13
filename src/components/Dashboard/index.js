@@ -153,7 +153,7 @@ function Dashboard(props) {
                                     </TableCell>
                                     <TableCell align="center" value={value.url}>
                                         <IconButton
-                                            component={Link}
+                                            component={"a"}
                                             to={{
                                                 pathname: `${value.url}`,
                                             }}
