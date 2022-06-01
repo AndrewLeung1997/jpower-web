@@ -41,7 +41,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "prettier --write src"
+    "lint": "prettier --write src",
+    "deploy": "yarn build && gcloud config configurations activate jpower && gcloud app deploy"
   },
   "eslintConfig": {
     "extends": [

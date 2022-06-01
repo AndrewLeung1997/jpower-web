@@ -3,9 +3,10 @@ import { Navbar, Nav } from "react-bootstrap";
 import "../Bar/index.css";
 import firebase from "firebase";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../App";
 
 function Bar() {
-    const user = firebase.auth().currentUser;
+    const [user] = useUser();
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState("");
 
