@@ -70,7 +70,6 @@ const styles = (theme: Theme) =>
 
 function Dashboard(props: { classes: any }) {
     const { classes } = props;
-    const categories = useCategories();
 
     const [video, setVideo] = useState<Video[]>([]);
     const [pageNumber, setPageNumber] = useState(0);

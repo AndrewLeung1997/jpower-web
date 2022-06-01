@@ -165,6 +165,7 @@ function SignIn(props: { classes: { [key: string]: string } }) {
                     const user = decode(token) as User;
                     setUser(user);
 
+                    console.log(user.role)
                     if (user.role === "admin")
                         return navigate("/dashboard", { replace: true });
                     navigate("/");

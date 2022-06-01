@@ -6,11 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../App";
 
 function Bar() {
-    const [user] = useUser();
+    const [user, setUser] = useUser();
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState("");
-
-    const navigate = useNavigate();
 
     return (
         <div>
@@ -68,12 +66,8 @@ function Bar() {
                             onClick={(event: any) => {
                                 if (user) {
                                     event.preventDefault();
-                                    firebase
-                                        .auth()
-                                        .signOut()
-                                        .then(() => {
-                                            navigate("/");
-                                        });
+                                    localStorage.removeItem("token");
+                                    setUser(null);
                                 }
                             }}
                             style={{
