@@ -13,8 +13,8 @@ import {
     IconButton,
     Box,
 } from "@material-ui/core";
-import withStyles from "@material-ui/core/styles/withStyles";
-import { Link, withRouter } from "react-router-dom";
+import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import firebase from "firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
@@ -22,80 +22,83 @@ import InsertLinkIcon from "@material-ui/icons/InsertLink";
 import PublishIcon from "@material-ui/icons/Publish";
 import "../Player/style.css";
 import { db } from "../../firebase";
-import { useCategories } from "../App";
+import { useCategories, useUser } from "../App";
 import { Delete } from "@material-ui/icons";
+import { Breakpoint, Theme } from "@mui/material";
+import { Video } from "../../types/video";
+import { api } from "../../api";
 
-const styles = (theme) => ({
-    main: {
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 3,
-        [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+const styles = (theme: Theme) =>
+    ({
+        main: {
             width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
+            display: "block", // Fix IE 11 issue.
+            marginLeft: Number(theme.spacing()) * 3,
+            marginRight: Number(theme.spacing()) * 3,
+            marginBottom: Number(theme.spacing()) * 3,
+            [theme.breakpoints.up(("auto" + Number(theme.spacing()) * 3 * 2) as Breakpoint)]:
+                {
+                    width: "auto",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                },
         },
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 6,
-        marginBottom: theme.spacing.unit * 4,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
-        }px`,
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        border: "2px",
-        marginTop: theme.spacing.unit,
-        paddingBottom: "10px",
-    },
-    submit: {
-        marginTop: theme.spacing.unit * 3,
-        width: "200px",
-    },
-    tableHeader: {
-        fontSize: "15px",
-    },
-});
+        paper: {
+            marginTop: Number(theme.spacing()) * 6,
+            marginBottom: Number(theme.spacing()) * 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
+                Number(theme.spacing()) * 3
+            }px`,
+        },
+        form: {
+            width: "100%", // Fix IE 11 issue.
+            border: "2px",
+            marginTop: Number(theme.spacing()),
+            paddingBottom: "10px",
+        },
+        submit: {
+            marginTop: Number(theme.spacing()) * 3,
+            width: "200px",
+        },
+        tableHeader: {
+            fontSize: "15px",
+        },
+    } as Styles<Theme, {}, never>);
 
-function Dashboard(props) {
+function Dashboard(props: { classes: any }) {
     const { classes } = props;
     const categories = useCategories();
 
-    const [video, setVideo] = useState([]);
+    const [video, setVideo] = useState<Video[]>([]);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalDataCount, setTotalDataCount] = useState(0);
     const [dataRange, setDataRange] = useState(5);
     const [newCategory, setNewCategory] = useState("");
+    const [user] = useUser();
 
     const createNewCategory = () => {
         if (newCategory) {
-            db.collection("categories")
-                .add({
-                    id: categories.length + 1,
-                    category_name: newCategory,
-                })
-                .then(() => {
-                    alert("Category added!");
-                });
+            api.post("/category/create", {
+                categoryName: newCategory,
+            }).then((res) => {
+                alert("Category added!");
+            });
             setNewCategory("");
         }
     };
 
     useEffect(() => {
         fetchAllVideo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageNumber, totalDataCount, dataRange]);
 
-    if (!firebase.auth().currentUser) {
+    if (!user) {
         // not logged in
         alert("Please login first");
-        props.history.replace("/login");
-        return null;
+        return <Navigate to="/login" />;
     }
 
     return (
@@ -147,30 +150,32 @@ function Dashboard(props) {
                         {video.map(function (value, key) {
                             return (
                                 <TableRow key={key}>
-                                    <TableCell align="center">{value.id}</TableCell>
+                                    <TableCell align="center">{value.videoId}</TableCell>
                                     <TableCell align="center">
-                                        {convertTimeStamp(value.timestamp)}
+                                        {convertTimeStamp(value.uploadTime)}
                                     </TableCell>
-                                    <TableCell align="center" value={value.url}>
-                                        <IconButton
-                                            component={"a"}
-                                            to={{
-                                                pathname: `${value.url}`,
-                                            }}
-                                        >
+                                    <TableCell align="center">
+                                        <IconButton component={Link} to={value.videoUrl}>
                                             <InsertLinkIcon color="primary" />
                                         </IconButton>
                                     </TableCell>
-                                    <TableCell align="center">{value.fileName}</TableCell>
-                                    <TableCell align="center">{value.category}</TableCell>
+                                    <TableCell align="center">
+                                        {value.videoDisplayName}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {value.category.categoryName}
+                                    </TableCell>
                                     <TableCell align="center">
                                         <div className="box">
-                                            {value.tag !== undefined ? (
-                                                value.tag.map(function (value, index) {
+                                            {value.videoTag &&
+                                                value.videoTag.map(function (
+                                                    value,
+                                                    index
+                                                ) {
                                                     return (
                                                         <div className="tag">
                                                             <button
-                                                                id={index}
+                                                                id={String(index)}
                                                                 style={{
                                                                     paddingLeft: "2px",
                                                                 }}
@@ -179,21 +184,13 @@ function Dashboard(props) {
                                                             </button>
                                                         </div>
                                                     );
-                                                })
-                                            ) : (
-                                                <div></div>
-                                            )}
+                                                })}
                                         </div>
                                     </TableCell>
                                     <TableCell align="center">
                                         <IconButton
                                             component={Link}
-                                            to={{
-                                                pathname: `/updateVideoInfo`,
-                                                state: {
-                                                    url: value.url,
-                                                },
-                                            }}
+                                            to={`/updateVideoInfo`}
                                         >
                                             <PublishIcon color="primary" />
                                         </IconButton>
@@ -210,13 +207,20 @@ function Dashboard(props) {
                                                         .database()
                                                         .ref("VideoList/")
                                                         .orderByChild("url")
-                                                        .equalTo(value.url);
-                                                    query.once("child_added", (snapshot) => {
-                                                        snapshot.ref.remove().then(() => {
-                                                            alert("Video removed.");
-                                                            fetchAllVideo();
-                                                        });
-                                                    });
+                                                        .equalTo(value.videoUrl);
+                                                    query.once(
+                                                        "child_added",
+                                                        (snapshot) => {
+                                                            snapshot.ref
+                                                                .remove()
+                                                                .then(() => {
+                                                                    alert(
+                                                                        "Video removed."
+                                                                    );
+                                                                    fetchAllVideo();
+                                                                });
+                                                        }
+                                                    );
                                                 }
                                             }}
                                         >
@@ -231,8 +235,8 @@ function Dashboard(props) {
                 <TablePagination
                     component="div"
                     count={totalDataCount}
-                    onChangePage={handlePageChange}
-                    onChangeRowsPerPage={(e) => handleRowsPerPageChange(e)}
+                    onPageChange={handlePageChange}
+                    onChangeRowsPerPage={handleRowsPerPageChange}
                     page={pageNumber}
                     rowsPerPage={dataRange}
                     rowsPerPageOptions={[5, 10]}
@@ -241,44 +245,33 @@ function Dashboard(props) {
         </main>
     );
 
-    function handlePageChange(event, page) {
+    function handlePageChange(
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+        page: number
+    ) {
         setPageNumber(page);
     }
 
-    function handleRowsPerPageChange(event) {
-        setDataRange(event.target.value);
+    function handleRowsPerPageChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setDataRange(Number(event.target.value));
     }
 
-    function paginate(array, page_size, page_number) {
+    function paginate(array: any[], page_size: number, page_number: number) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
 
     function fetchAllVideo() {
-        var videoArray = [];
-        var reversedArray = [];
-        var today = getTodayDate();
-        console.log(today);
-        firebase
-            .database()
-            .ref("VideoList/")
-            .on("value", function (snapshot) {
-                if (snapshot.val()) {
-                    var keys = Object.keys(snapshot.val()).sort();
-                    setTotalDataCount(keys.length);
-                    snapshot.forEach(function (video) {
-                        videoArray.push(video.val());
-                    });
-                    reversedArray = [...videoArray].reverse();
-                    setVideo(paginate(reversedArray, dataRange, pageNumber + 1));
-                }
-            });
+        api.get(`/videos?sort=latest`).then(({ data }) => {
+            setTotalDataCount(data.videos.length);
+            setVideo(paginate(data.videos, dataRange, pageNumber + 1));
+        });
     }
 
-    function convertTimeStamp(timestamp) {
-        var date = new Date(timestamp);
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
+    function convertTimeStamp(timestamp: string) {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        let month: string | number = date.getMonth() + 1;
+        let day: string | number = date.getDate();
 
         if (day < 10) {
             day = "0" + day;
@@ -287,28 +280,10 @@ function Dashboard(props) {
             month = "0" + month;
         }
 
-        var newDate = year + "-" + month + "-" + day;
-
-        return newDate;
-    }
-
-    function getTodayDate() {
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = date.getMonth() + 1;
-        var day = date.getDate();
-
-        if (day < 10) {
-            day = "0" + day;
-        }
-        if (month < 10) {
-            month = "0" + month;
-        }
-
-        var newDate = year + "-" + month + "-" + day;
+        const newDate = year + "-" + month + "-" + day;
 
         return newDate;
     }
 }
 
-export default withRouter(withStyles(styles)(Dashboard));
+export default withStyles(styles)(Dashboard);

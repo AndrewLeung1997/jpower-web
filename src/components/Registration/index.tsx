@@ -1,66 +1,69 @@
 import React, { useState } from "react";
-import {
-    Typography,
-    Paper,
-    Divider,
-} from "@material-ui/core";
-import withStyles from "@material-ui/core/styles/withStyles";
-import { withRouter } from "react-router-dom";
-import firebase from "../../firebase";
+import { Typography, Paper, Divider, Theme, Breakpoint, Button } from "@mui/material";
+import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
+import { useNavigate, Navigate } from "react-router-dom";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
+import { api } from "../../api";
+import { decode } from "jsonwebtoken";
+import { User } from "../../types/user";
+import { useUser } from "../App";
 
-const styles = (theme) => ({
-    main: {
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 4,
-        marginRight: theme.spacing.unit * 4,
-        [theme.breakpoints.up(`auto${(theme.spacing.unit * 3 * 2)}`)]: {
+const styles = (theme: Theme) =>
+    ({
+        main: {
             width: "auto",
-            marginLeft: 100,
-            marginRight: 100,
+            display: "block", // Fix IE 11 issue.
+            marginLeft: Number(theme.spacing()) * 4,
+            marginRight: Number(theme.spacing()) * 4,
+            [theme.breakpoints.up(
+                `auto${Number(theme.spacing()) * 3 * 2}` as number | Breakpoint
+            )]: {
+                width: "auto",
+                marginLeft: 100,
+                marginRight: 100,
+            },
         },
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 8,
-        marginBottom: theme.spacing.unit * 2,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
-        }px`,
-    },
-    loginPaper: {
-        marginTop: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 4,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
-        }px`,
-    },
-    avatar: {
-        margin: theme.spacing.unit,
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
-    },
-    formControl: {
-        margin: theme.spacing.unit,
-    },
+        paper: {
+            marginTop: Number(theme.spacing()) * 8,
+            marginBottom: Number(theme.spacing()) * 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
+                Number(theme.spacing()) * 3
+            }px`,
+        },
+        loginPaper: {
+            marginTop: Number(theme.spacing()) * 3,
+            marginBottom: Number(theme.spacing()) * 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
+                Number(theme.spacing()) * 3
+            }px`,
+        },
+        avatar: {
+            margin: Number(theme.spacing()),
+            backgroundColor: theme.palette.secondary.main,
+        },
+        form: {
+            width: "100%", // Fix IE 11 issue.
+            marginTop: Number(theme.spacing()),
+        },
+        formControl: {
+            margin: Number(theme.spacing()),
+        },
 
-    submit: {
-        marginTop: theme.spacing.unit * 3,
-    },
-});
+        submit: {
+            marginTop: Number(theme.spacing()) * 3,
+        },
+    } as Styles<Theme, {}, never>);
 
-function Register(props) {
+function Register(props: { classes: any }) {
     const { classes } = props;
+    const [user, setUser] = useUser();
 
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
@@ -70,6 +73,10 @@ function Register(props) {
     const [gender, setGender] = useState("");
     const [agreement, setAgreement] = useState(false);
     const genderArray = ["男", "女", "不方便透露"];
+
+    const navigate = useNavigate();
+
+    if (user) return <Navigate to="/" />;
 
     return (
         <main className={classes.main}>
@@ -83,7 +90,7 @@ function Register(props) {
                         <Divider />
                         <form
                             className={classes.form}
-                            onSubmit={(e) => e.preventDefault() && false}
+                            onSubmit={(e) => e.preventDefault()}
                         >
                             <div className="row">
                                 <div className="col-md-12">
@@ -177,19 +184,19 @@ function Register(props) {
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="form-group">
-                                        <div class="form-check">
+                                        <div className="form-check">
                                             <input
-                                                class="form-check-input"
+                                                className="form-check-input"
                                                 type="checkbox"
-                                                value={enoughYear}
+                                                value={Number(enoughYear)}
                                                 id="flexCheckDefault"
                                                 onChange={() =>
                                                     setEnoughYear(!enoughYear)
                                                 }
                                             />
                                             <label
-                                                class="form-check-label"
-                                                for="flexCheckDefault"
+                                                className="form-check-label"
+                                                htmlFor="flexCheckDefault"
                                             >
                                                 我保證我已滿18歲
                                             </label>
@@ -200,17 +207,17 @@ function Register(props) {
                             <div className="row">
                                 <div className="col-md-12">
                                     <div className="form-group">
-                                        <div class="form-check">
+                                        <div className="form-check">
                                             <input
-                                                class="form-check-input"
+                                                className="form-check-input"
                                                 type="checkbox"
-                                                value={agreement}
+                                                value={Number(agreement)}
                                                 id="flexCheckDefault"
                                                 onChange={() => setAgreement(!agreement)}
                                             />
                                             <label
-                                                class="form-check-label"
-                                                for="flexCheckDefault"
+                                                className="form-check-label"
+                                                htmlFor="flexCheckDefault"
                                             >
                                                 我同意會員條款及私隱政策
                                             </label>
@@ -219,7 +226,7 @@ function Register(props) {
                                 </div>
                             </div>
 
-                            <button
+                            <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
@@ -228,7 +235,7 @@ function Register(props) {
                                 className="btn btn-primary"
                             >
                                 註冊
-                            </button>
+                            </Button>
                         </form>
                     </Paper>
                 </div>
@@ -240,7 +247,7 @@ function Register(props) {
                         <Divider />
                         <form
                             className={classes.form}
-                            onSubmit={(e) => e.preventDefault() && false}
+                            onSubmit={(e) => e.preventDefault()}
                         >
                             <div className="row">
                                 <div className="col-md-12">
@@ -273,7 +280,7 @@ function Register(props) {
                                     </div>
                                 </div>
                             </div>
-                            <button
+                            <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
@@ -282,7 +289,7 @@ function Register(props) {
                                 className="btn btn-primary"
                             >
                                 登入
-                            </button>
+                            </Button>
                         </form>
                     </Paper>
                 </div>
@@ -302,24 +309,51 @@ function Register(props) {
 
     async function onRegister() {
         if (agreement && enoughYear) {
-            try {
-                await firebase.register(userName, email, password);
-                await firebase.addData(userName, email, gender, enoughYear, agreement);
-                props.history.replace("/dashboard");
-            } catch (error) {
-                alert(error.message);
-            }
+            api.post("/users/register", { userName, email, password })
+                .then(({ data }) => {
+                    const { token } = data;
+                    if (token) {
+                        localStorage.setItem("token", token);
+                        const user = decode(token) as User;
+                        setUser(user);
+
+                        if (user.role === "admin")
+                            return navigate("/dashboard", { replace: true });
+                        navigate("/");
+                    }
+                })
+                .catch((err) => {
+                    alert(
+                        `註冊失敗: ${
+                            err?.response?.data?.error || err?.response?.data || err
+                        }`
+                    );
+                });
         }
     }
 
     async function login() {
-        try {
-            await firebase.login(email, password);
-            props.history.replace("/dashboard");
-        } catch (error) {
-            alert(error.message);
-        }
+        api.post("/users/login", { email, password })
+            .then(({ data }) => {
+                const { token } = data;
+                if (token) {
+                    localStorage.setItem("token", token);
+                    const user = decode(token) as User;
+                    setUser(user);
+
+                    if (user.role === "admin")
+                        return navigate("/dashboard", { replace: true });
+                    navigate("/");
+                }
+            })
+            .catch((err) => {
+                alert(
+                    `登入失敗: ${
+                        err?.response?.data?.error || err?.response?.data || err
+                    }`
+                );
+            });
     }
 }
 
-export default withRouter(withStyles(styles)(Register));
+export default withStyles(styles)(Register);

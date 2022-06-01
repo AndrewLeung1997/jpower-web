@@ -8,24 +8,27 @@ import {
     Input,
     InputLabel,
     Theme,
-} from "@material-ui/core";
+} from "@mui/material";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
-import firebase from "../../firebase";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import "../Bar/index.css";
 import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import { api } from "../../api";
+import { decode } from "jsonwebtoken";
+import { User } from "../../types/user";
+import { useUser } from "../App";
 
-const styles = (theme: Theme) =>
-    ({
+const styles = (theme: Theme) => {
+    console.log(theme.spacing());
+    return {
         root: {
             width: "auto",
             display: "block", // Fix IE 11 issue.
             [theme.breakpoints.up(
-                ("auto" + theme.spacing.length * 3 * 2) as number | Breakpoint
+                ("auto" + Number(theme.spacing()) * 3 * 2) as number | Breakpoint
             )]: {
                 width: "auto",
                 marginLeft: "auto",
@@ -35,49 +38,55 @@ const styles = (theme: Theme) =>
         main: {
             width: "auto",
             display: "block", // Fix IE 11 issue.
-            marginLeft: theme.spacing.length * 3,
-            marginRight: theme.spacing.length * 3,
-            [theme.breakpoints.up(400 + theme.spacing.length * 3 * 2)]: {
+            marginLeft: Number(theme.spacing()) * 3,
+            marginRight: Number(theme.spacing()) * 3,
+            [theme.breakpoints.up(400 + Number(theme.spacing()) * 3 * 2)]: {
                 width: 400,
                 marginLeft: "auto",
                 marginRight: "auto",
             },
         },
         paper: {
-            marginTop: theme.spacing.length * 10,
+            marginTop: Number(theme.spacing()) * 10,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: `${theme.spacing.length * 2}px ${theme.spacing.length * 3}px ${
-                theme.spacing.length * 3
+            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
+                Number(theme.spacing()) * 3
             }px`,
         },
         avatar: {
-            margin: theme.spacing.length,
+            margin: Number(theme.spacing()),
             backgroundColor: theme.palette.secondary.main,
         },
         alternativeAvatar: {
-            margin: theme.spacing.length,
+            margin: Number(theme.spacing()),
             backgroundColor: theme.palette.secondary.light,
         },
         form: {
             width: "100%", // Fix IE 11 issue.
-            marginTop: theme.spacing.length,
+            marginTop: Number(theme.spacing()),
         },
         submit: {
-            marginTop: theme.spacing.length * 3,
+            marginTop: Number(theme.spacing()) * 3,
         },
 
         alternativeIcon: {
             paddingTop: "20px",
         },
-    } as Styles<Theme, {}, never>);
+    } as Styles<Theme, {}, never>;
+};
 
-function SignIn(props: RouteComponentProps & { classes: { [key: string]: string } }) {
+function SignIn(props: { classes: { [key: string]: string } }) {
     const { classes } = props;
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [user, setUser] = useUser();
+
+    const navigate = useNavigate();
+
+    if (user) return <Navigate to="/" />;
 
     return (
         <div className={classes.root}>
@@ -148,19 +157,27 @@ function SignIn(props: RouteComponentProps & { classes: { [key: string]: string 
     );
 
     async function login() {
-        try {
-            api.post("/login", { email, password }).then((res) => {
-                if (res.data.success) {
-                    localStorage.setItem("token", res.data.token);
-                    props.history.push("/");
+        api.post("/users/login", { email, password })
+            .then(({ data }) => {
+                const { token } = data;
+                if (token) {
+                    localStorage.setItem("token", token);
+                    const user = decode(token) as User;
+                    setUser(user);
+
+                    if (user.role === "admin")
+                        return navigate("/dashboard", { replace: true });
+                    navigate("/");
                 }
+            })
+            .catch((err) => {
+                alert(
+                    `登入失敗: ${
+                        err?.response?.data?.error || err?.response?.data || err
+                    }`
+                );
             });
-            await firebase.login(email, password);
-            props.history.replace("/dashboard");
-        } catch (error: any) {
-            alert(error?.message);
-        }
     }
 }
 
-export default withRouter(withStyles(styles)(SignIn));
+export default withStyles(styles)(SignIn);

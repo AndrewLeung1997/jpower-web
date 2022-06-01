@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-
 import { Navbar, Nav } from "react-bootstrap";
 import "../Bar/index.css";
 import firebase from "firebase";
+import { useNavigate } from "react-router-dom";
 
-function Bar(props: { history: any }) {
+function Bar() {
     const user = firebase.auth().currentUser;
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState("");
+
+    const navigate = useNavigate();
+
     return (
         <div>
             <Navbar
@@ -69,7 +71,7 @@ function Bar(props: { history: any }) {
                                         .auth()
                                         .signOut()
                                         .then(() => {
-                                            props.history.push("/");
+                                            navigate("/");
                                         });
                                 }
                             }}
@@ -163,4 +165,4 @@ function Bar(props: { history: any }) {
     );
 }
 
-export default withRouter(Bar);
+export default Bar;
