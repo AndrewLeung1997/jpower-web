@@ -3,7 +3,7 @@ import FileUpload from "../FileUpload";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import { CssBaseline, CircularProgress } from "@material-ui/core";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import firebase, { db } from "../../firebase";
+import firebase from "../../firebase";
 import Login from "../Login";
 import Registration from "../Registration";
 import Home from "../Home";
@@ -16,33 +16,37 @@ import Tags from "../Tags";
 import Search from "../Search";
 import All from "../All";
 import SearchByTag from "../SearchByTag";
+import { api } from "../../api";
+import { User } from "../../types/user";
 
 const theme = createTheme();
-const CategoryContext = createContext({ categories: [] });
+
+const AppContext = createContext<{
+    categories: string[];
+    user?: User
+}>({ categories: [] });
+
 export default function App() {
     const [firebaseInitialized, setFirebaseInitialized] = useState(false);
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState<string[]>([]);
+    const [user, setUser] = useState<User | undefined>()
 
     useEffect(() => {
         firebase.isInitialized().then((val) => {
             setFirebaseInitialized(val);
             !categories.length &&
-                db
-                    .collection("categories")
-                    .get()
-                    .then((querySnapshot) => {
-                        setCategories(
-                            querySnapshot.docs
-                                .sort((a, b) => a.data().id - b.data().id)
-                                .map((doc) => doc.data().category_name)
-                        );
+                api
+                    .get("/api/category")
+                    .then((res: { data: { categories: { categoryName: string }[] } }) => {
+                        const { categories } = res.data;
+                        setCategories(categories.map(({ categoryName }) => categoryName));
                     });
         });
     });
 
     return firebaseInitialized !== false ? (
         <MuiThemeProvider theme={theme}>
-            <CategoryContext.Provider value={{ categories }}>
+            <AppContext.Provider value={{ categories }}>
                 <CssBaseline />
                 <Router>
                     <Switch>
@@ -74,7 +78,7 @@ export default function App() {
                         <Route exact path="/All" component={All}></Route>
                     </Switch>
                 </Router>
-            </CategoryContext.Provider>
+            </AppContext.Provider>
         </MuiThemeProvider>
     ) : (
         <div id="loader">
@@ -84,7 +88,7 @@ export default function App() {
 }
 
 export function useCategories() {
-    const context = useContext(CategoryContext);
+    const context = useContext(AppContext);
     if (context === undefined) {
         throw new Error("useCategories must be used within a CategoryProvider");
     }

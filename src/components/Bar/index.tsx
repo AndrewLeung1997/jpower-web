@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 
-import { Navbar, Nav } from "bootstrap-4-react";
+import { Navbar, Nav } from "react-bootstrap";
 import "../Bar/index.css";
 import firebase from "firebase";
 
-function Bar(props) {
+function Bar(props: { history: any }) {
     const user = firebase.auth().currentUser;
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState("");
@@ -13,7 +13,6 @@ function Bar(props) {
         <div>
             <Navbar
                 expand="md"
-                dark
                 bg="dark"
                 fixed="top"
                 style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)" }}
@@ -24,19 +23,18 @@ function Bar(props) {
                         paddingLeft: "50px",
                         paddingRight: "60px",
                         fontSize: "30px",
+                        color: "white"
                     }}
                 >
-                    JTube Club
+                    JPower
                 </Navbar.Brand>
-                <Navbar.Toggler target="#responsive-navbar-nav" />
-
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="ml-auto">
                         <Nav.Link
                             href="/"
                             style={{
                                 color: "white",
-                                fontWeigt: "bold",
+                                fontWeight: "bold",
                                 fontSize: "17px",
                             }}
                         >
@@ -46,7 +44,7 @@ function Bar(props) {
                             href="/All"
                             style={{
                                 color: "white",
-                                fontWeigt: "bold",
+                                fontWeight: "bold",
                                 fontSize: "17px",
                             }}
                         >
@@ -56,7 +54,7 @@ function Bar(props) {
                             href="/Tags"
                             style={{
                                 color: "white",
-                                fontWeigt: "bold",
+                                fontWeight: "bold",
                                 fontSize: "17px",
                             }}
                         >
@@ -64,7 +62,7 @@ function Bar(props) {
                         </Nav.Link>
                         <Nav.Link
                             href={user ? "/" : "/login"}
-                            onClick={(event) => {
+                            onClick={(event: any) => {
                                 if (user) {
                                     event.preventDefault();
                                     firebase
@@ -77,7 +75,7 @@ function Bar(props) {
                             }}
                             style={{
                                 color: "white",
-                                fontWeigt: "bold",
+                                fontWeight: "bold",
                                 fontSize: "17px",
                             }}
                         >
@@ -88,7 +86,7 @@ function Bar(props) {
                                 href="/upload"
                                 style={{
                                     color: "white",
-                                    fontWeigt: "bold",
+                                    fontWeight: "bold",
                                     fontSize: "17px",
                                 }}
                             >
@@ -96,7 +94,9 @@ function Bar(props) {
                             </Nav.Link>
                         )}
                         <Nav.Link></Nav.Link>
-                        <Nav.Item style={{width: 240, marginRight: 10, marginBottom: 10}}>
+                        <Nav.Item
+                            style={{ width: 240, marginRight: 10, marginBottom: 10 }}
+                        >
                             <div className="input-group">
                                 <input
                                     type="text"
@@ -108,7 +108,9 @@ function Bar(props) {
                                     }}
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter" && filter)
-                                            window.location.replace(`/Search/Tag/${filter}`);
+                                            window.location.replace(
+                                                `/Search/Tag/${filter}`
+                                            );
                                     }}
                                 />
                                 <div className="input-group-append">
@@ -116,7 +118,9 @@ function Bar(props) {
                                         className="btn btn-secondary"
                                         type="button"
                                         onClick={() => {
-                                            window.location.replace(`/Search/Tag/${filter}`);
+                                            window.location.replace(
+                                                `/Search/Tag/${filter}`
+                                            );
                                         }}
                                     >
                                         Filter

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Typography,
     Paper,
@@ -7,67 +7,73 @@ import {
     FormControl,
     Input,
     InputLabel,
+    Theme,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import withStyles from "@material-ui/core/styles/withStyles";
-import { Link, withRouter } from "react-router-dom";
+import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import firebase from "../../firebase";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import "../Bar/index.css";
+import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
+import { api } from "../../api";
 
-const styles = (theme) => ({
-    root: {
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+const styles = (theme: Theme) =>
+    ({
+        root: {
             width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
+            display: "block", // Fix IE 11 issue.
+            [theme.breakpoints.up(
+                ("auto" + theme.spacing.length * 3 * 2) as number | Breakpoint
+            )]: {
+                width: "auto",
+                marginLeft: "auto",
+                marginRight: "auto",
+            },
         },
-    },
-    main: {
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-            width: 400,
-            marginLeft: "auto",
-            marginRight: "auto",
+        main: {
+            width: "auto",
+            display: "block", // Fix IE 11 issue.
+            marginLeft: theme.spacing.length * 3,
+            marginRight: theme.spacing.length * 3,
+            [theme.breakpoints.up(400 + theme.spacing.length * 3 * 2)]: {
+                width: 400,
+                marginLeft: "auto",
+                marginRight: "auto",
+            },
         },
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 10,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
-        }px`,
-    },
-    avatar: {
-        margin: theme.spacing.unit,
-        backgroundColor: theme.palette.secondary.main,
-    },
-    alternativeAvatar: {
-        margin: theme.spacing.unit,
-        backgroundColor: theme.palette.secondary.light,
-    },
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
-    },
-    submit: {
-        marginTop: theme.spacing.unit * 3,
-    },
+        paper: {
+            marginTop: theme.spacing.length * 10,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: `${theme.spacing.length * 2}px ${theme.spacing.length * 3}px ${
+                theme.spacing.length * 3
+            }px`,
+        },
+        avatar: {
+            margin: theme.spacing.length,
+            backgroundColor: theme.palette.secondary.main,
+        },
+        alternativeAvatar: {
+            margin: theme.spacing.length,
+            backgroundColor: theme.palette.secondary.light,
+        },
+        form: {
+            width: "100%", // Fix IE 11 issue.
+            marginTop: theme.spacing.length,
+        },
+        submit: {
+            marginTop: theme.spacing.length * 3,
+        },
 
-    alternativeIcon: {
-        paddingTop: "20px",
-    },
-});
+        alternativeIcon: {
+            paddingTop: "20px",
+        },
+    } as Styles<Theme, {}, never>);
 
-function SignIn(props) {
+function SignIn(props: RouteComponentProps & { classes: { [key: string]: string } }) {
     const { classes } = props;
 
     const [email, setEmail] = useState("");
@@ -91,10 +97,7 @@ function SignIn(props) {
                     <Typography component="h1" variant="h5">
                         登入
                     </Typography>
-                    <form
-                        className={classes.form}
-                        onSubmit={(e) => e.preventDefault() && false}
-                    >
+                    <form className={classes.form} onSubmit={(e) => e.preventDefault()}>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">電郵地址</InputLabel>
                             <Input
@@ -146,10 +149,16 @@ function SignIn(props) {
 
     async function login() {
         try {
+            api.post("/login", { email, password }).then((res) => {
+                if (res.data.success) {
+                    localStorage.setItem("token", res.data.token);
+                    props.history.push("/");
+                }
+            });
             await firebase.login(email, password);
             props.history.replace("/dashboard");
-        } catch (error) {
-            alert(error.message);
+        } catch (error: any) {
+            alert(error?.message);
         }
     }
 }
