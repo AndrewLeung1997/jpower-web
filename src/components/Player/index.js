@@ -156,7 +156,7 @@ function Player(props) {
 
     return (
         <div className={classes.main}>
-            <Bar></Bar>
+
             <div className="row">
                 <div className="col-md-12">
                     <Card className={classes.VideoCard}>

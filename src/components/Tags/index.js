@@ -64,7 +64,7 @@ function Tags(props) {
 
     return (
         <div className={classes.main}>
-            <Bar></Bar>
+
             <Paper className={classes.paper}>
                 <Typography component="h1" variant="h5" style={{ color: "#FCFCFC" }}>
                     所有標籤

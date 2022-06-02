@@ -108,7 +108,6 @@ function Home() {
     return (
         // <div sx={styles.root}>
         <Box sx={styles.main}>
-            <Bar></Bar>
             <div className="row">
                 <div className="col-md-3">
                     <Paper sx={styles.paper}>

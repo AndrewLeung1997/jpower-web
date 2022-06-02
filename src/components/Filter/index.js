@@ -94,7 +94,7 @@ function Home(props) {
 
     return (
         <div className={classes.main}>
-            <Bar></Bar>
+
 
             <div className="row">
                 <div className="col-md-3">

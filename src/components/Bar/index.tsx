@@ -12,7 +12,7 @@ function Bar() {
         <div>
             <Navbar
                 expand="md"
-                bg="dark"
+                bg="transparent"
                 fixed="top"
                 style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.5)" }}
             >

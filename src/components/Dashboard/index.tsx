@@ -12,13 +12,14 @@ import {
     TablePagination,
     IconButton,
     Box,
-} from "@material-ui/core";
-import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
+} from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
-import InsertLinkIcon from "@material-ui/icons/InsertLink";
-import PublishIcon from "@material-ui/icons/Publish";
+import {
+    InsertLink as InsertLinkIcon,
+    Publish as PublishIcon,
+} from "@mui/icons-material";
 import "../Player/style.css";
 import { useUser } from "../App";
 import { Delete } from "@material-ui/icons";
@@ -26,49 +27,43 @@ import { Breakpoint, Theme } from "@mui/material";
 import { Video } from "../../types/video";
 import { api } from "../../api";
 
-const styles = (theme: Theme) =>
-    ({
-        main: {
+const styles = {
+    main: (theme: Theme) => ({
+        width: "auto",
+        display: "block", // Fix IE 11 issue.
+        marginLeft: 3,
+        marginRight: 3,
+        marginBottom: 3,
+        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
             width: "auto",
-            display: "block", // Fix IE 11 issue.
-            marginLeft: theme.space * 3,
-            marginRight: theme.space * 3,
-            marginBottom: theme.space * 3,
-            [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]:
-                {
-                    width: "auto",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                },
+            marginLeft: "auto",
+            marginRight: "auto",
         },
-        paper: {
-            marginTop: theme.space * 6,
-            marginBottom: theme.space * 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: `${theme.space * 2}px ${theme.space * 3}px ${
-                theme.space * 3
-            }px`,
-        },
-        form: {
-            width: "100%", // Fix IE 11 issue.
-            border: "2px",
-            marginTop: theme.space,
-            paddingBottom: "10px",
-        },
-        submit: {
-            marginTop: theme.space * 3,
-            width: "200px",
-        },
-        tableHeader: {
-            fontSize: "15px",
-        },
-    } as Styles<Theme, {}, never>);
+    }),
+    paper: (theme: Theme) => ({
+        marginTop: 6,
+        marginBottom: 4,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
+    }),
+    form: (theme: Theme) => ({
+        width: "100%", // Fix IE 11 issue.
+        border: "2px",
+        marginTop: theme.space,
+        paddingBottom: "10px",
+    }),
+    submit: (theme: Theme) => ({
+        marginTop: 3,
+        width: "200px",
+    }),
+    tableHeader: (theme: Theme) => ({
+        fontSize: "15px",
+    }),
+};
 
-function Dashboard(props: { classes: any }) {
-    const { classes } = props;
-
+function Dashboard() {
     const [video, setVideo] = useState<Video[]>([]);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalDataCount, setTotalDataCount] = useState(0);
@@ -99,10 +94,9 @@ function Dashboard(props: { classes: any }) {
     }
 
     return (
-        <main className={classes.main}>
-            <Bar></Bar>
+        <Box sx={styles.main}>
             {/* Add category */}
-            <Paper className={classes.paper} style={{ marginTop: 90 }}>
+            <Paper sx={styles.paper} style={{ marginTop: 90 }}>
                 <Typography style={{ alignSelf: "flex-start" }}>
                     <h4>Add new category</h4>
                 </Typography>
@@ -130,7 +124,7 @@ function Dashboard(props: { classes: any }) {
                 </Box>
             </Paper>
             <TableContainer component={Paper} style={{ marginTop: "20px" }}>
-                <Table className={classes.table}>
+                <Table sx={styles.tableHeader}>
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">ID</TableCell>
@@ -200,12 +194,17 @@ function Dashboard(props: { classes: any }) {
                                                         "Are you sure to delete this video?"
                                                     )
                                                 ) {
-                                                    api.delete(`/videos/${value.videoId}`).then((res) => {
-                                                        alert("Video deleted!");
-                                                        fetchAllVideo();
-                                                    }).catch((err) => {
-                                                        alert(err?.response?.data || err?.response?.data)
-                                                    });
+                                                    api.delete(`/videos/${value.videoId}`)
+                                                        .then((res) => {
+                                                            alert("Video deleted!");
+                                                            fetchAllVideo();
+                                                        })
+                                                        .catch((err) => {
+                                                            alert(
+                                                                err?.response?.data ||
+                                                                    err?.response?.data
+                                                            );
+                                                        });
                                                 }
                                             }}
                                         >
@@ -221,13 +220,13 @@ function Dashboard(props: { classes: any }) {
                     component="div"
                     count={totalDataCount}
                     onPageChange={handlePageChange}
-                    onChangeRowsPerPage={handleRowsPerPageChange}
+                    onRowsPerPageChange={handleRowsPerPageChange}
                     page={pageNumber}
                     rowsPerPage={dataRange}
                     rowsPerPageOptions={[5, 10]}
                 />
             </TableContainer>
-        </main>
+        </Box>
     );
 
     function handlePageChange(
@@ -271,4 +270,4 @@ function Dashboard(props: { classes: any }) {
     }
 }
 
-export default withStyles(styles)(Dashboard);
+export default Dashboard;
