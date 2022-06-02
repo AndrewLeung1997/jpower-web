@@ -7,13 +7,12 @@ import {
     LinearProgress,
     Theme,
     Box,
-    FormControl,
+    FormGroup,
 } from "@mui/material";
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import { Navigate, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "../UpdateVideoInfo/style.css";
-import Bar from "../Bar";
 import { useCategories, useUser } from "../App";
 import axios from "axios";
 import { s3Url } from "../../config";
@@ -52,7 +51,7 @@ const styles = {
         margin: 1,
     },
     submit: {
-        marginTop: 3,
+        marginTop: 2,
     },
 };
 
@@ -78,7 +77,6 @@ function FileUpload() {
 
     return (
         <Box sx={styles.main} className="">
-            <Bar></Bar>
             <Paper sx={styles.paper}>
                 <Avatar sx={styles.avatar}>
                     <LockOutlinedIcon />
@@ -86,7 +84,7 @@ function FileUpload() {
                 <Typography component="h1" variant="h5" style={{ color: "white" }}>
                     上傳文件
                 </Typography>
-                <FormControl sx={styles.form} onSubmit={(e) => e.preventDefault()}>
+                <FormGroup sx={styles.form} onSubmit={(e) => e.preventDefault()}>
                     <div className="row">
                         <div className="col-sm-12">
                             <label className="form-label" style={{ color: "white" }}>
@@ -192,7 +190,11 @@ function FileUpload() {
                     {uploadStatus && (
                         <div className="row">
                             <div className="col-sm-12">
-                                <LinearProgress variant="determinate" value={process} />
+                                <LinearProgress
+                                    sx={{ marginTop: 2 }}
+                                    variant="determinate"
+                                    value={process}
+                                />
                             </div>
                         </div>
                     )}
@@ -206,7 +208,7 @@ function FileUpload() {
                     >
                         上傳
                     </Button>
-                </FormControl>
+                </FormGroup>
             </Paper>
         </Box>
     );
@@ -269,7 +271,7 @@ function FileUpload() {
                 videoDisplayName, // video name
                 videoDuration, // integer, in seconds
                 videoUrl, // url to video
-                videoPreviewImage, // url to image
+                ...(videoPreviewImage && { videoPreviewImage }), // url to image
             })
             .then((res: { data: { video: { videoId: string } } }) => {
                 alert("成功上傳");
@@ -297,8 +299,9 @@ function FileUpload() {
             },
             onUploadProgress: (progressEvent: ProgressEvent) => {
                 if (progressEvent.lengthComputable) {
-                    const progress =
-                        Math.round(progressEvent.loaded / progressEvent.total) * 100;
+                    const progress = Math.round(
+                        (progressEvent.loaded / progressEvent.total) * 100
+                    );
                     setProcess(progress);
                 }
             },
