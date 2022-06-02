@@ -73,7 +73,7 @@ function FileUpload() {
     if (!user) {
         // not logged in
         alert("Please login first");
-        return <Navigate to="login" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     return (

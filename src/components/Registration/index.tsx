@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, Paper, Divider, Theme, Breakpoint, Button } from "@mui/material";
+import { Typography, Paper, Divider, Theme, Breakpoint, Button, Box, FormGroup } from "@mui/material";
 import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
 import { useNavigate, Navigate } from "react-router-dom";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
@@ -9,60 +9,52 @@ import { decode } from "jsonwebtoken";
 import { User } from "../../types/user";
 import { useUser } from "../App";
 
-const styles = (theme: Theme) =>
-    ({
-        main: {
+const styles = {
+    main: (theme: Theme) => ({
+        width: "auto",
+        display: "block", // Fix IE 11 issue.
+        marginLeft: 4,
+        marginRight: 4,
+        [theme.breakpoints.up(`auto${theme.space * 3 * 2}` as number | Breakpoint)]: {
             width: "auto",
-            display: "block", // Fix IE 11 issue.
-            marginLeft: theme.space * 4,
-            marginRight: theme.space * 4,
-            [theme.breakpoints.up(
-                `auto${theme.space * 3 * 2}` as number | Breakpoint
-            )]: {
-                width: "auto",
-                marginLeft: 100,
-                marginRight: 100,
-            },
+            marginLeft: 100,
+            marginRight: 100,
         },
-        paper: {
-            marginTop: theme.space * 8,
-            marginBottom: theme.space * 2,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: `${theme.space * 2}px ${theme.space * 3}px ${
-                theme.space * 3
-            }px`,
-        },
-        loginPaper: {
-            marginTop: theme.space * 3,
-            marginBottom: theme.space * 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: `${theme.space * 2}px ${theme.space * 3}px ${
-                theme.space * 3
-            }px`,
-        },
-        avatar: {
-            margin: theme.space,
-            backgroundColor: theme.palette.secondary.main,
-        },
-        form: {
-            width: "100%", // Fix IE 11 issue.
-            marginTop: theme.space,
-        },
-        formControl: {
-            margin: theme.space,
-        },
+    }),
+    paper: (theme: Theme) => ({
+        marginTop: 8,
+        marginBottom: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
+    }),
+    loginPaper: (theme: Theme) => ({
+        marginTop: 3,
+        marginBottom: 4,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
+    }),
+    avatar: (theme: Theme) => ({
+        margin: 1,
+        backgroundColor: theme.palette.secondary.main,
+    }),
+    form: (theme: Theme) => ({
+        width: "100%", // Fix IE 11 issue.
+        marginTop: 1,
+    }),
+    formControl: (theme: Theme) => ({
+        margin: 1,
+    }),
 
-        submit: {
-            marginTop: theme.space * 3,
-        },
-    } as Styles<Theme, {}, never>);
+    submit: (theme: Theme) => ({
+        marginTop: 3,
+    }),
+};
 
-function Register(props: { classes: any }) {
-    const { classes } = props;
+function Register() {
     const [user, setUser] = useUser();
 
     const [userName, setUserName] = useState("");
@@ -79,17 +71,16 @@ function Register(props: { classes: any }) {
     if (user) return <Navigate to="/" />;
 
     return (
-        <main className={classes.main}>
-            <Bar></Bar>
+        <Box sx={styles.main}>
             <div className="row">
                 <div className="col-md-6">
-                    <Paper className={classes.paper}>
+                    <Paper sx={styles.paper}>
                         <Typography component="h2" variant="h5">
                             註冊閣下的 jpower 帳戶
                         </Typography>
                         <Divider />
-                        <form
-                            className={classes.form}
+                        <FormGroup
+                            sx={styles.form}
                             onSubmit={(e) => e.preventDefault()}
                         >
                             <div className="row">
@@ -236,17 +227,17 @@ function Register(props: { classes: any }) {
                             >
                                 註冊
                             </Button>
-                        </form>
+                        </FormGroup>
                     </Paper>
                 </div>
                 <div className="col-md-6">
-                    <Paper className={classes.paper}>
+                    <Paper sx={styles.paper}>
                         <Typography component="h2" variant="h5">
                             登入到你的 JPower 帳戶
                         </Typography>
                         <Divider />
-                        <form
-                            className={classes.form}
+                        <FormGroup
+                            sx={styles.form}
                             onSubmit={(e) => e.preventDefault()}
                         >
                             <div className="row">
@@ -290,11 +281,11 @@ function Register(props: { classes: any }) {
                             >
                                 登入
                             </Button>
-                        </form>
+                        </FormGroup>
                     </Paper>
                 </div>
             </div>
-        </main>
+        </Box>
     );
 
     async function onVerifyPassword() {
@@ -356,4 +347,4 @@ function Register(props: { classes: any }) {
     }
 }
 
-export default withStyles(styles)(Register);
+export default Register;

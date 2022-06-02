@@ -8,78 +8,70 @@ import {
     Input,
     InputLabel,
     Theme,
+    Breakpoint,
+    Box,
+    FormGroup,
 } from "@mui/material";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import "../Bar/index.css";
-import { Breakpoint } from "@material-ui/core/styles/createBreakpoints";
 import { api } from "../../api";
 import { decode } from "jsonwebtoken";
 import { User } from "../../types/user";
 import { useUser } from "../App";
 
-const styles = (theme: Theme) => {
-    console.log(theme.spacing());
-    return {
-        root: {
+const styles = {
+    root: (theme: Theme) => ({
+        width: "auto",
+        display: "block", // Fix IE 11 issue.
+        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as number | Breakpoint)]: {
             width: "auto",
-            display: "block", // Fix IE 11 issue.
-            [theme.breakpoints.up(
-                ("auto" + theme.space * 3 * 2) as number | Breakpoint
-            )]: {
-                width: "auto",
-                marginLeft: "auto",
-                marginRight: "auto",
-            },
+            marginLeft: "auto",
+            marginRight: "auto",
         },
-        main: {
-            width: "auto",
-            display: "block", // Fix IE 11 issue.
-            marginLeft: theme.space * 3,
-            marginRight: theme.space * 3,
-            [theme.breakpoints.up(400 + theme.space * 3 * 2)]: {
-                width: 400,
-                marginLeft: "auto",
-                marginRight: "auto",
-            },
+    }),
+    main: (theme: Theme) => ({
+        width: "auto",
+        display: "block", // Fix IE 11 issue.
+        marginLeft: 3,
+        marginRight: 3,
+        [theme.breakpoints.up(400 + theme.space * 3 * 2)]: {
+            width: 400,
+            marginLeft: "auto",
+            marginRight: "auto",
         },
-        paper: {
-            marginTop: theme.space * 10,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: `${theme.space * 2}px ${theme.space * 3}px ${
-                theme.space * 3
-            }px`,
-        },
-        avatar: {
-            margin: theme.space,
-            backgroundColor: theme.palette.secondary.main,
-        },
-        alternativeAvatar: {
-            margin: theme.space,
-            backgroundColor: theme.palette.secondary.light,
-        },
-        form: {
-            width: "100%", // Fix IE 11 issue.
-            marginTop: theme.space,
-        },
-        submit: {
-            marginTop: theme.space * 3,
-        },
+    }),
+    paper: (theme: Theme) => ({
+        marginTop: 10,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
+    }),
+    avatar: (theme: Theme) => ({
+        margin: 1,
+        backgroundColor: theme.palette.secondary.main,
+    }),
+    alternativeAvatar: (theme: Theme) => ({
+        margin: 1,
+        backgroundColor: theme.palette.secondary.light,
+    }),
+    form: {
+        width: "100%", // Fix IE 11 issue.
+        marginTop: 1,
+    },
+    submit: (theme: Theme) => ({
+        marginTop: 3,
+    }),
 
-        alternativeIcon: {
-            paddingTop: "20px",
-        },
-    } as Styles<Theme, {}, never>;
+    alternativeIcon: {
+        paddingTop: "20px",
+    },
 };
 
-function SignIn(props: { classes: { [key: string]: string } }) {
-    const { classes } = props;
-
+function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useUser();
@@ -89,10 +81,9 @@ function SignIn(props: { classes: { [key: string]: string } }) {
     if (user) return <Navigate to="/" />;
 
     return (
-        <div className={classes.root}>
-            <Bar></Bar>
-            <div className={classes.main}>
-                <Paper className={classes.paper}>
+        <Box sx={styles.root}>
+            <Box sx={styles.main}>
+                <Paper sx={styles.paper}>
                     <Typography
                         component="h2"
                         variant="h5"
@@ -100,13 +91,13 @@ function SignIn(props: { classes: { [key: string]: string } }) {
                     >
                         JTube Club 會員
                     </Typography>
-                    <Avatar className={classes.avatar}>
+                    <Avatar sx={styles.avatar}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         登入
                     </Typography>
-                    <form className={classes.form} onSubmit={(e) => e.preventDefault()}>
+                    <FormGroup sx={styles.form} onSubmit={(e) => e.preventDefault()}>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">電郵地址</InputLabel>
                             <Input
@@ -135,7 +126,7 @@ function SignIn(props: { classes: { [key: string]: string } }) {
                             variant="contained"
                             color="primary"
                             onClick={login}
-                            className={classes.submit}
+                            sx={styles.submit}
                         >
                             登入
                         </Button>
@@ -146,14 +137,14 @@ function SignIn(props: { classes: { [key: string]: string } }) {
                             color="secondary"
                             component={Link}
                             to="/register"
-                            className={classes.submit}
+                            sx={styles.submit}
                         >
                             註冊
                         </Button>
-                    </form>
+                    </FormGroup>
                 </Paper>
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 
     async function login() {
@@ -165,7 +156,6 @@ function SignIn(props: { classes: { [key: string]: string } }) {
                     const user = decode(token) as User;
                     setUser(user);
 
-                    console.log(user.role)
                     if (user.role === "admin")
                         return navigate("/dashboard", { replace: true });
                     navigate("/");
@@ -181,4 +171,4 @@ function SignIn(props: { classes: { [key: string]: string } }) {
     }
 }
 
-export default withStyles(styles)(SignIn);
+export default SignIn;
