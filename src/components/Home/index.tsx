@@ -19,6 +19,7 @@ import "../Home/index.css";
 import { useCategories } from "../App";
 import { Video } from "../../types/video";
 import { api } from "../../api";
+import VideoCard from "../VideoCard";
 
 const styles = {
     main: (theme: Theme) => ({
@@ -65,11 +66,11 @@ const styles = {
         marginTop: 2 * 8,
         marginBottom: 3 * 8,
     },
-    CardMedia: (theme: Theme) => ({
+    CardMedia: {
         paddingLeft: 1,
         paddingRight: 1,
         paddingTop: 1,
-    }),
+    },
     submit: {
         marginTop: 3,
         color: "white",
@@ -78,7 +79,6 @@ const styles = {
 };
 
 function Home() {
-    const ref = useRef(null);
     const path = window.location.pathname;
     const initialQueryString = queryString.parse(window.location.search);
     const initialPageNumber = Number(initialQueryString.page) || 0;
@@ -153,69 +153,7 @@ function Home() {
                             最新視頻
                         </Typography>
                         {latestVideo.map(function (value, index) {
-                            return (
-                                <div className="col-sm-4 col-md-3 col-lg-3">
-                                    <Card sx={styles.Card}>
-                                        <Box sx={styles.TimeTag}>
-                                            {convertTime(value.videoDuration)}
-                                        </Box>
-                                        <CardActionArea
-                                            component={Link}
-                                            to={`/player/id/${value.videoId}`}
-                                        >
-                                            <CardMedia
-                                                preload="metadata"
-                                                ref={ref}
-                                                id="video"
-                                                sx={styles.CardMedia}
-                                                component={
-                                                    value.videoPreviewImage
-                                                        ? "img"
-                                                        : "video"
-                                                }
-                                                alt="video"
-                                                width="100%"
-                                                height="200"
-                                                title={value.videoDisplayName}
-                                                muted={true}
-                                                src={`${
-                                                    value.videoPreviewImage ||
-                                                    value.videoUrl
-                                                }#t=0.5`}
-                                                // onMouseOver={(e) => onMouseOver(e)}
-                                                // onMouseOut={(e) => onMouseOut(e)}
-                                                // loop
-                                                // playsinline
-                                            />
-                                        </CardActionArea>
-                                        <CardContent style={{ color: "#FCFCFC" }}>
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="div"
-                                            >
-                                                {value.videoDisplayName}
-                                            </Typography>
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="div"
-                                            >
-                                                {convertTimeStamp(value.uploadTime)}
-                                            </Typography>
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="div"
-                                            >
-                                                <Box sx={styles.Tag}>
-                                                    {value.category.categoryName}
-                                                </Box>
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            );
+                            return <VideoCard video={value} key={index} />;
                         })}
                     </div>
                 </div>
@@ -264,65 +202,7 @@ function Home() {
                             所有視頻
                         </Typography>
                         {videoList.map(function (value, index) {
-                            return (
-                                <div className="col-sm-6 col-md-4 col-lg-4">
-                                    <Card sx={styles.Card}>
-                                        <Box sx={styles.TimeTag}>
-                                            {convertTime(value.videoDuration)}
-                                        </Box>
-                                        <CardActionArea
-                                            component={Link}
-                                            to={`/player/id/${value.videoId}`}
-                                        >
-                                            <CardMedia
-                                                preload="metadata"
-                                                ref={ref}
-                                                id="video"
-                                                sx={styles.CardMedia}
-                                                component={
-                                                    value.videoPreviewImage
-                                                        ? "img"
-                                                        : "video"
-                                                }
-                                                alt="video"
-                                                width="100%"
-                                                height="200"
-                                                title={value.videoDisplayName}
-                                                muted={true}
-                                                src={`${
-                                                    value.videoPreviewImage ||
-                                                    value.videoUrl
-                                                }#t=0.5`}
-                                            />
-                                        </CardActionArea>
-                                        <CardContent style={{ color: "#FCFCFC" }}>
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="div"
-                                            >
-                                                {value.videoDisplayName}
-                                            </Typography>
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="div"
-                                            >
-                                                {convertTimeStamp(value.uploadTime)}
-                                            </Typography>
-                                            <Typography
-                                                gutterBottom
-                                                variant="h6"
-                                                component="div"
-                                            >
-                                                <Box sx={styles.Tag}>
-                                                    {value.category.categoryName}
-                                                </Box>
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            );
+                            return <VideoCard video={value} key={index} />;
                         })}
                     </div>
                 </div>
@@ -362,23 +242,6 @@ function Home() {
         </Box>
     );
 
-    function convertTime(num: number) {
-        let minutes: string | number = Math.floor(num / 60);
-        let seconds: string | number = Math.round(num % 60);
-
-        if (minutes < 10) {
-            minutes = "0" + minutes;
-        }
-
-        if (seconds < 10) {
-            seconds = "0" + seconds;
-        }
-
-        const timestamp = minutes + ":" + seconds;
-
-        return timestamp;
-    }
-
     function paginate(array: any[], page_size: number, page_number: number) {
         return array.slice((page_number - 1) * page_size, page_number * page_size);
     }
@@ -395,24 +258,6 @@ function Home() {
             setTotalRecommendVideo(data.videos.length);
             setLatestVideo(paginate(data.videos, dataRange, pageNumber + 1));
         });
-    }
-
-    function convertTimeStamp(timestamp: string) {
-        const date = new Date(timestamp);
-        const year = date.getFullYear();
-        let month: string | number = date.getMonth() + 1;
-        let day: string | number = date.getDate();
-
-        if (day < 10) {
-            day = "0" + day;
-        }
-        if (month < 10) {
-            month = "0" + month;
-        }
-
-        const newDate = year + "-" + month + "-" + day;
-
-        return newDate;
     }
 }
 

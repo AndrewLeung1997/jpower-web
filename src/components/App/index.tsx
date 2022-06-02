@@ -8,15 +8,15 @@ import firebase from "../../firebase";
 import Login from "../Login";
 import Registration from "../Registration";
 import Home from "../Home";
-import Player from "../Player";
+/*import Player from "../Player";
 import Filter from "../Filter";
-import File from "../File";
+import File from "../File";*/
 import Dashboard from "../Dashboard";
-import UpdateVideoInfo from "../UpdateVideoInfo";
+/*import UpdateVideoInfo from "../UpdateVideoInfo";
 import Tags from "../Tags";
 import Search from "../Search";
 import All from "../All";
-import SearchByTag from "../SearchByTag";
+import SearchByTag from "../SearchByTag";*/
 import { api } from "../../api";
 import { User } from "../../types/user";
 import { decode } from "jsonwebtoken";
@@ -68,7 +68,7 @@ export default function App() {
         );
     }, []);
 
-    return firebaseInitialized !== false ? (
+    return (
         <ThemeProvider theme={theme}>
             <AppContext.Provider value={{ categories, user: [user, setUser] }}>
                 <CssBaseline />
@@ -98,11 +98,7 @@ export default function App() {
                 </Router>
             </AppContext.Provider>
         </ThemeProvider>
-    ) : (
-        <div id="loader">
-            <CircularProgress />
-        </div>
-    );
+    )
 }
 
 export function useCategories() {
