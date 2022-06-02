@@ -23,25 +23,25 @@ const styles = (theme) => ({
     main: {
         width: "auto",
         display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        marginTop: theme.spacing.unit * 5,
-        [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.space * 3,
+        marginRight: theme.space * 3,
+        marginTop: theme.space * 5,
+        [theme.breakpoints.up("auto" + theme.space * 3 * 2)]: {
             width: "auto",
             marginLeft: "auto",
             marginRight: "auto",
         },
-        backgroundColor: "#210548",
+        backgroundColor: "#222",
     },
     paper: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: theme.space * 8,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${
+            theme.space * 3
         }px`,
-        backgroundColor: "#210548",
+        backgroundColor: "#222",
     },
 
     tagList: {

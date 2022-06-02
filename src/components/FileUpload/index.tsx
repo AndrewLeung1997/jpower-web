@@ -1,92 +1,92 @@
 import React, { useState } from "react";
-import { Typography, Paper, Avatar, Button, LinearProgress } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import withStyles from "@material-ui/core/styles/withStyles";
-import { Link, withRouter } from "react-router-dom";
-import firebase from "firebase";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
+import {
+    Typography,
+    Paper,
+    Avatar,
+    Button,
+    LinearProgress,
+    Theme,
+    Box,
+    FormControl,
+} from "@mui/material";
+import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
+import { Navigate, useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.css";
 import "../UpdateVideoInfo/style.css";
 import Bar from "../Bar";
-import { useCategories } from "../App";
+import { useCategories, useUser } from "../App";
+import axios from "axios";
+import { s3Url } from "../../config";
+import random from "random";
+import { api } from "../../api";
 
-const styles = (theme) => ({
-    main: {
+const styles = {
+    main: (theme: Theme) => ({
         width: "auto",
         display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: 3,
+        marginRight: 3,
+        [theme.breakpoints.up(600 + theme.space * 3 * 2)]: {
             width: 600,
             marginLeft: "auto",
             marginRight: "auto",
         },
-    },
-    paper: {
-        marginTop: theme.spacing.unit * 8,
+    }),
+    paper: (theme: Theme) => ({
+        marginTop: 8,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
-        }px`,
-        backgroundColor: "#210548",
-    },
-    avatar: {
-        margin: theme.spacing.unit,
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
+        backgroundColor: "#222",
+    }),
+    avatar: (theme: Theme) => ({
+        margin: 1,
         backgroundColor: theme.palette.secondary.main,
-    },
+    }),
     form: {
         width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
+        marginTop: 1,
     },
     formControl: {
-        margin: theme.spacing.unit,
+        margin: 1,
     },
-
     submit: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: 3,
     },
-});
+};
 
-function FileUpload(props) {
-    const { classes } = props;
-
-    const [file, setFile] = useState("");
-    const [url, setUrl] = useState("");
-    const [previewUrl, setPreviewUrl] = useState("");
+function FileUpload() {
+    const [file, setFile] = useState<File | null>(null);
     const [process, setProcess] = useState(0);
     const [uploadStatus, setUploadStatus] = useState(false);
     const [category, setCategory] = useState("");
-    const [fileName, setFileName] = useState("");
-    const [preview, setPreview] = useState("");
-    const [tags, setTags] = useState([]);
+    const [videoDisplayName, setVideoDisplayName] = useState("");
+    const [preview, setPreview] = useState<File | null>(null);
+    const [videoTag, setVideoTag] = useState<string[]>([]);
     const [inputTag, setInputTag] = useState("");
-    const [isKeyReleased, setIsKeyReleased] = useState(false);
-    const [duration, setDuration] = useState("");
+    const [user] = useUser();
 
     const categoryArray = useCategories();
+    const navigate = useNavigate();
 
-    if (!getCurrentUsername) {
+    if (!user) {
         // not logged in
         alert("Please login first");
-        props.history.replace("/login");
-        return null;
+        return <Navigate to="login" replace />;
     }
 
     return (
-        <div className={classes.main}>
+        <Box sx={styles.main} className="">
             <Bar></Bar>
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
+            <Paper sx={styles.paper}>
+                <Avatar sx={styles.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5" style={{ color: "white" }}>
                     上傳文件
                 </Typography>
-                <form
-                    className={classes.form}
-                    onSubmit={(e) => e.preventDefault() && false}
-                >
+                <FormControl sx={styles.form} onSubmit={(e) => e.preventDefault()}>
                     <div className="row">
                         <div className="col-sm-12">
                             <label className="form-label" style={{ color: "white" }}>
@@ -96,7 +96,7 @@ function FileUpload(props) {
                                 disabled={uploadStatus}
                                 className="form-control"
                                 type="text"
-                                onChange={(e) => setFileName(e.target.value)}
+                                onChange={(e) => setVideoDisplayName(e.target.value)}
                             ></input>
                         </div>
                     </div>
@@ -115,7 +115,11 @@ function FileUpload(props) {
                                     onChange={(e) => setCategory(e.target.value)}
                                 >
                                     {categoryArray.map(function (value, index) {
-                                        return <option>{value}</option>;
+                                        return (
+                                            <option key={index}>
+                                                {value.categoryName}
+                                            </option>
+                                        );
                                     })}
                                 </select>
                             </div>
@@ -128,7 +132,7 @@ function FileUpload(props) {
                                     Tags
                                 </label>
 
-                                {tags.map(function (value, index) {
+                                {videoTag.map(function (value, index) {
                                     return (
                                         <div className="tag">
                                             {value}
@@ -144,9 +148,8 @@ function FileUpload(props) {
                                     disabled={uploadStatus}
                                     type="text"
                                     value={inputTag}
-                                    onKeyDown={(e) => onKeyDown(e)}
-                                    onKeyUp={onKeyUp}
-                                    onChange={(e) => handleTextFieldInput(e)}
+                                    onKeyDown={onKeyDown}
+                                    onChange={handleTextFieldInput}
                                 />
                             </div>
                         </div>
@@ -162,7 +165,7 @@ function FileUpload(props) {
                                     disabled={uploadStatus}
                                     className="form-control"
                                     onChange={(e) => {
-                                        setFile(e.target.files[0]);
+                                        setFile(e.target?.files?.[0] || null);
                                     }}
                                 ></input>
                             </div>
@@ -180,7 +183,7 @@ function FileUpload(props) {
                                     accept="image/png, image/jpg, image/gif"
                                     className="form-control"
                                     onChange={(e) => {
-                                        setPreview(e.target.files[0]);
+                                        setPreview(e.target.files?.[0] || null);
                                     }}
                                 ></input>
                             </div>
@@ -199,128 +202,137 @@ function FileUpload(props) {
                         variant="contained"
                         color="primary"
                         onClick={uploadFile}
-                        className={classes.submit}
+                        sx={styles.submit}
                     >
                         上傳
                     </Button>
-                </form>
+                </FormControl>
             </Paper>
-        </div>
+        </Box>
     );
 
     async function uploadFile() {
         if (file == null) return;
 
         setUploadStatus(true);
-        const storage = firebase.storage();
-        const storageRef = storage.ref();
-        let previewUrl;
-        if (preview != null) {
-            const uploadPreview = storageRef
-                .child("previewImage/" + preview.name)
-                .put(preview);
-            uploadPreview.on(
-                "state_changed",
-                (snapshot) => {
-                    const progress =
-                        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log(process);
-                    setProcess(progress);
-                },
-                (error) => {},
-                () => {
-                    uploadPreview.snapshot.ref.getDownloadURL().then((url) => {
-                        console.log(url);
-                        previewUrl = url;
-                    });
-                }
-            );
-        }
-        const uploadTask = storageRef.child("folder/" + file.name).put(file);
 
-        uploadTask.on(
-            firebase.storage.TaskEvent.STATE_CHANGED,
-            (snapshot) => {
-                const progress =
-                    Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log(progress);
-                setProcess(progress);
-            },
-            (error) => {
-                throw error;
-            },
-            () => {
-                uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-                    setUrl(url);
+        let videoPreviewImage: string = "",
+            videoUrl: string = "",
+            videoDuration = 0;
+        const id = random.int(100000, 999999);
 
-                    const timestamp = new Date().toISOString();
-                    const unix = Math.round(new Date() / 1000000000);
-                    const randomDigit = (
-                        Math.floor(Math.random() * 90000) + 10000
-                    ).toString();
-                    const videoID = unix + randomDigit;
-                    console.log({ previewUrl });
-                    firebase.database().ref("VideoList/").push({
-                        url: url,
-                        category: category,
-                        timestamp: timestamp,
-                        fileName: fileName,
-                        tag: tags,
-                        duration: duration,
-                        previewUrl: previewUrl,
-                        id: videoID,
-                    });
-                });
-                alert("成功上傳");
-
-                setCategory("");
-                setFile("");
-                setFileName("");
-                setPreview("");
-                setTags([]);
-                setUploadStatus(false);
+        if (preview) {
+            const formData = new FormData();
+            const name = `images/${id}-${preview.name}`;
+            formData.append("key", name);
+            formData.append("Content-Type", preview.type);
+            formData.append("file", preview);
+            try {
+                await upload(formData);
+                videoPreviewImage = `${s3Url}/images/${id}-${encodeURIComponent(
+                    preview.name
+                )}`;
+            } catch (e) {
+                console.log(e);
+                alert(e);
             }
-        );
+        }
+
+        const formData = new FormData();
+        const name = `videos/${id}-${file.name}`;
+        formData.append("key", name);
+        formData.append("Content-Type", file.type);
+        formData.append(`file`, file);
+        try {
+            await upload(formData);
+            videoUrl = `${s3Url}/videos/${id}-${encodeURIComponent(file.name)}`;
+        } catch (e) {
+            console.log(e);
+            alert(e);
+        }
+
+        const vid = document.createElement("video");
+        vid.src = videoUrl;
+        vid.ondurationchange = function () {
+            videoDuration = Math.round(vid.duration);
+        };
+
+        while (videoDuration === 0) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        await api
+            .post("/videos/create", {
+                categoryId: categoryArray.find((i) => i.categoryName === category)
+                    ?.categoryId, // integer, must be an existing category id
+                videoTag,
+                videoDisplayName, // video name
+                videoDuration, // integer, in seconds
+                videoUrl, // url to video
+                videoPreviewImage, // url to image
+            })
+            .then((res: { data: { video: { videoId: string } } }) => {
+                alert("成功上傳");
+                setCategory("");
+                setFile(null);
+                setVideoDisplayName("");
+                setPreview(null);
+                setVideoTag([]);
+                setUploadStatus(false);
+                navigate(`/player/id/${res.data.video.videoId}`);
+            })
+            .catch((err) => {
+                alert(
+                    err?.response?.data?.error || err?.response?.data || "Upload failed."
+                );
+                setUploadStatus(false);
+            });
     }
 
-    function getCurrentUsername() {
-        return firebase.auth().currentUser && firebase.auth().currentUser.displayName;
+    async function upload(formData: FormData) {
+        await axios.post(s3Url, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Access-Control-Allow-Origin": "*",
+            },
+            onUploadProgress: (progressEvent: ProgressEvent) => {
+                if (progressEvent.lengthComputable) {
+                    const progress =
+                        Math.round(progressEvent.loaded / progressEvent.total) * 100;
+                    setProcess(progress);
+                }
+            },
+        });
     }
 
-    function handleTextFieldInput(e) {
+    function handleTextFieldInput(e: React.ChangeEvent<HTMLInputElement>) {
         const inputTag = e.target.value;
         setInputTag(inputTag);
     }
 
-    function onKeyDown(e) {
+    function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
         const { key } = e;
         const trimmedInput = inputTag.trim();
 
-        if (key === " " && trimmedInput.length && !tags.includes(trimmedInput)) {
+        if (key === " " && trimmedInput.length && !videoTag.includes(trimmedInput)) {
             e.preventDefault();
-            setTags((prevState) => [...prevState, trimmedInput]);
+            setVideoTag((prevState) => [...prevState, trimmedInput]);
             setInputTag("");
         }
 
-        if (key === "Backspace" && !inputTag.length && tags.length) {
+        if (key === "Backspace" && !inputTag.length && videoTag.length) {
             e.preventDefault();
-            const tagsCopy = [...tags];
+            const tagsCopy = [...videoTag];
             const poppedTag = tagsCopy.pop();
 
-            setTags(tagsCopy);
-            setInputTag(poppedTag);
+            setVideoTag(tagsCopy);
+            setInputTag(poppedTag || "");
         }
-
-        setIsKeyReleased(false);
     }
 
-    function onKeyUp() {
-        setIsKeyReleased(true);
-    }
-
-    function deleteTag(index) {
-        setTags((prevState) => prevState.filter((tag, i) => i !== index));
+    function deleteTag(index: number) {
+        setVideoTag((prevState) => prevState.filter((tag, i) => i !== index));
     }
 }
 
-export default withRouter(withStyles(styles)(FileUpload));
+export default FileUpload;

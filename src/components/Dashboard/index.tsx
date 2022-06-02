@@ -14,15 +14,13 @@ import {
     Box,
 } from "@material-ui/core";
 import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import firebase from "firebase";
+import { Link, Navigate } from "react-router-dom";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import InsertLinkIcon from "@material-ui/icons/InsertLink";
 import PublishIcon from "@material-ui/icons/Publish";
 import "../Player/style.css";
-import { db } from "../../firebase";
-import { useCategories, useUser } from "../App";
+import { useUser } from "../App";
 import { Delete } from "@material-ui/icons";
 import { Breakpoint, Theme } from "@mui/material";
 import { Video } from "../../types/video";
@@ -33,10 +31,10 @@ const styles = (theme: Theme) =>
         main: {
             width: "auto",
             display: "block", // Fix IE 11 issue.
-            marginLeft: Number(theme.spacing()) * 3,
-            marginRight: Number(theme.spacing()) * 3,
-            marginBottom: Number(theme.spacing()) * 3,
-            [theme.breakpoints.up(("auto" + Number(theme.spacing()) * 3 * 2) as Breakpoint)]:
+            marginLeft: theme.space * 3,
+            marginRight: theme.space * 3,
+            marginBottom: theme.space * 3,
+            [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]:
                 {
                     width: "auto",
                     marginLeft: "auto",
@@ -44,23 +42,23 @@ const styles = (theme: Theme) =>
                 },
         },
         paper: {
-            marginTop: Number(theme.spacing()) * 6,
-            marginBottom: Number(theme.spacing()) * 4,
+            marginTop: theme.space * 6,
+            marginBottom: theme.space * 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
-                Number(theme.spacing()) * 3
+            padding: `${theme.space * 2}px ${theme.space * 3}px ${
+                theme.space * 3
             }px`,
         },
         form: {
             width: "100%", // Fix IE 11 issue.
             border: "2px",
-            marginTop: Number(theme.spacing()),
+            marginTop: theme.space,
             paddingBottom: "10px",
         },
         submit: {
-            marginTop: Number(theme.spacing()) * 3,
+            marginTop: theme.space * 3,
             width: "200px",
         },
         tableHeader: {
@@ -94,9 +92,9 @@ function Dashboard(props: { classes: any }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageNumber, totalDataCount, dataRange]);
 
-    if (!user) {
+    if (user?.role !== "admin") {
         // not logged in
-        alert("Please login first");
+        alert("Unauthorized.");
         return <Navigate to="/login" />;
     }
 
@@ -202,24 +200,12 @@ function Dashboard(props: { classes: any }) {
                                                         "Are you sure to delete this video?"
                                                     )
                                                 ) {
-                                                    const query = firebase
-                                                        .database()
-                                                        .ref("VideoList/")
-                                                        .orderByChild("url")
-                                                        .equalTo(value.videoUrl);
-                                                    query.once(
-                                                        "child_added",
-                                                        (snapshot) => {
-                                                            snapshot.ref
-                                                                .remove()
-                                                                .then(() => {
-                                                                    alert(
-                                                                        "Video removed."
-                                                                    );
-                                                                    fetchAllVideo();
-                                                                });
-                                                        }
-                                                    );
+                                                    api.delete(`/videos/${value.videoId}`).then((res) => {
+                                                        alert("Video deleted!");
+                                                        fetchAllVideo();
+                                                    }).catch((err) => {
+                                                        alert(err?.response?.data || err?.response?.data)
+                                                    });
                                                 }
                                             }}
                                         >

@@ -14,10 +14,10 @@ const styles = (theme: Theme) =>
         main: {
             width: "auto",
             display: "block", // Fix IE 11 issue.
-            marginLeft: Number(theme.spacing()) * 4,
-            marginRight: Number(theme.spacing()) * 4,
+            marginLeft: theme.space * 4,
+            marginRight: theme.space * 4,
             [theme.breakpoints.up(
-                `auto${Number(theme.spacing()) * 3 * 2}` as number | Breakpoint
+                `auto${theme.space * 3 * 2}` as number | Breakpoint
             )]: {
                 width: "auto",
                 marginLeft: 100,
@@ -25,39 +25,39 @@ const styles = (theme: Theme) =>
             },
         },
         paper: {
-            marginTop: Number(theme.spacing()) * 8,
-            marginBottom: Number(theme.spacing()) * 2,
+            marginTop: theme.space * 8,
+            marginBottom: theme.space * 2,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
-                Number(theme.spacing()) * 3
+            padding: `${theme.space * 2}px ${theme.space * 3}px ${
+                theme.space * 3
             }px`,
         },
         loginPaper: {
-            marginTop: Number(theme.spacing()) * 3,
-            marginBottom: Number(theme.spacing()) * 4,
+            marginTop: theme.space * 3,
+            marginBottom: theme.space * 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
-                Number(theme.spacing()) * 3
+            padding: `${theme.space * 2}px ${theme.space * 3}px ${
+                theme.space * 3
             }px`,
         },
         avatar: {
-            margin: Number(theme.spacing()),
+            margin: theme.space,
             backgroundColor: theme.palette.secondary.main,
         },
         form: {
             width: "100%", // Fix IE 11 issue.
-            marginTop: Number(theme.spacing()),
+            marginTop: theme.space,
         },
         formControl: {
-            margin: Number(theme.spacing()),
+            margin: theme.space,
         },
 
         submit: {
-            marginTop: Number(theme.spacing()) * 3,
+            marginTop: theme.space * 3,
         },
     } as Styles<Theme, {}, never>);
 

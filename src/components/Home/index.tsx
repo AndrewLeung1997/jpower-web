@@ -7,82 +7,77 @@ import {
     CardContent,
     CardActionArea,
     Button,
-} from "@material-ui/core";
-import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
+    Theme,
+    Breakpoint,
+    Box,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import queryString from "query-string";
 import "../Home/index.css";
 import { useCategories } from "../App";
-import { Breakpoint, Theme } from "@mui/material";
 import { Video } from "../../types/video";
 import { api } from "../../api";
 
-const styles = (theme: Theme) =>
-    ({
-        main: {
+const styles = {
+    main: (theme: Theme) => ({
+        width: "auto",
+        display: "block", // Fix IE 11 issue.
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 5,
+        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
             width: "auto",
-            display: "block", // Fix IE 11 issue.
-            marginLeft: Number(theme.spacing()) * 3,
-            marginRight: Number(theme.spacing()) * 3,
-            marginTop: Number(theme.spacing()) * 5,
-            [theme.breakpoints.up(("auto" + Number(theme.spacing()) * 3 * 2) as Breakpoint)]:
-                {
-                    width: "auto",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                },
-            backgroundColor: "#210548",
+            marginLeft: "auto",
+            marginRight: "auto",
         },
-        paper: {
-            marginTop: Number(theme.spacing()) * 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
-                Number(theme.spacing()) * 3
-            }px`,
-            backgroundColor: "#210548",
-        },
+        backgroundColor: "#222",
+    }),
+    paper: (theme: Theme) => ({
+        marginTop: 8,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
+        backgroundColor: "#222",
+    }),
+    Card: (theme: Theme) => ({
+        marginTop: 2,
+        height: 42,
+        backgroundColor: "#222",
+    }),
+    Tag: (theme: Theme) => ({
+        width: 10,
+        backgroundColor: "#FFC0CB",
+        textAlign: "center",
+        borderRadius: "6px",
+        borderColor: "#ffffff",
+    }),
+    TimeTag: (theme: Theme) => ({
+        width: 8,
+        backgroundColor: "#808080",
+        textAlign: "center",
+        borderRadius: "6px",
+        borderColor: "#ffffff",
+    }),
+    Pagination: {
+        marginTop: 2 * 8,
+        marginBottom: 3 * 8,
+    },
+    CardMedia: (theme: Theme) => ({
+        paddingLeft: 1,
+        paddingRight: 1,
+        paddingTop: 1,
+    }),
+    submit: {
+        marginTop: 3,
+        color: "white",
+        fontSize: "20px",
+    },
+};
 
-        Card: {
-            marginTop: Number(theme.spacing()) * 2,
-            height: Number(theme.spacing()) * 42,
-            backgroundColor: "#210548",
-        },
-        Tag: {
-            width: Number(theme.spacing()) * 10,
-            backgroundColor: "#FFC0CB",
-            textAlign: "center",
-            borderRadius: "6px",
-            borderColor: "#ffffff",
-        },
-        TimeTag: {
-            width: Number(theme.spacing()) * 8,
-            backgroundColor: "#808080",
-            textAlign: "center",
-            borderRadius: "6px",
-            borderColor: "#ffffff",
-        },
-        Pagination: {
-            marginTop: Number(theme.spacing()) * 2,
-            marginBottom: Number(theme.spacing()) * 3,
-        },
-        CardMedia: {
-            paddingLeft: Number(theme.spacing()) * 1,
-            paddingRight: Number(theme.spacing()) * 1,
-            paddingTop: Number(theme.spacing()) * 1,
-        },
-        submit: {
-            marginTop: Number(theme.spacing()) * 3,
-            color: "white",
-            fontSize: "20px",
-        },
-    } as Styles<Theme, {}, never>);
-
-function Home(props: { classes: any }) {
-    const { classes } = props;
+function Home() {
     const ref = useRef(null);
     const path = window.location.pathname;
     const initialQueryString = queryString.parse(window.location.search);
@@ -115,13 +110,12 @@ function Home(props: { classes: any }) {
     ]);
 
     return (
-        // <div className={classes.root}>
-
-        <div className={classes.main}>
+        // <div sx={styles.root}>
+        <Box sx={styles.main}>
             <Bar></Bar>
             <div className="row">
                 <div className="col-md-3">
-                    <Paper className={classes.paper}>
+                    <Paper sx={styles.paper}>
                         <Typography
                             component="h1"
                             variant="h5"
@@ -133,14 +127,14 @@ function Home(props: { classes: any }) {
                             <ul className="list-group">
                                 {categoryArray.map(function (value, index) {
                                     return (
-                                        <li>
+                                        <li key={index}>
                                             <Button
-                                                className={classes.submit}
+                                                sx={styles.submit}
                                                 id={String(index)}
                                                 component={Link}
-                                                to={`/filter/category/${value}`}
+                                                to={`/filter/category/${value.categoryId}`}
                                             >
-                                                {value}
+                                                {value.categoryName}
                                             </Button>
                                         </li>
                                     );
@@ -161,10 +155,10 @@ function Home(props: { classes: any }) {
                         {latestVideo.map(function (value, index) {
                             return (
                                 <div className="col-sm-4 col-md-3 col-lg-3">
-                                    <Card className={classes.Card}>
-                                        <div className={classes.TimeTag}>
+                                    <Card sx={styles.Card}>
+                                        <Box sx={styles.TimeTag}>
                                             {convertTime(value.videoDuration)}
-                                        </div>
+                                        </Box>
                                         <CardActionArea
                                             component={Link}
                                             to={`/player/id/${value.videoId}`}
@@ -173,7 +167,7 @@ function Home(props: { classes: any }) {
                                                 preload="metadata"
                                                 ref={ref}
                                                 id="video"
-                                                className={classes.CardMedia}
+                                                sx={styles.CardMedia}
                                                 component={
                                                     value.videoPreviewImage
                                                         ? "img"
@@ -214,9 +208,9 @@ function Home(props: { classes: any }) {
                                                 variant="h6"
                                                 component="div"
                                             >
-                                                <div className={classes.Tag}>
+                                                <Box sx={styles.Tag}>
                                                     {value.category.categoryName}
-                                                </div>
+                                                </Box>
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -226,7 +220,7 @@ function Home(props: { classes: any }) {
                     </div>
                 </div>
             </div>
-            <nav className={classes.Pagination}>
+            <nav style={styles.Pagination}>
                 <ul className="pagination pg-blue justify-content-center">
                     {[...Array(Math.ceil(totalRecommendVideo / dataRange))].map(function (
                         _,
@@ -272,10 +266,10 @@ function Home(props: { classes: any }) {
                         {videoList.map(function (value, index) {
                             return (
                                 <div className="col-sm-6 col-md-4 col-lg-4">
-                                    <Card className={classes.Card}>
-                                        <div className={classes.TimeTag}>
+                                    <Card sx={styles.Card}>
+                                        <Box sx={styles.TimeTag}>
                                             {convertTime(value.videoDuration)}
-                                        </div>
+                                        </Box>
                                         <CardActionArea
                                             component={Link}
                                             to={`/player/id/${value.videoId}`}
@@ -284,7 +278,7 @@ function Home(props: { classes: any }) {
                                                 preload="metadata"
                                                 ref={ref}
                                                 id="video"
-                                                className={classes.CardMedia}
+                                                sx={styles.CardMedia}
                                                 component={
                                                     value.videoPreviewImage
                                                         ? "img"
@@ -321,9 +315,9 @@ function Home(props: { classes: any }) {
                                                 variant="h6"
                                                 component="div"
                                             >
-                                                <div className={classes.Tag}>
+                                                <Box sx={styles.Tag}>
                                                     {value.category.categoryName}
-                                                </div>
+                                                </Box>
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -332,7 +326,7 @@ function Home(props: { classes: any }) {
                         })}
                     </div>
                 </div>
-                <nav className={classes.Pagination}>
+                <nav style={styles.Pagination}>
                     <ul className="pagination pg-blue justify-content-center">
                         {Array(Math.ceil(totalDataCount / dataRange))
                             .fill(undefined)
@@ -345,6 +339,7 @@ function Home(props: { classes: any }) {
                                             paddingLeft: "5px",
                                             fontWeight: "bold",
                                         }}
+                                        key={i}
                                     >
                                         <li
                                             className="page-item"
@@ -364,7 +359,7 @@ function Home(props: { classes: any }) {
                     </ul>
                 </nav>
             </div>
-        </div>
+        </Box>
     );
 
     function convertTime(num: number) {
@@ -421,4 +416,4 @@ function Home(props: { classes: any }) {
     }
 }
 
-export default withStyles(styles)(Home);
+export default Home;

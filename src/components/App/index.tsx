@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import FileUpload from "../FileUpload";
-import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 import { CssBaseline, CircularProgress } from "@material-ui/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import firebase from "../../firebase";
@@ -19,18 +20,38 @@ import SearchByTag from "../SearchByTag";
 import { api } from "../../api";
 import { User } from "../../types/user";
 import { decode } from "jsonwebtoken";
+import { Category } from "../../types/category";
 
-const theme = createTheme();
+declare module "@mui/material/styles" {
+    interface ExtendedTheme {
+        space: number
+    }
+    interface Theme extends ExtendedTheme {}
+    interface ThemeOptions extends ExtendedTheme {}
+}
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#673ab7",
+        },
+        secondary: {
+            main: "#ff5722",
+        },
+    },
+    spacing: 8,
+    space: 8
+});
 
 const AppContext = createContext<{
-    categories: string[];
+    categories: Category[];
     user: [User | null, React.Dispatch<React.SetStateAction<User | null>>];
     // @ts-ignore
 }>(null);
 
 export default function App() {
     const [firebaseInitialized, setFirebaseInitialized] = useState(false);
-    const [categories, setCategories] = useState<string[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [user, setUser] = useState<User | null>(
         decode(String(localStorage.getItem("token"))) as User | null
     );
@@ -38,26 +59,25 @@ export default function App() {
     useEffect(() => {
         firebase.isInitialized().then((val) => {
             setFirebaseInitialized(val);
-            !categories.length &&
-                api
-                    .get("/category")
-                    .then((res: { data: { categories: { categoryName: string }[] } }) => {
-                        const { categories } = res.data;
-                        setCategories(categories.map(({ categoryName }) => categoryName));
-                    });
         });
-    });
+        api.get("/category").then(
+            (res: { data: { categories: Category[] } }) => {
+                const { categories } = res.data;
+                setCategories(categories);
+            }
+        );
+    }, []);
 
     return firebaseInitialized !== false ? (
-        <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
             <AppContext.Provider value={{ categories, user: [user, setUser] }}>
                 <CssBaseline />
                 <Router>
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Registration />} />
-                        {/*<Route path="/upload" element={FileUpload} />
-                        <Route path="/file" element={File} />
+                        <Route path="/upload" element={<FileUpload />} />
+                        {/*<Route path="/file" element={File} />
     <Route path="/player/id/:id" element={Player} />*/}
                         <Route path="/" element={<Home />} />
                         {/*<Route
@@ -77,7 +97,7 @@ export default function App() {
                     </Routes>
                 </Router>
             </AppContext.Provider>
-        </MuiThemeProvider>
+        </ThemeProvider>
     ) : (
         <div id="loader">
             <CircularProgress />

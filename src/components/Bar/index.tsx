@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import "../Bar/index.css";
-import firebase from "firebase";
-import { useNavigate } from "react-router-dom";
 import { useUser } from "../App";
 
 function Bar() {
@@ -99,7 +97,7 @@ function Bar() {
                                     type="text"
                                     className="form-control"
                                     placeholder="過濾影片"
-                                    style={{ background: "#210548", color: "white" }}
+                                    style={{ background: "#222", color: "white" }}
                                     onChange={(e) => {
                                         setFilter(e.target.value);
                                     }}
@@ -131,7 +129,7 @@ function Bar() {
                                     type="text"
                                     className="form-control"
                                     placeholder="搜尋影片"
-                                    style={{ background: "#210548", color: "white" }}
+                                    style={{ background: "#222", color: "white" }}
                                     onChange={(e) => {
                                         setQuery(e.target.value);
                                     }}

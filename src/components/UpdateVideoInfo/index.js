@@ -12,32 +12,32 @@ const styles = (theme) => ({
     main: {
         width: "auto",
         display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        marginBottom: theme.spacing.unit * 2,
-        [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.space * 3,
+        marginRight: theme.space * 3,
+        marginBottom: theme.space * 2,
+        [theme.breakpoints.up("auto" + theme.space * 3 * 2)]: {
             width: "auto",
             marginLeft: "auto",
             marginRight: "auto",
         },
     },
     paper: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.space * 3,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${
+            theme.space * 3
         }px`,
     },
     form: {
         width: "100%", // Fix IE 11 issue.
         border: "2px",
-        marginTop: theme.spacing.unit,
+        marginTop: theme.space,
         paddingBottom: "10px",
     },
     submit: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.space * 3,
         width: "200px",
     },
 });

@@ -21,34 +21,34 @@ const styles = (theme) => ({
   main: {
     width: "auto",
     display: "block", // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 5,
-    [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+    marginLeft: theme.space * 3,
+    marginRight: theme.space * 3,
+    marginTop: theme.space * 5,
+    [theme.breakpoints.up("auto" + theme.space * 3 * 2)]: {
       width: "auto",
       marginLeft: "auto",
       marginRight: "auto",
     },
-    backgroundColor: "#210548",
+    backgroundColor: "#222",
   },
   paper: {
-    marginTop: theme.spacing.unit * 8,
+    marginTop: theme.space * 8,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-      theme.spacing.unit * 3
+    padding: `${theme.space * 2}px ${theme.space * 3}px ${
+      theme.space * 3
     }px`,
-    backgroundColor: "#210548",
+    backgroundColor: "#222",
   },
 
   Card: {
-    marginTop: theme.spacing.unit * 2,
-    height: theme.spacing.unit * 45,
-    backgroundColor: "#210548",
+    marginTop: theme.space * 2,
+    height: theme.space * 45,
+    backgroundColor: "#222",
   },
   Tag: {
-    width: theme.spacing.unit * 10,
+    width: theme.space * 10,
 
     backgroundColor: "#FFC0CB",
     textAlign: "center",
@@ -57,20 +57,20 @@ const styles = (theme) => ({
     borderStyle: "solid",
   },
   Pagination: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.space * 2,
   },
   CardMedia: {
-    paddingLeft: theme.spacing.unit * 1,
-    paddingRight: theme.spacing.unit * 1,
-    paddingTop: theme.spacing.unit * 1,
+    paddingLeft: theme.space * 1,
+    paddingRight: theme.space * 1,
+    paddingTop: theme.space * 1,
   },
   submit: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.space * 3,
     color: "white",
     fontSize: "20px",
   },
   TimeTag: {
-    width: theme.spacing.unit * 8,
+    width: theme.space * 8,
     backgroundColor: "#808080",
     textAlign: "center",
     borderRadius: "6px",

@@ -28,7 +28,7 @@ const styles = (theme: Theme) => {
             width: "auto",
             display: "block", // Fix IE 11 issue.
             [theme.breakpoints.up(
-                ("auto" + Number(theme.spacing()) * 3 * 2) as number | Breakpoint
+                ("auto" + theme.space * 3 * 2) as number | Breakpoint
             )]: {
                 width: "auto",
                 marginLeft: "auto",
@@ -38,37 +38,37 @@ const styles = (theme: Theme) => {
         main: {
             width: "auto",
             display: "block", // Fix IE 11 issue.
-            marginLeft: Number(theme.spacing()) * 3,
-            marginRight: Number(theme.spacing()) * 3,
-            [theme.breakpoints.up(400 + Number(theme.spacing()) * 3 * 2)]: {
+            marginLeft: theme.space * 3,
+            marginRight: theme.space * 3,
+            [theme.breakpoints.up(400 + theme.space * 3 * 2)]: {
                 width: 400,
                 marginLeft: "auto",
                 marginRight: "auto",
             },
         },
         paper: {
-            marginTop: Number(theme.spacing()) * 10,
+            marginTop: theme.space * 10,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: `${Number(theme.spacing()) * 2}px ${Number(theme.spacing()) * 3}px ${
-                Number(theme.spacing()) * 3
+            padding: `${theme.space * 2}px ${theme.space * 3}px ${
+                theme.space * 3
             }px`,
         },
         avatar: {
-            margin: Number(theme.spacing()),
+            margin: theme.space,
             backgroundColor: theme.palette.secondary.main,
         },
         alternativeAvatar: {
-            margin: Number(theme.spacing()),
+            margin: theme.space,
             backgroundColor: theme.palette.secondary.light,
         },
         form: {
             width: "100%", // Fix IE 11 issue.
-            marginTop: Number(theme.spacing()),
+            marginTop: theme.space,
         },
         submit: {
-            marginTop: Number(theme.spacing()) * 3,
+            marginTop: theme.space * 3,
         },
 
         alternativeIcon: {

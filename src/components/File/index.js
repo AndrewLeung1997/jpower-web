@@ -22,37 +22,37 @@ const styles = (theme) => ({
     main: {
         width: "auto",
         display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(600 + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.space * 3,
+        marginRight: theme.space * 3,
+        [theme.breakpoints.up(600 + theme.space * 3 * 2)]: {
             width: 600,
             marginLeft: "auto",
             marginRight: "auto",
         },
     },
     paper: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: theme.space * 8,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${
-            theme.spacing.unit * 3
+        padding: `${theme.space * 2}px ${theme.space * 3}px ${
+            theme.space * 3
         }px`,
     },
     avatar: {
-        margin: theme.spacing.unit,
+        margin: theme.space,
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: "100%", // Fix IE 11 issue.
-        marginTop: theme.spacing.unit,
+        marginTop: theme.space,
     },
     formControl: {
-        margin: theme.spacing.unit,
+        margin: theme.space,
     },
 
     submit: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.space * 3,
     },
 });
 

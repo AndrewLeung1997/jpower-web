@@ -22,57 +22,57 @@ const styles = (theme) => ({
     root: {
         width: "auto",
         display: "block", // Fix IE 11 issue.
-        [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+        [theme.breakpoints.up("auto" + theme.space * 3 * 2)]: {
             width: "auto",
             marginLeft: "auto",
             marginRight: "auto",
         },
-        backgroundColor: "#210548",
+        backgroundColor: "#222",
     },
     main: {
         width: "auto",
         display: "block", // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 2,
-        marginRight: theme.spacing.unit * 2,
-        [theme.breakpoints.up("auto" + theme.spacing.unit * 3 * 2)]: {
+        marginLeft: theme.space * 2,
+        marginRight: theme.space * 2,
+        [theme.breakpoints.up("auto" + theme.space * 3 * 2)]: {
             width: "auto",
             marginLeft: "auto",
             marginRight: "auto",
         },
-        backgroundColor: "#210548",
+        backgroundColor: "#222",
     },
 
     relatedVideoPaper: {
-        marginTop: theme.spacing.unit * 2,
-        // marginBottom: theme.spacing.unit * 6,
+        marginTop: theme.space * 2,
+        // marginBottom: theme.space * 6,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${
-            theme.spacing.unit * 2
+        padding: `${theme.space * 1}px ${theme.space * 2}px ${
+            theme.space * 2
         }px`,
-        backgroundColor: "#210548",
+        backgroundColor: "#222",
         color: "white",
     },
     paper: {
-        marginTop: theme.spacing.unit * 8,
-        marginBottom: theme.spacing.unit * 6,
+        marginTop: theme.space * 8,
+        marginBottom: theme.space * 6,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${
-            theme.spacing.unit * 2
+        padding: `${theme.space * 1}px ${theme.space * 2}px ${
+            theme.space * 2
         }px`,
-        backgroundColor: "#210548",
+        backgroundColor: "#222",
     },
 
     videoName: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.space * 3,
 
         fontSize: "20px",
     },
     Tag: {
-        width: theme.spacing.unit * 10,
+        width: theme.space * 10,
         backgroundColor: "#FFC0CB",
         textAlign: "center",
         borderRadius: "10px",
@@ -80,26 +80,26 @@ const styles = (theme) => ({
         borderStyle: "solid",
     },
     Card: {
-        marginTop: theme.spacing.unit * 2,
-        height: theme.spacing.unit * 45,
-        backgroundColor: "#210548",
+        marginTop: theme.space * 2,
+        height: theme.space * 45,
+        backgroundColor: "#222",
         color: "white",
     },
     VideoCard: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: theme.space * 8,
         display: "flex",
         flexDirection: "column",
         alignItems: "left",
-        padding: `${theme.spacing.unit * 1}px ${theme.spacing.unit * 2}px ${
-            theme.spacing.unit * 2
+        padding: `${theme.space * 1}px ${theme.space * 2}px ${
+            theme.space * 2
         }px`,
         height: "auto",
-        backgroundColor: "#210548",
+        backgroundColor: "#222",
     },
     CardMedia: {
-        paddingLeft: theme.spacing.unit * 1,
-        paddingRight: theme.spacing.unit * 1,
-        paddingTop: theme.spacing.unit * 1,
+        paddingLeft: theme.space * 1,
+        paddingRight: theme.space * 1,
+        paddingTop: theme.space * 1,
     },
     titleBar: {
         display: "block",
@@ -109,7 +109,7 @@ const styles = (theme) => ({
         lineHeight: "normal",
     },
     submit: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.space * 3,
         color: "white",
     },
     adView: {
@@ -118,14 +118,14 @@ const styles = (theme) => ({
         top: 50,
     },
     category: {
-        marginTop: theme.spacing.unit * 1,
+        marginTop: theme.space * 1,
         color: "#FCFCFC",
     },
     title: {
         color: "#FCFCFC",
     },
     TimeTag: {
-        width: theme.spacing.unit * 8,
+        width: theme.space * 8,
         backgroundColor: "#808080",
         textAlign: "center",
         borderRadius: "6px",
