@@ -238,15 +238,13 @@ function Dashboard() {
         setDataRange(Number(event.target.value));
     }
 
-    function paginate(array: any[], page_size: number, page_number: number) {
-        return array.slice((page_number - 1) * page_size, page_number * page_size);
-    }
-
     function fetchAllVideo() {
-        api.get(`/videos?sort=latest`).then(({ data }) => {
-            setTotalDataCount(data.videos.length);
-            setVideo(paginate(data.videos, dataRange, pageNumber + 1));
-        });
+        api.get(`/videos?sort=latest&page=${pageNumber + 1}&limit=${dataRange}`).then(
+            ({ data }) => {
+                setTotalDataCount(data.videos.length);
+                setVideo(data.videos);
+            }
+        );
     }
 
     function convertTimeStamp(timestamp: string) {

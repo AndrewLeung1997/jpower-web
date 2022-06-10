@@ -7,7 +7,6 @@ import { Breakpoint, Theme } from "@mui/material";
 import { Video } from "../../types/video";
 import VideoCard from "../VideoCard";
 import { api } from "../../api";
-import { paginate } from "../../lib/paginate";
 
 const styles = {
     main: (theme: Theme) => ({
@@ -149,9 +148,9 @@ function All() {
     );
 
     function getAllMedia() {
-        api.get(`/videos`).then(({ data }) => {
+        api.get(`/videos?page=${pageNumber + 1}&limit=${dataRange}`).then(({ data }) => {
             setTotalDataCount(data.videos.length);
-            setVideoList(paginate(data.videos, dataRange, pageNumber + 1));
+            setVideoList(data.videos);
         });
     }
 }

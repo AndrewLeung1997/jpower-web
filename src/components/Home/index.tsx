@@ -7,7 +7,6 @@ import { useCategories } from "../App";
 import { Video } from "../../types/video";
 import { api } from "../../api";
 import VideoCard from "../VideoCard";
-import { paginate } from "../../lib/paginate";
 
 const styles = {
     main: (theme: Theme) => ({
@@ -31,25 +30,25 @@ const styles = {
         padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
         backgroundColor: "#222",
     }),
-    Card: (theme: Theme) => ({
+    Card: {
         marginTop: 2,
         height: 42,
         backgroundColor: "#222",
-    }),
-    Tag: (theme: Theme) => ({
+    },
+    Tag: {
         width: 10,
         backgroundColor: "#FFC0CB",
         textAlign: "center",
         borderRadius: "6px",
         borderColor: "#ffffff",
-    }),
-    TimeTag: (theme: Theme) => ({
+    },
+    TimeTag: {
         width: 8,
         backgroundColor: "#808080",
         textAlign: "center",
         borderRadius: "6px",
         borderColor: "#ffffff",
-    }),
+    },
     Pagination: {
         marginTop: 2 * 8,
         marginBottom: 3 * 8,
@@ -230,17 +229,19 @@ function Home() {
     );
 
     function getAllMedia() {
-        api.get(`/videos?sort=popular`).then(({ data }) => {
+        api.get(`/videos?page=${pageNumber + 1}&limit=${dataRange}`).then(({ data }) => {
             setTotalDataCount(data.videos.length);
-            setVideoList(paginate(data.videos, dataRange, pageNumber + 1));
+            setVideoList(data.videos);
         });
     }
 
     function getLatestMedia() {
-        api.get(`/videos?filter=latest`).then(({ data }) => {
-            setTotalRecommendVideo(data.videos.length);
-            setLatestVideo(paginate(data.videos, dataRange, pageNumber + 1));
-        });
+        api.get(`/videos?filter=latest&page=${pageNumber + 1}&limit=${dataRange}`).then(
+            ({ data }) => {
+                setTotalRecommendVideo(data.videos.length);
+                setLatestVideo(data.videos);
+            }
+        );
     }
 }
 

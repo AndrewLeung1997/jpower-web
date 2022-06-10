@@ -1,4 +1,4 @@
-export function convertTimeStamp(timestamp: string) {
+export function convertTimeStamp(timestamp: string | Date) {
     const date = new Date(timestamp);
     const year = date.getFullYear();
     let month: string | number = date.getMonth() + 1;
