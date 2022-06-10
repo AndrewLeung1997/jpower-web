@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { Typography, Paper, Divider, Theme, Breakpoint, Button, Box, FormGroup } from "@mui/material";
-import withStyles, { Styles } from "@material-ui/core/styles/withStyles";
 import { useNavigate, Navigate } from "react-router-dom";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
-import Bar from "../Bar";
 import { api } from "../../api";
 import { decode } from "jsonwebtoken";
 import { User } from "../../types/user";

@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
-import Bar from "../Bar";
 import "../Bar/index.css";
 import { api } from "../../api";
 import { decode } from "jsonwebtoken";

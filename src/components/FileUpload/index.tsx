@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
 import { Navigate, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
 import "../UpdateVideoInfo/style.css";
 import { useCategories, useUser } from "../App";
 import axios from "axios";

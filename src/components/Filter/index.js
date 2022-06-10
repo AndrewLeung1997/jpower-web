@@ -13,7 +13,6 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
 import firebase from "firebase";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import Bar from "../Bar";
 import "../Bar/index.css";
 import { useCategories } from "../App";

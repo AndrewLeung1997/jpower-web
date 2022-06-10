@@ -1,3 +1,4 @@
+import "bootstrap/dist/css/bootstrap.css";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import FileUpload from "../FileUpload";
 import { ThemeProvider } from "@mui/material";

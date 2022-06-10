@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Paper, Button, Theme, Breakpoint, Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
 import queryString from "query-string";
 import "../Home/index.css";
 import { useCategories } from "../App";

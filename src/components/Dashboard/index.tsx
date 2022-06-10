@@ -14,8 +14,6 @@ import {
     Box,
 } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
-import Bar from "../Bar";
 import {
     InsertLink as InsertLinkIcon,
     Publish as PublishIcon,

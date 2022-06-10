@@ -4,7 +4,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
 import firebase from "firebase";
 import { useCategories } from "../App";
-import "../../../node_modules/bootstrap/dist/css/bootstrap.css";
 import ReactPlayer from "react-player";
 import "../UpdateVideoInfo/style.css";
 
