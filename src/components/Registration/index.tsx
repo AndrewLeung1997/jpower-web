@@ -19,7 +19,7 @@ const styles = {
         },
     }),
     paper: (theme: Theme) => ({
-        marginTop: 8,
+        marginTop: 10,
         marginBottom: 2,
         display: "flex",
         flexDirection: "column",

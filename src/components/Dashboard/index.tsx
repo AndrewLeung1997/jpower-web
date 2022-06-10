@@ -20,10 +20,11 @@ import {
 } from "@mui/icons-material";
 import "../Player/style.css";
 import { useUser } from "../App";
-import { Delete } from "@material-ui/icons";
+import { Delete } from "@mui/icons-material";
 import { Breakpoint, Theme } from "@mui/material";
 import { Video } from "../../types/video";
 import { api } from "../../api";
+import { convertTimeStamp } from "../../lib/convertTimeStamp";
 
 const styles = {
     main: (theme: Theme) => ({
@@ -39,7 +40,7 @@ const styles = {
         },
     }),
     paper: (theme: Theme) => ({
-        marginTop: 6,
+        marginTop: 10,
         marginBottom: 4,
         display: "flex",
         flexDirection: "column",
@@ -52,13 +53,13 @@ const styles = {
         marginTop: theme.space,
         paddingBottom: "10px",
     }),
-    submit: (theme: Theme) => ({
+    submit: {
         marginTop: 3,
         width: "200px",
-    }),
-    tableHeader: (theme: Theme) => ({
+    },
+    tableHeader: {
         fontSize: "15px",
-    }),
+    },
 };
 
 function Dashboard() {
@@ -136,82 +137,71 @@ function Dashboard() {
                     </TableHead>
 
                     <TableBody>
-                        {video.map(function (value, key) {
-                            return (
-                                <TableRow key={key}>
-                                    <TableCell align="center">{value.videoId}</TableCell>
-                                    <TableCell align="center">
-                                        {convertTimeStamp(value.uploadTime)}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <IconButton component={Link} to={value.videoUrl}>
-                                            <InsertLinkIcon color="primary" />
-                                        </IconButton>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {value.videoDisplayName}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {value.category.categoryName}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <div className="box">
-                                            {value.videoTag &&
-                                                value.videoTag.map(function (
-                                                    value,
-                                                    index
-                                                ) {
-                                                    return (
-                                                        <div className="tag">
-                                                            <button
-                                                                id={String(index)}
-                                                                style={{
-                                                                    paddingLeft: "2px",
-                                                                }}
-                                                            >
-                                                                {value}
-                                                            </button>
-                                                        </div>
-                                                    );
-                                                })}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <IconButton
-                                            component={Link}
-                                            to={`/updateVideoInfo`}
-                                        >
-                                            <PublishIcon color="primary" />
-                                        </IconButton>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <IconButton
-                                            onClick={() => {
-                                                if (
-                                                    window.confirm(
-                                                        "Are you sure to delete this video?"
-                                                    )
-                                                ) {
-                                                    api.delete(`/videos/${value.videoId}`)
-                                                        .then((res) => {
-                                                            alert("Video deleted!");
-                                                            fetchAllVideo();
-                                                        })
-                                                        .catch((err) => {
-                                                            alert(
-                                                                err?.response?.data ||
-                                                                    err?.response?.data
-                                                            );
-                                                        });
-                                                }
-                                            }}
-                                        >
-                                            <Delete color="primary" />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
+                        {video.map((value, index) => (
+                            <TableRow key={index}>
+                                <TableCell align="center">{value.videoId}</TableCell>
+                                <TableCell align="center">
+                                    {convertTimeStamp(value.uploadTime)}
+                                </TableCell>
+                                <TableCell align="center">
+                                    <IconButton component={Link} to={value.videoUrl}>
+                                        <InsertLinkIcon color="primary" />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell align="center">
+                                    {value.videoDisplayName}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {value.category.categoryName}
+                                </TableCell>
+                                <TableCell align="center">
+                                    <div className="box">
+                                        {value.videoTag &&
+                                            value.videoTag.map((value, index) => (
+                                                <div className="tag">
+                                                    <button
+                                                        id={String(index)}
+                                                        style={{
+                                                            paddingLeft: "2px",
+                                                        }}
+                                                    >
+                                                        {value}
+                                                    </button>
+                                                </div>
+                                            ))}
+                                    </div>
+                                </TableCell>
+                                <TableCell align="center">
+                                    <IconButton component={Link} to={`/updateVideoInfo`}>
+                                        <PublishIcon color="primary" />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell align="center">
+                                    <IconButton
+                                        onClick={() => {
+                                            if (
+                                                window.confirm(
+                                                    "Are you sure to delete this video?"
+                                                )
+                                            )
+                                                api.delete(`/videos/${value.videoId}`)
+                                                    .then(() => {
+                                                        alert("Video deleted!");
+                                                        fetchAllVideo();
+                                                    })
+                                                    .catch((err) => {
+                                                        alert(
+                                                            err?.response?.data ||
+                                                                err?.response?.data
+                                                        );
+                                                    });
+                                        }}
+                                    >
+                                        <Delete color="primary" />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
                 <TablePagination
@@ -245,24 +235,6 @@ function Dashboard() {
                 setVideo(data.videos);
             }
         );
-    }
-
-    function convertTimeStamp(timestamp: string) {
-        const date = new Date(timestamp);
-        const year = date.getFullYear();
-        let month: string | number = date.getMonth() + 1;
-        let day: string | number = date.getDate();
-
-        if (day < 10) {
-            day = "0" + day;
-        }
-        if (month < 10) {
-            month = "0" + month;
-        }
-
-        const newDate = year + "-" + month + "-" + day;
-
-        return newDate;
     }
 }
 
