@@ -1,10 +1,9 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import FileUpload from "../FileUpload";
-import { Box, ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { CssBaseline, CircularProgress } from "@material-ui/core";
+import { CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import firebase from "../../firebase";
 import Login from "../Login";
 import Registration from "../Registration";
 import Home from "../Home";
@@ -14,14 +13,13 @@ import File from "../File";*/
 import Dashboard from "../Dashboard";
 /*import UpdateVideoInfo from "../UpdateVideoInfo";
 import Tags from "../Tags";
-import Search from "../Search";
+import Search from "../Search";*/
 import All from "../All";
-import SearchByTag from "../SearchByTag";*/
+// import SearchByTag from "../SearchByTag";
 import { api } from "../../api";
 import { User } from "../../types/user";
 import { decode } from "jsonwebtoken";
 import { Category } from "../../types/category";
-import Bar from "../Bar";
 import ResponsiveAppBar from "../Bar/Appbar";
 
 declare module "@mui/material/styles" {
@@ -52,16 +50,12 @@ const AppContext = createContext<{
 }>(null);
 
 export default function App() {
-    const [firebaseInitialized, setFirebaseInitialized] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const [user, setUser] = useState<User | null>(
         decode(String(localStorage.getItem("token"))) as User | null
     );
 
     useEffect(() => {
-        firebase.isInitialized().then((val) => {
-            setFirebaseInitialized(val);
-        });
         api.get("/category").then((res: { data: { categories: Category[] } }) => {
             const { categories } = res.data;
             setCategories(categories);
@@ -93,8 +87,8 @@ export default function App() {
                             element={UpdateVideoInfo}
                          />
                         <Route path="/Tags" element={Tags} />
-                        <Route path="/Search/tag/:tag" element={SearchByTag} />
-                        <Route path="/All" element={All} />*/}
+                        <Route path="/Search/tag/:tag" element={SearchByTag} />*/}
+                        <Route path="/All" element={<All />} />
                     </Routes>
                 </Router>
             </AppContext.Provider>

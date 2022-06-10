@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,18 +7,13 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItemButton from "@mui/material/MenuItem";
 import { useUser } from "../App";
 import { Link } from "react-router-dom";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
 const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const [user, setUser] = useUser();
 
     const pages = [
@@ -39,20 +34,13 @@ const ResponsiveAppBar = () => {
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
-
     return (
-        <AppBar position="fixed" sx={{bgcolor: "#ef6694"}}>
+        <AppBar position="fixed" sx={{ bgcolor: "#ef6694" }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography
@@ -149,7 +137,11 @@ const ResponsiveAppBar = () => {
                                             handleCloseNavMenu();
                                             page.action && page.action();
                                         }}
-                                        sx={{ my: 2, color: "white !important", display: "block" }}
+                                        sx={{
+                                            my: 2,
+                                            color: "white !important",
+                                            display: "block",
+                                        }}
                                     >
                                         {page.title}
                                     </Button>

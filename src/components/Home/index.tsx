@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-    Typography,
-    Paper,
-    Button,
-    Theme,
-    Breakpoint,
-    Box,
-} from "@mui/material";
+import { Typography, Paper, Button, Theme, Breakpoint, Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
-import Bar from "../Bar";
 import queryString from "query-string";
 import "../Home/index.css";
 import { useCategories } from "../App";
 import { Video } from "../../types/video";
 import { api } from "../../api";
 import VideoCard from "../VideoCard";
+import { paginate } from "../../lib/paginate";
 
 const styles = {
     main: (theme: Theme) => ({
@@ -196,9 +189,9 @@ function Home() {
                         >
                             所有視頻
                         </Typography>
-                        {videoList.map(function (value, index) {
-                            return <VideoCard video={value} key={index} />;
-                        })}
+                        {videoList.map((value, index) => (
+                            <VideoCard video={value} key={index} />
+                        ))}
                     </div>
                 </div>
                 <nav style={styles.Pagination}>
@@ -237,12 +230,8 @@ function Home() {
         </Box>
     );
 
-    function paginate(array: any[], page_size: number, page_number: number) {
-        return array.slice((page_number - 1) * page_size, page_number * page_size);
-    }
-
     function getAllMedia() {
-        api.get(`/videos`).then(({ data }) => {
+        api.get(`/videos?sort=popular`).then(({ data }) => {
             setTotalDataCount(data.videos.length);
             setVideoList(paginate(data.videos, dataRange, pageNumber + 1));
         });
