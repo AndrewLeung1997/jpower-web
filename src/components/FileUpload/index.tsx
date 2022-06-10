@@ -55,17 +55,18 @@ const styles = {
 };
 
 function FileUpload() {
+    const categoryArray = useCategories();
+
     const [file, setFile] = useState<File | null>(null);
     const [process, setProcess] = useState(0);
     const [uploadStatus, setUploadStatus] = useState(false);
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(categoryArray[0]?.categoryName || "");
     const [videoDisplayName, setVideoDisplayName] = useState("");
     const [preview, setPreview] = useState<File | null>(null);
     const [videoTag, setVideoTag] = useState<string[]>([]);
     const [inputTag, setInputTag] = useState("");
     const [user] = useUser();
 
-    const categoryArray = useCategories();
     const navigate = useNavigate();
 
     if (!user) {
@@ -90,6 +91,7 @@ function FileUpload() {
                                 標題
                             </label>
                             <input
+                                required
                                 disabled={uploadStatus}
                                 className="form-control"
                                 type="text"
@@ -107,6 +109,7 @@ function FileUpload() {
                                     類別
                                 </label>
                                 <select
+                                    required
                                     className="form-select"
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
@@ -158,6 +161,7 @@ function FileUpload() {
                                     影片文件
                                 </label>
                                 <input
+                                    required
                                     type="file"
                                     disabled={uploadStatus}
                                     className="form-control"

@@ -183,7 +183,7 @@ function VideoPlayer() {
                                         src={video?.videoUrl}
                                         fluid={window.innerHeight > 600}
                                         width={"100%"}
-                                        height={window.innerHeight * 0.8}
+                                        height={500}
                                     >
                                         {/* @ts-ignore */}
                                         <ControlBar>
