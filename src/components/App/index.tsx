@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "../Login";
 import Registration from "../Registration";
 import Home from "../Home";
-import Player from "../Player";
+import VideoPlayer from "../Player";
 /*import Filter from "../Filter";
 import File from "../File";*/
 import Dashboard from "../Dashboard";
@@ -74,7 +74,7 @@ export default function App() {
                         <Route path="/register" element={<Registration />} />
                         <Route path="/upload" element={<FileUpload />} />
                         {/*<Route path="/file" element={File} />*/}
-                        <Route path="/player/id/:id" element={<Player />} />
+                        <Route path="/player/id/:id" element={<VideoPlayer />} />
                         <Route path="/" element={<Home />} />
                         {/*<Route
                             path="/filter/category/:category"

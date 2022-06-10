@@ -152,6 +152,7 @@ function Home() {
                     ) {
                         return (
                             <div
+                                key={i}
                                 className="pagination"
                                 style={{
                                     borderRadius: "20px",

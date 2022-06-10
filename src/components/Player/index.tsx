@@ -15,10 +15,19 @@ import {
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import "../Player/style.css";
+import "video-react/dist/video-react.css";
 import { Video } from "../../types/video";
 import VideoCard from "../VideoCard";
 import { convertTimeStamp } from "../../lib/convertTimeStamp";
 import { api } from "../../api";
+import {
+    BigPlayButton,
+    ControlBar,
+    ForwardControl,
+    PlaybackRateMenuButton,
+    Player,
+    ReplayControl,
+} from "video-react";
 
 const styles = {
     root: (theme: Theme) => ({
@@ -128,7 +137,7 @@ const styles = {
     },
 };
 
-function Player() {
+function VideoPlayer() {
     const [relatedVideo, setRelatedVideo] = useState<Video[]>([]);
     const [video, setVideo] = useState<Video | null>(null);
 
@@ -165,19 +174,32 @@ function Player() {
                                     title={video?.videoDisplayName}
                                 ></CardHeader>
                                 <CardActions>
+                                    {/* @ts-ignore */}
                                     <CardMedia
                                         sx={styles.CardMedia}
-                                        component="video"
+                                        component={Player}
+                                        poster={video?.videoPreviewImage}
                                         preload="metadata"
-                                        width="50%"
-                                        height="500"
-                                        title={video?.videoDisplayName}
                                         src={video?.videoUrl}
-                                        controls={true}
-                                        onContextMenu={(
-                                            e: React.MouseEvent<HTMLVideoElement>
-                                        ) => e.preventDefault()}
-                                    />
+                                        fluid={window.innerHeight > 600}
+                                        width={"100%"}
+                                        height={window.innerHeight * 0.8}
+                                    >
+                                        {/* @ts-ignore */}
+                                        <ControlBar>
+                                            {/* @ts-ignore */}
+                                            <ReplayControl seconds={10} order={2.1} />
+                                            {/* @ts-ignore */}
+                                            <ForwardControl seconds={10} order={3.1} />
+                                            <PlaybackRateMenuButton
+                                                rates={[5, 2, 1, 0.5]}
+                                                // @ts-ignore
+                                                order={4.1}
+                                            />
+                                        </ControlBar>
+                                        <BigPlayButton position="center" />
+                                        <source src={video?.videoUrl} />
+                                    </CardMedia>
                                 </CardActions>
                                 <CardContent style={{ color: "#FCFCFC" }}>
                                     <Typography gutterBottom variant="h6" component="div">
@@ -243,11 +265,11 @@ function Player() {
                         >
                             相關影片
                         </Typography>
-                        <div className="row">
+                        <Box className="row" sx={{ width: "90vw" }}>
                             {relatedVideo.map((value, index) => (
                                 <VideoCard video={value} key={index} />
                             ))}
-                        </div>
+                        </Box>
                     </Paper>
                 </React.Fragment>
             )}
@@ -268,7 +290,9 @@ function Player() {
     function getVideoByCategory(category: number) {
         api.get(`/videos?cat=${category}&limit=20`)
             .then((res: { data: { videos: Video[] } }) => {
-                setRelatedVideo(res.data.videos.filter((value) => value.videoId !== videoId));
+                setRelatedVideo(
+                    res.data.videos.filter((value) => value.videoId !== videoId)
+                );
             })
             .catch((err) => {
                 alert(err?.response?.data?.error);
@@ -276,4 +300,4 @@ function Player() {
     }
 }
 
-export default Player;
+export default VideoPlayer;

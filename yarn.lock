@@ -2153,6 +2153,13 @@
   dependencies:
     source-map "^0.6.1"
 
+"@types/video-react@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@types/video-react/-/video-react-0.15.0.tgz#8c9dac03c37b362356f9d1f6ba44fdbed1329cb3"
+  integrity sha512-ASFm9E3Gz7CFz1WcDURkHUnLjU7HqSIfb/foZvqWYZtxoJT0cqnzmDdkTYbYOPXNwI2fH6cPJxQzz5HmhD1C7Q==
+  dependencies:
+    "@types/react" "*"
+
 "@types/warning@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/warning/-/warning-3.0.0.tgz#0d2501268ad8f9962b740d387c4654f5f8e23e52"
