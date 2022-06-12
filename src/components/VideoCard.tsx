@@ -42,6 +42,7 @@ const styles: { [key: string]: SxProps<Theme>; } = {
         maxHeight: "200px",
         minHeight: "200px",
         borderRadius: "15px",
+        objectFit: "cover"
     },
     typography: {
         fontSize: 14,
