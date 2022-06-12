@@ -29,6 +29,7 @@ const ResponsiveAppBar = () => {
             },
         },
         { title: user && "上傳", link: "/upload" },
+        { title: user?.role === "admin" && "管理", link: "/dashboard" },
     ];
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {

@@ -163,6 +163,7 @@ function FileUpload() {
                                 <input
                                     required
                                     type="file"
+                                    accept="video/*"
                                     disabled={uploadStatus}
                                     className="form-control"
                                     onChange={(e) => {
@@ -181,7 +182,7 @@ function FileUpload() {
                                 <input
                                     type="file"
                                     disabled={uploadStatus}
-                                    accept="image/png, image/jpg, image/gif"
+                                    accept="image/*"
                                     className="form-control"
                                     onChange={(e) => {
                                         setPreview(e.target.files?.[0] || null);
