@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Paper, Button, Theme, Breakpoint, Box } from "@mui/material";
+import {
+    Typography,
+    Paper,
+    Button,
+    Theme,
+    Breakpoint,
+    Box,
+    CircularProgress,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import "../Home/index.css";
@@ -7,6 +15,7 @@ import { useCategories } from "../App";
 import { Video } from "../../types/video";
 import { api } from "../../api";
 import VideoCard from "../VideoCard";
+import Loader from "../../lib/loader";
 
 const styles = {
     main: (theme: Theme) => ({
@@ -70,8 +79,8 @@ function Home() {
     const initialQueryString = queryString.parse(window.location.search);
     const initialPageNumber = Number(initialQueryString.page) || 0;
 
-    const [videoList, setVideoList] = useState<Video[]>([]);
-    const [latestVideo, setLatestVideo] = useState<Video[]>([]);
+    const [popularVideos, setPopularVideos] = useState<Video[] | null>(null);
+    const [latestVideos, setLatestVideo] = useState<Video[] | null>(null);
     const [totalDataCount, setTotalDataCount] = useState(0);
     const [dataRange] = useState(18);
     const [pageNumber, setPageNumber] = useState(initialPageNumber);
@@ -83,8 +92,8 @@ function Home() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getAllMedia();
-        getLatestMedia();
+        getPopularVideos();
+        getLatestVideos();
         navigate(`${path}?page=${pageNumber}`);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
@@ -138,9 +147,13 @@ function Home() {
                         >
                             最新視頻
                         </Typography>
-                        {latestVideo.map(function (value, index) {
-                            return <VideoCard video={value} key={index} />;
-                        })}
+                        {latestVideos ? (
+                            latestVideos.map((value, index) => (
+                                <VideoCard video={value} key={index} />
+                            ))
+                        ) : (
+                            <Loader position="flex-start" />
+                        )}
                     </div>
                 </div>
             </div>
@@ -186,11 +199,15 @@ function Home() {
                             variant="h5"
                             style={{ color: "#FCFCFC" }}
                         >
-                            所有視頻
+                            熱門視頻
                         </Typography>
-                        {videoList.map((value, index) => (
-                            <VideoCard video={value} key={index} />
-                        ))}
+                        {popularVideos ? (
+                            popularVideos.map((value, index) => (
+                                <VideoCard video={value} key={index} />
+                            ))
+                        ) : (
+                            <Loader position="flex-start" />
+                        )}
                     </div>
                 </div>
                 <nav style={styles.Pagination}>
@@ -229,14 +246,14 @@ function Home() {
         </Box>
     );
 
-    function getAllMedia() {
-        api.get(`/videos?page=${pageNumber + 1}&limit=${dataRange}`).then(({ data }) => {
+    function getPopularVideos() {
+        api.get(`/videos?filter=popular&page=${pageNumber + 1}&limit=${dataRange}`).then(({ data }) => {
             setTotalDataCount(data.videos.length);
-            setVideoList(data.videos);
+            setPopularVideos(data.videos);
         });
     }
 
-    function getLatestMedia() {
+    function getLatestVideos() {
         api.get(`/videos?filter=latest&page=${pageNumber + 1}&limit=${dataRange}`).then(
             ({ data }) => {
                 setTotalRecommendVideo(data.videos.length);

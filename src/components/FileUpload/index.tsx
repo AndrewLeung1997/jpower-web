@@ -209,6 +209,7 @@ function FileUpload() {
                         color="primary"
                         onClick={uploadFile}
                         sx={styles.submit}
+                        disabled={uploadStatus}
                     >
                         上傳
                     </Button>

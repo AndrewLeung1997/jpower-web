@@ -7,6 +7,7 @@ import { Breakpoint, Theme } from "@mui/material";
 import { Video } from "../../types/video";
 import VideoCard from "../VideoCard";
 import { api } from "../../api";
+import Loader from "../../lib/loader";
 
 const styles = {
     main: (theme: Theme) => ({
@@ -66,7 +67,7 @@ const styles = {
 };
 
 function All() {
-    const [videoList, setVideoList] = useState<Video[]>([]);
+    const [videoList, setVideoList] = useState<Video[] | null>(null);
     const [totalDataCount, setTotalDataCount] = useState(0);
     const [dataRange] = useState(15);
     const [pageNumber, setPageNumber] = useState(0);
@@ -109,9 +110,9 @@ function All() {
                 </div>
                 <div className="col-md-9">
                     <div className="row" style={{ marginTop: "20px" }}>
-                        {videoList.map((value, index) => (
+                        {videoList ? videoList.map((value, index) => (
                             <VideoCard video={value} key={index} />
-                        ))}
+                        )) : <Loader />}
                     </div>
                 </div>
                 <nav style={styles.Pagination}>

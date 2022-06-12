@@ -11,7 +11,6 @@ import {
     Theme,
     Breakpoint,
     Box,
-    CircularProgress,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import "../Player/style.css";
@@ -28,6 +27,7 @@ import {
     Player,
     ReplayControl,
 } from "video-react";
+import Loader from "../../lib/loader";
 
 const styles = {
     root: (theme: Theme) => ({
@@ -123,7 +123,9 @@ const styles = {
     },
     category: {
         marginTop: 1,
-        color: "#FCFCFC",
+        color: "#FCFCFC !important",
+        textDecoration: "none",
+        textTransform: "none",
     },
     title: {
         color: "#FCFCFC",
@@ -154,16 +156,7 @@ function VideoPlayer() {
     return (
         <Box sx={styles.main}>
             {!video ? (
-                <Box
-                    sx={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        marginTop: 11,
-                    }}
-                >
-                    <CircularProgress />
-                </Box>
+                <Loader sx={{ marginTop: 11 }} />
             ) : (
                 <React.Fragment>
                     <div className="row">
@@ -205,6 +198,13 @@ function VideoPlayer() {
                                     <Typography gutterBottom variant="h6" component="div">
                                         上載時間： {convertTimeStamp(video?.uploadTime)}
                                     </Typography>
+                                    <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                        component="div"
+                                    >
+                                        觀看次數： {video?.viewCount}
+                                    </Typography>
                                     <div className="box">
                                         <Typography
                                             gutterBottom
@@ -221,7 +221,12 @@ function VideoPlayer() {
                                         {video?.videoTag?.map((value, index) => (
                                             <div className="tag" key={index}>
                                                 <Button
-                                                    style={{ paddingLeft: "2px" }}
+                                                    sx={{
+                                                        paddingLeft: "2px",
+                                                        textDecoration: "none",
+                                                        textTransform: "none",
+                                                        color: "#FCFCFC !important",
+                                                    }}
                                                     component={Link}
                                                     to={`/Search/tag/${value}`}
                                                 >
