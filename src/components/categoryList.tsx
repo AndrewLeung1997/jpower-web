@@ -22,7 +22,7 @@ export default function CategoryList() {
                                 }}
                                 component={Link}
                                 key={index}
-                                to={`/filter/category/${value}`}
+                                to={`/filter/category/${value.categoryId}`}
                             >
                                 {value.categoryName}
                             </Button>
