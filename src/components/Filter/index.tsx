@@ -24,7 +24,7 @@ function Home() {
     useEffect(() => {
         if (categoryId) getCategoryMedia();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageNumber, totalDataCount, categories]);
+    }, [pageNumber, totalDataCount, categories, categoryId]);
 
     if (!categoryId) {
         alert("category id invalid.");
