@@ -14,7 +14,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import "../UpdateVideoInfo/style.css";
 import { useCategories, useUser } from "../App";
 import axios from "axios";
-import { s3Url } from "../../config";
+import { cfUrl, s3Url } from "../../config";
 import random from "random";
 import { api } from "../../api";
 
@@ -234,7 +234,7 @@ function FileUpload() {
             formData.append("file", preview);
             try {
                 await upload(formData);
-                videoPreviewImage = `${s3Url}/images/${id}-${encodeURIComponent(
+                videoPreviewImage = `${cfUrl}/images/${id}-${encodeURIComponent(
                     preview.name
                 )}`;
             } catch (e) {
@@ -250,7 +250,7 @@ function FileUpload() {
         formData.append(`file`, file);
         try {
             await upload(formData);
-            videoUrl = `${s3Url}/videos/${id}-${encodeURIComponent(file.name)}`;
+            videoUrl = `${cfUrl}/videos/${id}-${encodeURIComponent(file.name)}`;
         } catch (e) {
             console.log(e);
             alert(e);
