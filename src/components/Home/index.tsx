@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Theme, Breakpoint, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import "../Home/index.css";
@@ -9,22 +9,7 @@ import VideoCard from "../VideoCard";
 import Loader from "../../lib/loader";
 import CategoryList from "../categoryList";
 import PaginateButtons from "../../lib/paginateButtons";
-
-const styles = {
-    main: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: 3,
-        marginRight: 3,
-        marginTop: 7,
-        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
-            width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-        backgroundColor: "#222",
-    }),
-};
+import { commonStyles } from "../../lib/styles";
 
 function Home() {
     const path = window.location.pathname;
@@ -56,7 +41,7 @@ function Home() {
     ]);
 
     return (
-        <Box sx={styles.main}>
+        <Box sx={commonStyles.main}>
             <div className="row">
                 <CategoryList />
                 <div className="col-md-9">

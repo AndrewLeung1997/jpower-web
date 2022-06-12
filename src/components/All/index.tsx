@@ -2,29 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import "../Bar/index.css";
 import { useCategories } from "../App";
-import { Breakpoint, Theme } from "@mui/material";
 import { Video } from "../../types/video";
 import VideoCard from "../VideoCard";
 import { api } from "../../api";
 import Loader from "../../lib/loader";
 import CategoryList from "../categoryList";
 import { commonStyles } from "../../lib/styles";
-
-const styles = {
-    main: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: 3,
-        marginRight: 3,
-        marginTop: 7,
-        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
-            width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-        backgroundColor: "#222",
-    }),
-};
 
 function All() {
     const [videoList, setVideoList] = useState<Video[] | null>(null);
@@ -39,7 +22,7 @@ function All() {
     }, [pageNumber, totalDataCount, categories]);
 
     return (
-        <Box sx={styles.main}>
+        <Box sx={commonStyles.main}>
             <Box className="row">
                 <CategoryList />
                 <Box className="col-md-9">
@@ -53,7 +36,7 @@ function All() {
                         )}
                     </Box>
                 </Box>
-                <Box style={commonStyles.Pagination}>
+                <Box sx={commonStyles.Pagination}>
                     <ul className="pagination pg-blue justify-content-center">
                         {[...Array(Math.ceil(totalDataCount / dataRange))].map(function (
                             _,

@@ -1,6 +1,19 @@
-import { Theme } from "@mui/material";
+import { Breakpoint, SxProps, Theme } from "@mui/material";
 
-export const commonStyles = {
+export const commonStyles: { [key: string]: SxProps<Theme> } = {
+    main: (theme: Theme) => ({
+        width: "auto",
+        display: "block", // Fix IE 11 issue.
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 7,
+        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
+            width: "auto",
+            marginLeft: "auto",
+            marginRight: "auto",
+        },
+        backgroundColor: "#222",
+    }),
     paper: (theme: Theme) => ({
         marginTop: 10,
         display: "flex",
@@ -32,4 +45,4 @@ export const commonStyles = {
         borderRadius: "6px",
         borderColor: "#ffffff",
     },
-}
+};

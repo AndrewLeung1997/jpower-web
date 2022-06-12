@@ -58,7 +58,7 @@ function FileUpload() {
     const categoryArray = useCategories();
 
     const [file, setFile] = useState<File | null>(null);
-    const [process, setProcess] = useState(0);
+    const [progress, setProgress] = useState(0);
     const [uploadStatus, setUploadStatus] = useState(false);
     const [category, setCategory] = useState(categoryArray[0]?.categoryName || "");
     const [videoDisplayName, setVideoDisplayName] = useState("");
@@ -197,7 +197,7 @@ function FileUpload() {
                                 <LinearProgress
                                     sx={{ marginTop: 2 }}
                                     variant="determinate"
-                                    value={process}
+                                    value={progress}
                                 />
                             </div>
                         </div>
@@ -307,7 +307,7 @@ function FileUpload() {
                     const progress = Math.round(
                         (progressEvent.loaded / progressEvent.total) * 100
                     );
-                    setProcess(progress);
+                    setProgress(progress);
                 }
             },
         });

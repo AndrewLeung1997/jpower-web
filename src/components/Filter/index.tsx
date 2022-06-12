@@ -1,30 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Theme, Breakpoint, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { useCategories } from "../App";
 import CategoryList from "../categoryList";
 import VideoCard from "../VideoCard";
 import PaginateButtons from "../../lib/paginateButtons";
 import { Navigate, useParams } from "react-router-dom";
 import { api } from "../../api";
-
-const styles = {
-    main: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: 3,
-        marginRight: 3,
-        marginTop: 5,
-        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
-            width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-        backgroundColor: "#222",
-    }),
-};
+import { commonStyles } from "../../lib/styles";
+import { Video } from "../../types/video";
+import Loader from "../../lib/loader";
 
 function Home() {
-    const [videoList, setVideoList] = useState([]);
+    const [videoList, setVideoList] = useState<Video[] | null>(null);
     const [totalDataCount, setTotalDataCount] = useState(0);
     const [dataRange] = useState(15);
     const [pageNumber, setPageNumber] = useState(0);
@@ -45,14 +32,18 @@ function Home() {
     }
 
     return (
-        <Box sx={styles.main}>
+        <Box sx={commonStyles.main}>
             <div className="row">
                 <CategoryList />
                 <div className="col-md-9">
                     <div className="row" style={{ marginTop: "20px" }}>
-                        {videoList.map((value, index) => (
-                            <VideoCard video={value} key={index} />
-                        ))}
+                        {videoList ? (
+                            videoList.map((value, index) => (
+                                <VideoCard video={value} key={index} />
+                            ))
+                        ) : (
+                            <Loader position="flex-start" />
+                        )}
                     </div>
                 </div>
                 <PaginateButtons
@@ -65,10 +56,12 @@ function Home() {
     );
 
     function getCategoryMedia() {
-        api.get(`/videos?cat=${categoryId}&page=${pageNumber + 1}&limit=${dataRange}`).then(({ data }) => {
+        api.get(
+            `/videos?cat=${categoryId}&page=${pageNumber + 1}&limit=${dataRange}`
+        ).then(({ data }) => {
             setVideoList(data.videos);
             setTotalDataCount(data.count);
-        })
+        });
     }
 }
 

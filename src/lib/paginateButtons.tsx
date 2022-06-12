@@ -13,6 +13,7 @@ export default function PaginateButtons(props: {
                 {[...Array(Math.ceil(totalDataCount / dataRange))].map(function (_, i) {
                     return (
                         <div
+                            key={i}
                             className="pagination"
                             style={{
                                 borderRadius: "20px",
