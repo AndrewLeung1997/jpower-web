@@ -9,8 +9,7 @@ import Login from "../Login";
 import Registration from "../Registration";
 import Home from "../Home";
 import VideoPlayer from "../Player";
-/*import Filter from "../Filter";
-import File from "../File";*/
+import Filter from "../Filter";
 import Dashboard from "../Dashboard";
 /*import UpdateVideoInfo from "../UpdateVideoInfo";
 import Tags from "../Tags";
@@ -73,13 +72,9 @@ export default function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Registration />} />
                         <Route path="/upload" element={<FileUpload />} />
-                        {/*<Route path="/file" element={File} />*/}
                         <Route path="/player/id/:id" element={<VideoPlayer />} />
                         <Route path="/" element={<Home />} />
-                        {/*<Route
-                            path="/filter/category/:category"
-                            element={Filter}
-                        />*/}
+                        <Route path="/filter/category/:category" element={<Filter />} />
                         {/*<Route path="/uploads" element={File} />*/}
                         <Route path="/dashboard" element={<Dashboard />} />
                         {/*<Route path="/search" element={Search} />

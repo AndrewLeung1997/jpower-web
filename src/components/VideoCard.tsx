@@ -4,6 +4,7 @@ import {
     CardActionArea,
     CardContent,
     CardMedia,
+    SxProps,
     Theme,
     Typography,
 } from "@mui/material";
@@ -12,7 +13,7 @@ import { convertTime } from "../lib/convertTime";
 import { convertTimeStamp } from "../lib/convertTimeStamp";
 import { Video } from "../types/video";
 
-const styles = {
+const styles: { [key: string]: SxProps<Theme>; } = {
     Card: {
         marginTop: 2,
         height: "100%",
@@ -36,16 +37,19 @@ const styles = {
     CardMedia: {
         paddingLeft: 1,
         paddingRight: 1,
-        paddingTop: 1,
-        fit: "contain",
+        paddingTop: 2,
+        height: "100%",
+        maxHeight: "200px",
+        minHeight: "200px",
+        borderRadius: "15px",
     },
     typography: {
         fontSize: 14,
         color: "white",
         textDecoration: "none",
         "&:hover": {
-            color: "white"
-        }
+            color: "white",
+        },
     },
 };
 
