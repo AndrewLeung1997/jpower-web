@@ -14,7 +14,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import "../UpdateVideoInfo/style.css";
 import { useCategories, useUser } from "../App";
 import axios from "axios";
-import { cfUrl, s3Url } from "../../config";
+import { cfUrl } from "../../config";
 import random from "random";
 import { api } from "../../api";
 
@@ -295,7 +295,7 @@ function FileUpload() {
     }
 
     async function upload(formData: FormData) {
-        await axios.post(s3Url, formData, {
+        await axios.post(cfUrl, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
                 "Access-Control-Allow-Origin": "*",
