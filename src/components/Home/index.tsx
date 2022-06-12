@@ -6,7 +6,6 @@ import {
     Theme,
     Breakpoint,
     Box,
-    CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import queryString from "query-string";
