@@ -29,6 +29,8 @@ import {
 import Loader from "../../lib/loader";
 import { commonStyles } from "../../lib/styles";
 import { useIsSmallHeight, useIsSmallWidth } from "../App";
+import HashTag from "../../lib/hashtag";
+import Slash from "../../lib/slash";
 
 const styles = {
     relatedVideoPaper: (theme: Theme) => ({
@@ -59,6 +61,7 @@ const styles = {
         color: "#FCFCFC !important",
         textDecoration: "none",
         textTransform: "none",
+        fontSize: 20,
     },
     title: {
         color: "#FCFCFC",
@@ -137,7 +140,7 @@ function VideoPlayer() {
                                     <Typography gutterBottom variant="h6" component="div">
                                         觀看次數： {video?.viewCount}
                                     </Typography>
-                                    <div className="box">
+                                    <Box sx={{ display: "flex", alignItems: "center" }}>
                                         <Typography
                                             gutterBottom
                                             variant="h6"
@@ -151,44 +154,48 @@ function VideoPlayer() {
                                             標籤:
                                         </Typography>
                                         {video?.videoTag?.map((value, index) => (
-                                            <div className="tag" key={index}>
-                                                <Button
-                                                    sx={{
-                                                        paddingLeft: "2px",
-                                                        textDecoration: "none",
-                                                        textTransform: "none",
-                                                        color: "#FCFCFC !important",
-                                                    }}
-                                                    component={Link}
-                                                    to={`/Search/tag/${value}`}
-                                                >
-                                                    {value}
-                                                </Button>
-                                            </div>
+                                            <Button
+                                                key={index}
+                                                sx={{
+                                                    paddingLeft: "2px",
+                                                    textDecoration: "none",
+                                                    textTransform: "none",
+                                                    color: "#FCFCFC !important",
+                                                    fontSize: 20,
+                                                }}
+                                                component={Link}
+                                                variant="text"
+                                                to={`/Search/tag/${value}`}
+                                            >
+                                                <Slash />{value}
+                                            </Button>
                                         ))}
-                                    </div>
-                                    <Typography
-                                        gutterBottom
-                                        variant="h6"
-                                        component="div"
-                                        style={{
-                                            color: "#FCFCFC",
-                                            paddingTop: "12px",
-                                            paddingRight: "10px",
-                                        }}
-                                    >
-                                        類別:
-                                    </Typography>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="secondary"
-                                        component={Link}
-                                        to={`/filter/category/${video?.category?.categoryId}`}
-                                        sx={styles.category}
-                                    >
-                                        {video?.category?.categoryName}
-                                    </Button>
+                                    </Box>
+                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                        <Typography
+                                            gutterBottom
+                                            variant="h6"
+                                            component="div"
+                                            style={{
+                                                color: "#FCFCFC",
+                                                paddingTop: "12px",
+                                                paddingRight: "10px",
+                                            }}
+                                        >
+                                            類別:
+                                        </Typography>
+                                        <Button
+                                            type="submit"
+                                            variant="text"
+                                            color="secondary"
+                                            component={Link}
+                                            to={`/filter/category/${video?.category?.categoryId}`}
+                                            sx={styles.category}
+                                        >
+                                            <HashTag />
+                                            {video?.category?.categoryName}
+                                        </Button>
+                                    </Box>
                                 </CardContent>
                             </Card>
                             {!isSmallWidth && (
@@ -261,7 +268,6 @@ function VideoPlayer() {
                 setRelatedVideos(
                     res.data.videos.filter((value) => value.videoId !== videoId)
                 );
-                res.data.videos.filter((value) => value.videoId !== videoId)
             })
             .catch((err) => {
                 alert(err?.response?.data?.error);
@@ -271,7 +277,9 @@ function VideoPlayer() {
     function getPopularVideos() {
         api.get(`/videos?limit=20&filter=popular`)
             .then((res: { data: { videos: Video[] } }) => {
-                setPopularVideos(res.data.videos);
+                setPopularVideos(
+                    res.data.videos.filter((value) => value.videoId !== videoId)
+                );
             })
             .catch((err) => {
                 alert(err?.response?.data?.error);

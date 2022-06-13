@@ -9,6 +9,7 @@ import { api } from "../../api";
 import { commonStyles } from "../../lib/styles";
 import { Video } from "../../types/video";
 import Loader from "../../lib/loader";
+import HashTag from "../../lib/hashtag";
 
 function Home() {
     const [videoList, setVideoList] = useState<Video[] | null>(null);
@@ -44,8 +45,9 @@ function Home() {
             <div className="row">
                 <CategoryList />
                 <div className="col-md-9">
-                    <div className="row" style={{ marginTop: "20px" }}>
-                        <Typography variant="h1">
+                    <Box className="row" sx={{ marginTop: 4 }}>
+                        <Typography variant="h4" sx={{ color: "white" }}>
+                            <HashTag />
                             {
                                 categories.find(
                                     (category) => category.categoryId === categoryId
@@ -59,7 +61,7 @@ function Home() {
                         ) : (
                             <Loader position="flex-start" />
                         )}
-                    </div>
+                    </Box>
                 </div>
                 <PaginateButtons
                     totalDataCount={totalDataCount}
