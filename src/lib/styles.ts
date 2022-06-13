@@ -13,6 +13,7 @@ export const commonStyles: { [key: string]: SxProps<Theme> } = {
         marginTop: 10,
         display: "flex",
         flexDirection: "column",
+        height: "fit-content",
         alignItems: "center",
         padding: 3,
         paddingTop: 2,
