@@ -191,27 +191,29 @@ function VideoPlayer() {
                                     </Button>
                                 </CardContent>
                             </Card>
-                            <Paper
-                                sx={{
-                                    width: "30vw",
-                                    maxHeight: "450px",
-                                    overflow: "auto",
-                                    backgroundColor: "#222",
-                                    marginTop: 9,
-                                }}
-                            >
-                                {!isSmallWidth && relatedVideos ? (
-                                    relatedVideos.map((value, index) => (
-                                        <VideoCard
-                                            video={value}
-                                            key={index}
-                                            sx={{ width: "100%" }}
-                                        />
-                                    ))
-                                ) : (
-                                    <Loader />
-                                )}
-                            </Paper>
+                            {!isSmallWidth && (
+                                <Paper
+                                    sx={{
+                                        width: "30vw",
+                                        maxHeight: "450px",
+                                        overflow: "auto",
+                                        backgroundColor: "#222",
+                                        marginTop: 9,
+                                    }}
+                                >
+                                    {relatedVideos ? (
+                                        relatedVideos.map((value, index) => (
+                                            <VideoCard
+                                                video={value}
+                                                key={index}
+                                                sx={{ width: "100%" }}
+                                            />
+                                        ))
+                                    ) : (
+                                        <Loader />
+                                    )}
+                                </Paper>
+                            )}
                         </Box>
                     </Box>
                     <Paper sx={styles.relatedVideoPaper}>
@@ -259,6 +261,7 @@ function VideoPlayer() {
                 setRelatedVideos(
                     res.data.videos.filter((value) => value.videoId !== videoId)
                 );
+                res.data.videos.filter((value) => value.videoId !== videoId)
             })
             .catch((err) => {
                 alert(err?.response?.data?.error);
