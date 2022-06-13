@@ -21,32 +21,13 @@ import {
 import "../Player/style.css";
 import { useUser } from "../App";
 import { Delete } from "@mui/icons-material";
-import { Breakpoint, Theme } from "@mui/material";
+import { Theme } from "@mui/material";
 import { Video } from "../../types/video";
 import { api } from "../../api";
 import { convertTimeStamp } from "../../lib/convertTimeStamp";
+import { commonStyles } from "../../lib/styles";
 
 const styles = {
-    main: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: 3,
-        marginRight: 3,
-        marginBottom: 3,
-        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
-            width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-    }),
-    paper: (theme: Theme) => ({
-        marginTop: 10,
-        marginBottom: 4,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
-    }),
     form: (theme: Theme) => ({
         width: "100%", // Fix IE 11 issue.
         border: "2px",
@@ -74,7 +55,7 @@ function Dashboard() {
         if (newCategory) {
             api.post("/category/create", {
                 categoryName: newCategory,
-            }).then((res) => {
+            }).then(() => {
                 alert("Category added!");
             });
             setNewCategory("");
@@ -93,9 +74,9 @@ function Dashboard() {
     }
 
     return (
-        <Box sx={styles.main}>
+        <Box sx={commonStyles.main}>
             {/* Add category */}
-            <Paper sx={styles.paper} style={{ marginTop: 90 }}>
+            <Paper sx={commonStyles.paper} style={{ marginTop: 90 }}>
                 <Typography style={{ alignSelf: "flex-start" }}>
                     <h4>Add new category</h4>
                 </Typography>

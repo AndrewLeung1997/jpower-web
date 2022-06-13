@@ -4,50 +4,20 @@ import {
     Paper,
     Avatar,
     Button,
-    FormControl,
-    Input,
-    InputLabel,
     Theme,
-    Breakpoint,
     Box,
-    FormGroup,
+    TextField,
+    TextFieldProps,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import "../Bar/index.css";
 import { api } from "../../api";
 import { decode } from "jsonwebtoken";
 import { User } from "../../types/user";
 import { useUser } from "../App";
+import { commonStyles } from "../../lib/styles";
 
 const styles = {
-    root: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as number | Breakpoint)]: {
-            width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-    }),
-    main: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: 3,
-        marginRight: 3,
-        [theme.breakpoints.up(400 + theme.space * 3 * 2)]: {
-            width: 400,
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-    }),
-    paper: (theme: Theme) => ({
-        marginTop: 10,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
-    }),
     avatar: (theme: Theme) => ({
         margin: 1,
         backgroundColor: theme.palette.secondary.main,
@@ -56,14 +26,9 @@ const styles = {
         margin: 1,
         backgroundColor: theme.palette.secondary.light,
     }),
-    form: {
-        width: "100%", // Fix IE 11 issue.
-        marginTop: 1,
-    },
-    submit: (theme: Theme) => ({
+    submit: {
         marginTop: 3,
-    }),
-
+    },
     alternativeIcon: {
         paddingTop: "20px",
     },
@@ -75,77 +40,76 @@ function SignIn() {
     const [user, setUser] = useUser();
 
     const navigate = useNavigate();
-
     if (user) return <Navigate to="/" />;
 
+    const commonProps: TextFieldProps = {
+        variant: "standard",
+        required: true,
+        fullWidth: true,
+        sx: { marginTop: 3 },
+    };
+
     return (
-        <Box sx={styles.root}>
-            <Box sx={styles.main}>
-                <Paper sx={styles.paper}>
-                    <Typography
-                        component="h2"
-                        variant="h5"
-                        style={{ textAlign: "center" }}
+        <Box sx={{ ...commonStyles.main, display: "flex", justifyContent: "center" }}>
+            <Paper
+                sx={{
+                    ...commonStyles.paper,
+                    width: "400px",
+                    maxWidth: "90vw",
+                    marginTop: 5,
+                    marginBottom: 5,
+                }}
+            >
+                <Typography component="h2" variant="h5" style={{ textAlign: "center" }}>
+                    JPower 會員
+                </Typography>
+                <Avatar sx={styles.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    登入
+                </Typography>
+                <form onSubmit={login} style={{ width: "100%" }}>
+                    <TextField
+                        {...commonProps}
+                        label="電郵地址"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        type="email"
+                    />
+                    <TextField
+                        {...commonProps}
+                        label="密碼"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        sx={styles.submit}
                     >
-                        JTube Club 會員
-                    </Typography>
-                    <Avatar sx={styles.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
                         登入
-                    </Typography>
-                    <FormGroup sx={styles.form} onSubmit={(e) => e.preventDefault()}>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">電郵地址</InputLabel>
-                            <Input
-                                id="email"
-                                name="email"
-                                autoComplete="off"
-                                autoFocus
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">密碼</InputLabel>
-                            <Input
-                                name="password"
-                                type="password"
-                                id="password"
-                                autoComplete="off"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </FormControl>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            onClick={login}
-                            sx={styles.submit}
-                        >
-                            登入
-                        </Button>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            component={Link}
-                            to="/register"
-                            sx={styles.submit}
-                        >
-                            註冊
-                        </Button>
-                    </FormGroup>
-                </Paper>
-            </Box>
+                    </Button>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        component={Link}
+                        to="/register"
+                        sx={{ ...styles.submit, color: "white !important" }}
+                    >
+                        註冊
+                    </Button>
+                </form>
+            </Paper>
         </Box>
     );
 
-    async function login() {
+    async function login(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
         api.post("/users/login", { email, password })
             .then(({ data }) => {
                 const { token } = data;

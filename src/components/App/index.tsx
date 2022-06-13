@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css";
 import React, { useState, useEffect, createContext, useContext, useRef } from "react";
 import FileUpload from "../FileUpload";
-import { ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -11,9 +11,9 @@ import Home from "../Home";
 import VideoPlayer from "../Player";
 import Filter from "../Filter";
 import Dashboard from "../Dashboard";
-/*import UpdateVideoInfo from "../UpdateVideoInfo";
+/*import UpdateVideoInfo from "../UpdateVideoInfo";*/
 import Tags from "../Tags";
-import Search from "../Search";*/
+/*import Search from "../Search";*/
 import All from "../All";
 // import SearchByTag from "../SearchByTag";
 import { api } from "../../api";
@@ -84,27 +84,31 @@ export default function App() {
                 }}
             >
                 <CssBaseline />
-                <Router>
-                    <ResponsiveAppBar />
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Registration />} />
-                        <Route path="/upload" element={<FileUpload />} />
-                        <Route path="/player/id/:id" element={<VideoPlayer />} />
-                        <Route path="/" element={<Home />} />
-                        <Route path="/filter/category/:category" element={<Filter />} />
-                        {/*<Route path="/uploads" element={File} />*/}
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        {/*<Route path="/search" element={Search} />
+                <Box sx={{ display: "flex", bgcolor: "#222", minHeight: "100vh" }}>
+                    <Router>
+                        <ResponsiveAppBar />
+                        <Routes>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Registration />} />
+                            <Route path="/upload" element={<FileUpload />} />
+                            <Route path="/player/id/:id" element={<VideoPlayer />} />
+                            <Route path="/" element={<Home />} />
+                            <Route
+                                path="/filter/category/:category"
+                                element={<Filter />}
+                            />
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            {/*<Route path="/search" element={Search} />
                         <Route
                             path="/updateVideoInfo"
                             element={UpdateVideoInfo}
-                         />
-                        <Route path="/Tags" element={Tags} />
-                        <Route path="/Search/tag/:tag" element={SearchByTag} />*/}
-                        <Route path="/All" element={<All />} />
-                    </Routes>
-                </Router>
+            />*/}
+                            <Route path="/Tags" element={<Tags />} />
+                            {/*<Route path="/Search/tag/:tag" element={SearchByTag} />*/}
+                            <Route path="/All" element={<All />} />
+                        </Routes>
+                    </Router>
+                </Box>
             </AppContext.Provider>
         </ThemeProvider>
     );

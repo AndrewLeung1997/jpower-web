@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import "../Bar/index.css";
 import { Video } from "../../types/video";
 import VideoCard from "../VideoCard";
 import { api } from "../../api";

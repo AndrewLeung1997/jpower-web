@@ -7,9 +7,15 @@ import {
     LinearProgress,
     Theme,
     Box,
-    FormGroup,
+    TextField,
+    TextFieldProps,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Chip,
 } from "@mui/material";
-import { LockOutlined as LockOutlinedIcon } from "@mui/icons-material";
+import { Image, LockOutlined as LockOutlinedIcon, Upload } from "@mui/icons-material";
 import { Navigate, useNavigate } from "react-router-dom";
 import "../UpdateVideoInfo/style.css";
 import { useCategories, useUser } from "../App";
@@ -17,27 +23,9 @@ import axios from "axios";
 import { cfUrl } from "../../config";
 import random from "random";
 import { api } from "../../api";
+import { commonStyles } from "../../lib/styles";
 
 const styles = {
-    main: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: 3,
-        marginRight: 3,
-        [theme.breakpoints.up(600 + theme.space * 3 * 2)]: {
-            width: 600,
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-    }),
-    paper: (theme: Theme) => ({
-        marginTop: 8,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.space * 2}px ${theme.space * 3}px ${theme.space * 3}px`,
-        backgroundColor: "#222",
-    }),
     avatar: (theme: Theme) => ({
         margin: 1,
         backgroundColor: theme.palette.secondary.main,
@@ -71,126 +59,126 @@ function FileUpload() {
 
     if (!user) {
         // not logged in
-        alert("Please login first");
+        alert("請先登入");
         return <Navigate to="/login" replace />;
     }
 
+    const commonProps: TextFieldProps = {
+        disabled: uploadStatus,
+        required: true,
+        fullWidth: true,
+        variant: "standard",
+        sx: { marginTop: 3 },
+    };
+
     return (
-        <Box sx={styles.main} className="">
-            <Paper sx={styles.paper}>
+        <Box
+            sx={{ ...commonStyles.main, display: "flex", justifyContent: "center" }}
+            className=""
+        >
+            <Paper
+                sx={{
+                    ...commonStyles.paper,
+                    width: "600px",
+                    maxWidth: "90vw",
+                    marginTop: 3,
+                }}
+            >
                 <Avatar sx={styles.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5" style={{ color: "white" }}>
+                <Typography component="h1" variant="h5">
                     上傳文件
                 </Typography>
-                <FormGroup sx={styles.form} onSubmit={(e) => e.preventDefault()}>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <label className="form-label" style={{ color: "white" }}>
-                                標題
-                            </label>
+                <form onSubmit={onSubmit} style={{ width: "100%" }}>
+                    <TextField
+                        label="標題"
+                        {...commonProps}
+                        onChange={(e) => setVideoDisplayName(e.target.value)}
+                    />
+                    <FormControl
+                        sx={{ marginTop: 3, marginBottom: 3 }}
+                        fullWidth
+                        disabled={uploadStatus}
+                        required
+                    >
+                        <InputLabel>類別</InputLabel>
+                        <Select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            label="類別"
+                            variant="standard"
+                        >
+                            {categoryArray.map((value, index) => (
+                                <MenuItem value={value.categoryName} key={index}>
+                                    {value.categoryName}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    {videoTag.map(function (value, index) {
+                        return (
+                            <Chip
+                                color="primary"
+                                sx={{ marginRight: 1 }}
+                                label={value}
+                                onDelete={() => deleteTag(index)}
+                            />
+                        );
+                    })}
+                    <TextField
+                        {...commonProps}
+                        sx={{ ...(videoTag.length && { marginTop: 1 }) }}
+                        required={false}
+                        label="標籤 (輸入後按 空格 鍵)"
+                        type="text"
+                        value={inputTag}
+                        onKeyDown={onKeyDown}
+                        onChange={handleTextFieldInput}
+                    />
+                    <Box sx={{ display: "flex", alignItems: "center", marginTop: 3 }}>
+                        <Button
+                            sx={{ marginRight: 1 }}
+                            variant="contained"
+                            component="label"
+                            disabled={uploadStatus}
+                        >
+                            <Upload />
+                            影片文件
                             <input
                                 required
+                                type="file"
+                                accept="video/*"
                                 disabled={uploadStatus}
-                                className="form-control"
-                                type="text"
-                                onChange={(e) => setVideoDisplayName(e.target.value)}
-                            ></input>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="form-group">
-                                <label
-                                    className="form-label"
-                                    style={{ color: "white", paddingTop: "15px" }}
-                                >
-                                    類別
-                                </label>
-                                <select
-                                    required
-                                    className="form-select"
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                >
-                                    {categoryArray.map(function (value, index) {
-                                        return (
-                                            <option key={index}>
-                                                {value.categoryName}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="form-group">
-                                <label htmlFor="tags" style={{ color: "white" }}>
-                                    Tags
-                                </label>
-
-                                {videoTag.map(function (value, index) {
-                                    return (
-                                        <div className="tag">
-                                            {value}
-                                            <button onClick={() => deleteTag(index)}>
-                                                x
-                                            </button>
-                                        </div>
-                                    );
-                                })}
-                                <input
-                                    className="form-control"
-                                    id="tags"
-                                    disabled={uploadStatus}
-                                    type="text"
-                                    value={inputTag}
-                                    onKeyDown={onKeyDown}
-                                    onChange={handleTextFieldInput}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="form-group">
-                                <label className="form-label" style={{ color: "white" }}>
-                                    影片文件
-                                </label>
-                                <input
-                                    required
-                                    type="file"
-                                    accept="video/*"
-                                    disabled={uploadStatus}
-                                    className="form-control"
-                                    onChange={(e) => {
-                                        setFile(e.target?.files?.[0] || null);
-                                    }}
-                                ></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div className="form-group">
-                                <label className="form-label" style={{ color: "white" }}>
-                                    預覽圖
-                                </label>
-                                <input
-                                    type="file"
-                                    disabled={uploadStatus}
-                                    accept="image/*"
-                                    className="form-control"
-                                    onChange={(e) => {
-                                        setPreview(e.target.files?.[0] || null);
-                                    }}
-                                ></input>
-                            </div>
-                        </div>
-                    </div>
+                                onChange={(e) => {
+                                    setFile(e.target?.files?.[0] || null);
+                                }}
+                                hidden
+                            />
+                        </Button>
+                        {file?.name || "未選擇影片"}
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", marginTop: 3 }}>
+                        <Button
+                            sx={{ marginRight: 1 }}
+                            variant="contained"
+                            component="label"
+                            disabled={uploadStatus}
+                        >
+                            <Image />
+                            預覽圖
+                            <input
+                                type="file"
+                                accept="image/*"
+                                disabled={uploadStatus}
+                                onChange={(e) => {
+                                    setFile(e.target?.files?.[0] || null);
+                                }}
+                                hidden
+                            />
+                        </Button>
+                        {preview?.name || "未選擇預覽圖　（可以不選）"}
+                    </Box>
                     {uploadStatus && (
                         <div className="row">
                             <div className="col-sm-12">
@@ -207,20 +195,20 @@ function FileUpload() {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        onClick={uploadFile}
                         sx={styles.submit}
                         disabled={uploadStatus}
                     >
                         上傳
                     </Button>
-                </FormGroup>
+                </form>
             </Paper>
         </Box>
     );
 
-    async function uploadFile() {
-        if (file == null) return;
+    async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
 
+        if (!file) return;
         setUploadStatus(true);
 
         let videoPreviewImage: string = "",

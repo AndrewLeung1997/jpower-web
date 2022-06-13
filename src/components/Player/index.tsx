@@ -5,13 +5,12 @@ import {
     Card,
     CardMedia,
     CardContent,
-    Button,
     CardActions,
     CardHeader,
     Theme,
     Box,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "../Player/style.css";
 import "video-react/dist/video-react.css";
 import { Video } from "../../types/video";
@@ -29,8 +28,8 @@ import {
 import Loader from "../../lib/loader";
 import { commonStyles } from "../../lib/styles";
 import { useIsSmallHeight, useIsSmallWidth } from "../App";
-import HashTag from "../../lib/hashtag";
-import Slash from "../../lib/slash";
+import TagBtn from "../../lib/tagBtn";
+import CategoryBtn from "../../lib/categoryBtn";
 
 const styles = {
     relatedVideoPaper: (theme: Theme) => ({
@@ -56,13 +55,6 @@ const styles = {
         backgroundColor: "#222",
         width: "100%",
     }),
-    category: {
-        marginTop: 1,
-        color: "#FCFCFC !important",
-        textDecoration: "none",
-        textTransform: "none",
-        fontSize: 20,
-    },
     title: {
         color: "#FCFCFC",
     },
@@ -154,21 +146,7 @@ function VideoPlayer() {
                                             標籤:
                                         </Typography>
                                         {video?.videoTag?.map((value, index) => (
-                                            <Button
-                                                key={index}
-                                                sx={{
-                                                    paddingLeft: "2px",
-                                                    textDecoration: "none",
-                                                    textTransform: "none",
-                                                    color: "#FCFCFC !important",
-                                                    fontSize: 20,
-                                                }}
-                                                component={Link}
-                                                variant="text"
-                                                to={`/Search/tag/${value}`}
-                                            >
-                                                <Slash />{value}
-                                            </Button>
+                                            <TagBtn tag={value} key={index} />
                                         ))}
                                     </Box>
                                     <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -184,17 +162,7 @@ function VideoPlayer() {
                                         >
                                             類別:
                                         </Typography>
-                                        <Button
-                                            type="submit"
-                                            variant="text"
-                                            color="secondary"
-                                            component={Link}
-                                            to={`/filter/category/${video?.category?.categoryId}`}
-                                            sx={styles.category}
-                                        >
-                                            <HashTag />
-                                            {video?.category?.categoryName}
-                                        </Button>
+                                        <CategoryBtn category={video?.category} />
                                     </Box>
                                 </CardContent>
                             </Card>

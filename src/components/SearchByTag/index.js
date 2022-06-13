@@ -14,7 +14,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
 import firebase from "firebase";
 import Bar from "../Bar";
-import "../Bar/index.css";
 
 const styles = (theme) => ({
   main: {
