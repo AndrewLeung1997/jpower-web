@@ -88,7 +88,7 @@ function Register() {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         onBlur={onVerifyPassword}
                     />
-                    <FormControl sx={{ marginTop: 3, marginBottom: 3 }}>
+                    <FormControl sx={{ marginTop: 3, marginBottom: 3 }} fullWidth>
                         <InputLabel>性別</InputLabel>
                         <Select
                             value={gender}
@@ -112,6 +112,7 @@ function Register() {
                         }
                         label="我保證我已滿18歲"
                     />
+                    <br />
                     <FormControlLabel
                         control={
                             <Checkbox
