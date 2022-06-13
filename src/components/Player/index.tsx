@@ -169,7 +169,7 @@ function VideoPlayer() {
                             <Paper
                                 sx={{
                                     width: "30vw",
-                                    maxHeight: "450px",
+                                    maxHeight: "700px",
                                     overflow: "auto",
                                     backgroundColor: "#222",
                                     marginTop: 9,
