@@ -13,7 +13,7 @@ import { convertTime } from "../lib/convertTime";
 import { convertTimeStamp } from "../lib/convertTimeStamp";
 import { Video } from "../types/video";
 
-const styles: { [key: string]: SxProps<Theme>; } = {
+const styles: { [key: string]: SxProps<Theme> } = {
     Card: {
         marginTop: 2,
         height: "100%",
@@ -42,7 +42,7 @@ const styles: { [key: string]: SxProps<Theme>; } = {
         maxHeight: "200px",
         minHeight: "200px",
         borderRadius: "15px",
-        objectFit: "cover"
+        objectFit: "cover",
     },
     typography: {
         fontSize: 14,
@@ -54,10 +54,14 @@ const styles: { [key: string]: SxProps<Theme>; } = {
     },
 };
 
-export default function VideoCard(props: { video: Video }) {
-    const { video } = props;
+export default function VideoCard(props: {
+    video: Video;
+    className?: string;
+    sx?: SxProps<Theme>;
+}) {
+    const { video, className, sx } = props;
     return (
-        <Box className="col-sm-6 col-md-4 col-lg-4">
+        <Box className={className || "col-sm-6 col-md-4 col-lg-4"} sx={sx}>
             <Card sx={styles.Card}>
                 <Box sx={styles.TimeTag}>{convertTime(video.videoDuration)}</Box>
                 <CardActionArea component={Link} to={`/player/id/${video.videoId}`}>

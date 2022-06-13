@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useCategories } from "../App";
 import CategoryList from "../categoryList";
 import VideoCard from "../VideoCard";
@@ -22,9 +22,17 @@ function Home() {
     const categoryId = Number(params.category);
 
     useEffect(() => {
-        if (categoryId) getCategoryMedia();
+        setTotalDataCount(0);
+        setPageNumber(0);
+    }, [categoryId]);
+
+    useEffect(() => {
+        if (categoryId) {
+            setVideoList(null);
+            getCategoryMedia();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageNumber, totalDataCount, categories, categoryId]);
+    }, [pageNumber, categoryId]);
 
     if (!categoryId) {
         alert("category id invalid.");
@@ -37,6 +45,13 @@ function Home() {
                 <CategoryList />
                 <div className="col-md-9">
                     <div className="row" style={{ marginTop: "20px" }}>
+                        <Typography variant="h1">
+                            {
+                                categories.find(
+                                    (category) => category.categoryId === categoryId
+                                )?.categoryName
+                            }
+                        </Typography>
                         {videoList ? (
                             videoList.map((value, index) => (
                                 <VideoCard video={value} key={index} />

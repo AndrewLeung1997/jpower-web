@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { useState, useEffect, createContext, useContext, useRef } from "react";
 import FileUpload from "../FileUpload";
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
@@ -46,6 +46,8 @@ const theme = createTheme({
 const AppContext = createContext<{
     categories: Category[];
     user: [User | null, React.Dispatch<React.SetStateAction<User | null>>];
+    width: [number, React.Dispatch<React.SetStateAction<number>>];
+    height: [number, React.Dispatch<React.SetStateAction<number>>];
     // @ts-ignore
 }>(null);
 
@@ -53,6 +55,15 @@ export default function App() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [user, setUser] = useState<User | null>(
         decode(String(localStorage.getItem("token"))) as User | null
+    );
+    const [width, setWidth] = useState(window.innerWidth);
+    const [height, setHeight] = useState(window.innerHeight);
+
+    useRef(
+        window.addEventListener("resize", () => {
+            setWidth(window.innerWidth);
+            setHeight(window.innerHeight);
+        })
     );
 
     useEffect(() => {
@@ -64,7 +75,14 @@ export default function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <AppContext.Provider value={{ categories, user: [user, setUser] }}>
+            <AppContext.Provider
+                value={{
+                    categories,
+                    user: [user, setUser],
+                    width: [width, setWidth],
+                    height: [height, setHeight],
+                }}
+            >
                 <CssBaseline />
                 <Router>
                     <ResponsiveAppBar />
@@ -100,4 +118,24 @@ export function useCategories() {
 export function useUser() {
     const { user } = useContext(AppContext);
     return user;
+}
+
+export function useWidth() {
+    const { width } = useContext(AppContext);
+    return width;
+}
+
+export function useHeight() {
+    const { height } = useContext(AppContext);
+    return height;
+}
+
+export function useIsSmallWidth() {
+    const [width] = useWidth();
+    return width < 600;
+}
+
+export function useIsSmallHeight() {
+    const [height] = useHeight();
+    return height < 600;
 }

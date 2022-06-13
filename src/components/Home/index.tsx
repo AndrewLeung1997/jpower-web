@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import "../Home/index.css";
 import { Video } from "../../types/video";
@@ -12,7 +11,6 @@ import PaginateButtons from "../../lib/paginateButtons";
 import { commonStyles } from "../../lib/styles";
 
 function Home() {
-    const path = window.location.pathname;
     const initialQueryString = queryString.parse(window.location.search);
     const initialPageNumber = Number(initialQueryString.page) || 0;
 
@@ -24,20 +22,15 @@ function Home() {
     const [totalLatestVideo, setTotalLatestVideo] = useState(0);
     const [latestVideoPage, setLatestVideoPage] = useState(0);
 
-    const navigate = useNavigate();
-
     useEffect(() => {
+        setLatestVideos(null);
+        setPopularVideos(null);
         getPopularVideos();
         getLatestVideos();
-        navigate(`${path}?page=${popularVideoPage}`);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         popularVideoPage,
-        totalPopularVideo,
-        totalLatestVideo,
         latestVideoPage,
-        navigate,
-        path,
     ]);
 
     return (

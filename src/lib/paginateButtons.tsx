@@ -26,9 +26,9 @@ export default function PaginateButtons(props: {
                                 key={i}
                                 onClick={() => setPageNumber(i)}
                             >
-                                <a className="page-link" href="#">
+                                <button className="page-link">
                                     {i + 1}
-                                </a>
+                                </button>
                             </li>
                         </div>
                     );

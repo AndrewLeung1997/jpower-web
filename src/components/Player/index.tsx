@@ -9,7 +9,6 @@ import {
     CardActions,
     CardHeader,
     Theme,
-    Breakpoint,
     Box,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
@@ -28,31 +27,10 @@ import {
     ReplayControl,
 } from "video-react";
 import Loader from "../../lib/loader";
+import { commonStyles } from "../../lib/styles";
+import { useIsSmallHeight, useIsSmallWidth } from "../App";
 
 const styles = {
-    root: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        [theme.breakpoints.up(("auto" + theme.space * 3 * 2) as Breakpoint)]: {
-            width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-        backgroundColor: "#222",
-    }),
-    main: (theme: Theme) => ({
-        width: "auto",
-        display: "block", // Fix IE 11 issue.
-        marginLeft: 2,
-        marginRight: 2,
-        [theme.breakpoints.up(("auto" + 3 * 2) as Breakpoint)]: {
-            width: "auto",
-            marginLeft: "auto",
-            marginRight: "auto",
-        },
-        backgroundColor: "#222",
-    }),
-
     relatedVideoPaper: (theme: Theme) => ({
         marginTop: 2,
         // marginBottom: theme.space * 6,
@@ -63,64 +41,19 @@ const styles = {
         backgroundColor: "#222",
         color: "white",
     }),
-    paper: (theme: Theme) => ({
-        marginTop: 10,
-        marginBottom: 6,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: `${theme.space * 1}px ${theme.space * 2}px ${theme.space * 2}px`,
-        backgroundColor: "#222",
-    }),
-
     videoName: {
         marginTop: 3,
         fontSize: "20px",
     },
-    Tag: {
-        width: 10,
-        backgroundColor: "#FFC0CB",
-        textAlign: "center",
-        borderRadius: "10px",
-        borderColor: "#ffffff",
-        borderStyle: "solid",
-    },
-    Card: {
-        marginTop: 2,
-        height: 45,
-        backgroundColor: "#222",
-        color: "white",
-    },
     VideoCard: (theme: Theme) => ({
-        marginTop: 8,
         display: "flex",
         flexDirection: "column",
         alignItems: "left",
         padding: `${theme.space * 1}px ${theme.space * 2}px ${theme.space * 2}px`,
         height: "auto",
         backgroundColor: "#222",
-    }),
-    CardMedia: {
-        paddingLeft: 1,
-        paddingRight: 1,
-        paddingTop: 1,
-    },
-    titleBar: {
-        display: "block",
         width: "100%",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        lineHeight: "normal",
-    },
-    submit: {
-        marginTop: 3,
-        color: "white",
-    },
-    adView: {
-        position: "absolute",
-        left: 50,
-        top: 50,
-    },
+    }),
     category: {
         marginTop: 1,
         color: "#FCFCFC !important",
@@ -130,37 +63,40 @@ const styles = {
     title: {
         color: "#FCFCFC",
     },
-    TimeTag: {
-        width: 8,
-        backgroundColor: "#808080",
-        textAlign: "center",
-        borderRadius: "6px",
-        borderColor: "#ffffff",
-    },
 };
 
 function VideoPlayer() {
-    const [relatedVideo, setRelatedVideo] = useState<Video[]>([]);
+    const [relatedVideos, setRelatedVideos] = useState<Video[] | null>(null);
+    const [popularVideos, setPopularVideos] = useState<Video[] | null>(null);
     const [video, setVideo] = useState<Video | null>(null);
 
     const params = useParams();
     const videoId = params.id;
 
+    const isSmallHeight = useIsSmallHeight();
+    const isSmallWidth = useIsSmallWidth();
+
+    useEffect(() => {
+        if (video) getVideoByCategory();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [video]);
+
     useEffect(() => {
         setVideo(null);
-        setRelatedVideo([]);
+        setRelatedVideos(null);
         getVideoByID();
+        getPopularVideos();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [videoId]);
 
     return (
-        <Box sx={styles.main}>
+        <Box sx={commonStyles.main}>
             {!video ? (
                 <Loader sx={{ marginTop: 11 }} />
             ) : (
                 <React.Fragment>
-                    <div className="row">
-                        <div className="col-md-12">
+                    <Box className="row">
+                        <Box className="col-md-12" sx={{ display: "flex", marginTop: 7 }}>
                             <Card sx={styles.VideoCard}>
                                 <CardHeader
                                     sx={styles.title}
@@ -169,14 +105,14 @@ function VideoPlayer() {
                                 <CardActions>
                                     {/* @ts-ignore */}
                                     <CardMedia
-                                        sx={styles.CardMedia}
+                                        sx={commonStyles.CardMedia}
                                         component={Player}
                                         poster={video?.videoPreviewImage}
                                         preload="metadata"
                                         src={video?.videoUrl}
-                                        fluid={window.innerHeight > 600}
+                                        fluid={!isSmallHeight}
                                         width={"100%"}
-                                        height={500}
+                                        height={450}
                                     >
                                         {/* @ts-ignore */}
                                         <ControlBar>
@@ -198,11 +134,7 @@ function VideoPlayer() {
                                     <Typography gutterBottom variant="h6" component="div">
                                         上載時間： {convertTimeStamp(video?.uploadTime)}
                                     </Typography>
-                                    <Typography
-                                        gutterBottom
-                                        variant="h6"
-                                        component="div"
-                                    >
+                                    <Typography gutterBottom variant="h6" component="div">
                                         觀看次數： {video?.viewCount}
                                     </Typography>
                                     <div className="box">
@@ -259,8 +191,29 @@ function VideoPlayer() {
                                     </Button>
                                 </CardContent>
                             </Card>
-                        </div>
-                    </div>
+                            <Paper
+                                sx={{
+                                    width: "30vw",
+                                    maxHeight: "450px",
+                                    overflow: "auto",
+                                    backgroundColor: "#222",
+                                    marginTop: 9,
+                                }}
+                            >
+                                {!isSmallWidth && relatedVideos ? (
+                                    relatedVideos.map((value, index) => (
+                                        <VideoCard
+                                            video={value}
+                                            key={index}
+                                            sx={{ width: "100%" }}
+                                        />
+                                    ))
+                                ) : (
+                                    <Loader />
+                                )}
+                            </Paper>
+                        </Box>
+                    </Box>
                     <Paper sx={styles.relatedVideoPaper}>
                         <Typography
                             sx={styles.videoName}
@@ -268,12 +221,21 @@ function VideoPlayer() {
                             variant="h5"
                             align="left"
                         >
-                            相關影片
+                            {isSmallWidth ? "相關影片" : "熱門影片"}
                         </Typography>
                         <Box className="row" sx={{ width: "90vw" }}>
-                            {relatedVideo.map((value, index) => (
-                                <VideoCard video={value} key={index} />
-                            ))}
+                            {(() => {
+                                const videos = isSmallWidth
+                                    ? relatedVideos
+                                    : popularVideos;
+                                return videos ? (
+                                    videos.map((value, index) => (
+                                        <VideoCard video={value} key={index} />
+                                    ))
+                                ) : (
+                                    <Loader position={"flex-start"} />
+                                );
+                            })()}
                         </Box>
                     </Paper>
                 </React.Fragment>
@@ -285,19 +247,28 @@ function VideoPlayer() {
         api.get(`/videos/${videoId}`)
             .then((res: { data: { video: Video } }) => {
                 setVideo(res.data.video);
-                getVideoByCategory(res.data.video.category.categoryId);
             })
             .catch((err) => {
                 alert(err?.response?.data?.error);
             });
     }
 
-    function getVideoByCategory(category: number) {
-        api.get(`/videos?cat=${category}&limit=20`)
+    function getVideoByCategory() {
+        api.get(`/videos?cat=${video?.category?.categoryId}&limit=20`)
             .then((res: { data: { videos: Video[] } }) => {
-                setRelatedVideo(
+                setRelatedVideos(
                     res.data.videos.filter((value) => value.videoId !== videoId)
                 );
+            })
+            .catch((err) => {
+                alert(err?.response?.data?.error);
+            });
+    }
+
+    function getPopularVideos() {
+        api.get(`/videos?limit=20&filter=popular`)
+            .then((res: { data: { videos: Video[] } }) => {
+                setPopularVideos(res.data.videos);
             })
             .catch((err) => {
                 alert(err?.response?.data?.error);
