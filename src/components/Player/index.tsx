@@ -87,109 +87,107 @@ function VideoPlayer() {
     return (
         <Box sx={commonStyles.main}>
             {!video ? (
-                <Loader sx={{ marginTop: 11 }} />
+                <Loader sx={{ marginTop: 5 }} />
             ) : (
                 <React.Fragment>
-                    <Box className="row">
-                        <Box className="col-md-12" sx={{ display: "flex", marginTop: 7 }}>
-                            <Card sx={styles.VideoCard}>
-                                <CardHeader
-                                    sx={styles.title}
-                                    title={video?.videoDisplayName}
-                                ></CardHeader>
-                                <CardActions>
-                                    {/* @ts-ignore */}
-                                    <CardMedia
-                                        sx={commonStyles.CardMedia}
-                                        component={Player}
-                                        poster={video?.videoPreviewImage}
-                                        preload="metadata"
-                                        src={video?.videoUrl}
-                                        fluid={!isSmallHeight}
-                                        width={"100%"}
-                                        height={450}
-                                    >
-                                        {/* @ts-ignore */}
-                                        <ControlBar>
-                                            {/* @ts-ignore */}
-                                            <ReplayControl seconds={10} order={2.1} />
-                                            {/* @ts-ignore */}
-                                            <ForwardControl seconds={10} order={3.1} />
-                                            <PlaybackRateMenuButton
-                                                rates={[5, 2, 1, 0.5]}
-                                                // @ts-ignore
-                                                order={4.1}
-                                            />
-                                        </ControlBar>
-                                        <BigPlayButton position="center" />
-                                        <source src={video?.videoUrl} />
-                                    </CardMedia>
-                                </CardActions>
-                                <CardContent style={{ color: "#FCFCFC" }}>
-                                    <Typography gutterBottom variant="h6" component="div">
-                                        上載時間： {convertTimeStamp(video?.uploadTime)}
-                                    </Typography>
-                                    <Typography gutterBottom variant="h6" component="div">
-                                        觀看次數： {video?.viewCount}
-                                    </Typography>
-                                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                                        <Typography
-                                            gutterBottom
-                                            variant="h6"
-                                            component="div"
-                                            style={{
-                                                color: "#FCFCFC",
-                                                paddingTop: "12px",
-                                                paddingRight: "10px",
-                                            }}
-                                        >
-                                            標籤:
-                                        </Typography>
-                                        {video?.videoTag?.map((value, index) => (
-                                            <TagBtn tag={value} key={index} />
-                                        ))}
-                                    </Box>
-                                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                                        <Typography
-                                            gutterBottom
-                                            variant="h6"
-                                            component="div"
-                                            style={{
-                                                color: "#FCFCFC",
-                                                paddingTop: "12px",
-                                                paddingRight: "10px",
-                                            }}
-                                        >
-                                            類別:
-                                        </Typography>
-                                        <CategoryBtn category={video?.category} />
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                            {!isSmallWidth && (
-                                <Paper
-                                    sx={{
-                                        width: "30vw",
-                                        maxHeight: "450px",
-                                        overflow: "auto",
-                                        backgroundColor: "#222",
-                                        marginTop: 9,
-                                    }}
+                    <Box sx={{ display: "flex", marginTop: 5 }}>
+                        <Card sx={styles.VideoCard}>
+                            <CardHeader
+                                sx={styles.title}
+                                title={video?.videoDisplayName}
+                            ></CardHeader>
+                            <CardActions>
+                                {/* @ts-ignore */}
+                                <CardMedia
+                                    sx={commonStyles.CardMedia}
+                                    component={Player}
+                                    poster={video?.videoPreviewImage}
+                                    preload="metadata"
+                                    src={video?.videoUrl}
+                                    fluid={!isSmallHeight}
+                                    width={"100%"}
+                                    height={450}
                                 >
-                                    {relatedVideos ? (
-                                        relatedVideos.map((value, index) => (
-                                            <VideoCard
-                                                video={value}
-                                                key={index}
-                                                sx={{ width: "100%" }}
-                                            />
-                                        ))
-                                    ) : (
-                                        <Loader />
-                                    )}
-                                </Paper>
-                            )}
-                        </Box>
+                                    {/* @ts-ignore */}
+                                    <ControlBar>
+                                        {/* @ts-ignore */}
+                                        <ReplayControl seconds={10} order={2.1} />
+                                        {/* @ts-ignore */}
+                                        <ForwardControl seconds={10} order={3.1} />
+                                        <PlaybackRateMenuButton
+                                            rates={[5, 2, 1, 0.5]}
+                                            // @ts-ignore
+                                            order={4.1}
+                                        />
+                                    </ControlBar>
+                                    <BigPlayButton position="center" />
+                                    <source src={video?.videoUrl} />
+                                </CardMedia>
+                            </CardActions>
+                            <CardContent style={{ color: "#FCFCFC" }}>
+                                <Typography gutterBottom variant="h6" component="div">
+                                    上載時間： {convertTimeStamp(video?.uploadTime)}
+                                </Typography>
+                                <Typography gutterBottom variant="h6" component="div">
+                                    觀看次數： {video?.viewCount}
+                                </Typography>
+                                <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                        component="div"
+                                        style={{
+                                            color: "#FCFCFC",
+                                            paddingTop: "12px",
+                                            paddingRight: "10px",
+                                        }}
+                                    >
+                                        標籤:
+                                    </Typography>
+                                    {video?.videoTag?.map((value, index) => (
+                                        <TagBtn tag={value} key={index} />
+                                    ))}
+                                </Box>
+                                <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Typography
+                                        gutterBottom
+                                        variant="h6"
+                                        component="div"
+                                        style={{
+                                            color: "#FCFCFC",
+                                            paddingTop: "12px",
+                                            paddingRight: "10px",
+                                        }}
+                                    >
+                                        類別:
+                                    </Typography>
+                                    <CategoryBtn category={video?.category} />
+                                </Box>
+                            </CardContent>
+                        </Card>
+                        {!isSmallWidth && (
+                            <Paper
+                                sx={{
+                                    width: "30vw",
+                                    maxHeight: "450px",
+                                    overflow: "auto",
+                                    backgroundColor: "#222",
+                                    marginTop: 9,
+                                }}
+                            >
+                                {relatedVideos ? (
+                                    relatedVideos.map((value, index) => (
+                                        <VideoCard
+                                            video={value}
+                                            key={index}
+                                            sx={{ width: "100%" }}
+                                        />
+                                    ))
+                                ) : (
+                                    <Loader />
+                                )}
+                            </Paper>
+                        )}
                     </Box>
                     <Paper sx={styles.relatedVideoPaper}>
                         <Typography

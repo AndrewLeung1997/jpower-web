@@ -13,7 +13,11 @@ export default function CategoryList() {
                 </Typography>
                 <Box sx={{ justifyContent: "center" }}>
                     {categories.map((value, index) => (
-                        <CategoryBtn category={value} key={index} sx={{ marginTop: 3 }} />
+                        <CategoryBtn
+                            category={value}
+                            key={index}
+                            sx={{ marginTop: 3, display: "inline-block" }}
+                        />
                     ))}
                 </Box>
             </Paper>

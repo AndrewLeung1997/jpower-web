@@ -17,9 +17,10 @@ function Tags() {
             <Paper
                 sx={{
                     ...commonStyles.paper,
+                    display: "normal",
                     bgcolor: "#222",
                     marginTop: 3,
-                    width: "800px",
+                    width: "600px",
                     maxWidth: "90vw",
                 }}
             >
@@ -42,9 +43,19 @@ function Tags() {
     );
 
     function getAllTags() {
-        api.get("/tags").then(({ data }) => {
-            setTagList(data.tags);
-        });
+        api.get("/tags").then(
+            (res: {
+                data: {
+                    tags: {
+                        tagName: string; // tag name
+                        videoCount: number; // number of videos in this tag
+                        lastModified: string; // last modified time, date string
+                    }[];
+                };
+            }) => {
+                setTagList(res.data.tags.map((tag) => tag.tagName));
+            }
+        );
     }
 }
 
