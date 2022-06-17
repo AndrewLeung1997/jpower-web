@@ -116,16 +116,14 @@ function FileUpload() {
                             ))}
                         </Select>
                     </FormControl>
-                    {videoTag.map(function (value, index) {
-                        return (
-                            <Chip
-                                color="primary"
-                                sx={{ marginRight: 1 }}
-                                label={value}
-                                onDelete={() => deleteTag(index)}
-                            />
-                        );
-                    })}
+                    {videoTag.map((value, index) => (
+                        <Chip
+                            color="primary"
+                            sx={{ marginRight: 1 }}
+                            label={value}
+                            onDelete={!uploadStatus ? () => deleteTag(index) : undefined}
+                        />
+                    ))}
                     <TextField
                         {...commonProps}
                         sx={{ ...(videoTag.length && { marginTop: 1 }) }}
