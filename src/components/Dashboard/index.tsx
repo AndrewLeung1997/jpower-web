@@ -26,6 +26,7 @@ import { Video } from "../../types/video";
 import { api } from "../../api";
 import { convertTimeStamp } from "../../lib/convertTimeStamp";
 import { commonStyles } from "../../lib/styles";
+import TagBtn from "../../lib/tagBtn";
 
 const styles = {
     form: (theme: Theme) => ({
@@ -52,14 +53,13 @@ function Dashboard() {
     const [user] = useUser();
 
     const createNewCategory = () => {
-        if (newCategory) {
+        if (newCategory)
             api.post("/category/create", {
                 categoryName: newCategory,
             }).then(() => {
                 alert("Category added!");
             });
             setNewCategory("");
-        }
     };
 
     useEffect(() => {
@@ -125,7 +125,7 @@ function Dashboard() {
                                     {convertTimeStamp(value.uploadTime)}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <IconButton component={Link} to={value.videoUrl}>
+                                    <IconButton component={"a"} href={value.videoUrl}>
                                         <InsertLinkIcon color="primary" />
                                     </IconButton>
                                 </TableCell>
@@ -136,21 +136,10 @@ function Dashboard() {
                                     {value.category.categoryName}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <div className="box">
-                                        {value.videoTag &&
-                                            value.videoTag.map((value, index) => (
-                                                <div className="tag">
-                                                    <button
-                                                        id={String(index)}
-                                                        style={{
-                                                            paddingLeft: "2px",
-                                                        }}
-                                                    >
-                                                        {value}
-                                                    </button>
-                                                </div>
-                                            ))}
-                                    </div>
+                                    {value.videoTag &&
+                                        value.videoTag.map((value, index) => (
+                                            <TagBtn tag={value} key={index} />
+                                        ))}
                                 </TableCell>
                                 <TableCell align="center">
                                     <IconButton component={Link} to={`/updateVideoInfo`}>
@@ -212,7 +201,7 @@ function Dashboard() {
     function fetchAllVideo() {
         api.get(`/videos?sort=latest&page=${pageNumber + 1}&limit=${dataRange}`).then(
             ({ data }) => {
-                setTotalDataCount(data.videos.length);
+                setTotalDataCount(data.count);
                 setVideo(data.videos);
             }
         );
