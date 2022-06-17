@@ -172,7 +172,7 @@ function FileUpload() {
                                 accept="image/*"
                                 disabled={uploadStatus}
                                 onChange={(e) => {
-                                    setFile(e.target?.files?.[0] || null);
+                                    setPreview(e.target?.files?.[0] || null);
                                 }}
                                 hidden
                             />
