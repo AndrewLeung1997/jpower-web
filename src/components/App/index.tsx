@@ -84,7 +84,7 @@ export default function App() {
                 }}
             >
                 <CssBaseline />
-                <Box sx={{ display: "flex", bgcolor: "#222", minHeight: "100vh" }}>
+                <Box sx={{ bgcolor: "#222", minHeight: "100vh", display: "flex" }}>
                     <Router>
                         <ResponsiveAppBar />
                         <Routes>

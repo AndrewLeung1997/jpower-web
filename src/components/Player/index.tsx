@@ -12,24 +12,17 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import "../Player/style.css";
-import "video-react/dist/video-react.css";
 import { Video } from "../../types/video";
 import VideoCard from "../VideoCard";
 import { convertTimeStamp } from "../../lib/convertTimeStamp";
 import { api } from "../../api";
-import {
-    BigPlayButton,
-    ControlBar,
-    ForwardControl,
-    PlaybackRateMenuButton,
-    Player,
-    ReplayControl,
-} from "video-react";
 import Loader from "../../lib/loader";
 import { commonStyles } from "../../lib/styles";
-import { useIsSmallHeight, useIsSmallWidth } from "../App";
+import { useIsSmallHeight, useIsSmallWidth, useWidth } from "../App";
 import TagBtn from "../../lib/tagBtn";
 import CategoryBtn from "../../lib/categoryBtn";
+import videojs, { VideoJsPlayer } from "video.js";
+import VideoJS from "../videojs/videoJS";
 
 const styles = {
     relatedVideoPaper: (theme: Theme) => ({
@@ -64,12 +57,14 @@ function VideoPlayer() {
     const [relatedVideos, setRelatedVideos] = useState<Video[] | null>(null);
     const [popularVideos, setPopularVideos] = useState<Video[] | null>(null);
     const [video, setVideo] = useState<Video | null>(null);
+    const [playerRef, setPlayerRef] = React.useState<VideoJsPlayer | null>(null);
 
     const params = useParams();
     const videoId = params.id;
 
     const isSmallHeight = useIsSmallHeight();
     const isSmallWidth = useIsSmallWidth();
+    const [width] = useWidth();
 
     useEffect(() => {
         if (video) getVideoByCategory();
@@ -84,6 +79,19 @@ function VideoPlayer() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [videoId]);
 
+    const handlePlayerReady = (player: VideoJsPlayer) => {
+        setPlayerRef(player);
+
+        // You can handle player events here, for example:
+        player.on("waiting", () => {
+            videojs.log("player is waiting");
+        });
+
+        player.on("dispose", () => {
+            videojs.log("player will dispose");
+        });
+    };
+
     return (
         <Box sx={commonStyles.main}>
             {!video ? (
@@ -97,32 +105,30 @@ function VideoPlayer() {
                                 title={video?.videoDisplayName}
                             ></CardHeader>
                             <CardActions>
-                                {/* @ts-ignore */}
                                 <CardMedia
                                     sx={commonStyles.CardMedia}
-                                    component={Player}
-                                    poster={video?.videoPreviewImage}
-                                    preload="metadata"
-                                    src={video?.videoUrl}
-                                    fluid={!isSmallHeight}
-                                    width={"100%"}
-                                    height={450}
-                                >
-                                    {/* @ts-ignore */}
-                                    <ControlBar>
-                                        {/* @ts-ignore */}
-                                        <ReplayControl seconds={10} order={2.1} />
-                                        {/* @ts-ignore */}
-                                        <ForwardControl seconds={10} order={3.1} />
-                                        <PlaybackRateMenuButton
-                                            rates={[5, 2, 1, 0.5]}
-                                            // @ts-ignore
-                                            order={4.1}
-                                        />
-                                    </ControlBar>
-                                    <BigPlayButton position="center" />
-                                    <source src={video?.videoUrl} />
-                                </CardMedia>
+                                    component={VideoJS}
+                                    options={{
+                                        autoplay: true,
+                                        controls: true,
+                                        responsive: true,
+                                        sources: [
+                                            {
+                                                src: video.videoUrl,
+                                                type: "video/mp4",
+                                            },
+                                        ],
+                                        fluid: false,
+                                        poster: video.videoPreviewImage,
+                                        width: width * (isSmallWidth ? 1 : 0.7) - 80,
+                                        height: isSmallWidth ? undefined : 450,
+                                        bigPlayButton: true,
+                                        playbackRates: [1, 1.5, 2, 3],
+                                        nativeControlsForTouch: true,
+                                        preload: "auto",
+                                    }}
+                                    onReady={handlePlayerReady}
+                                />
                             </CardActions>
                             <CardContent style={{ color: "#FCFCFC" }}>
                                 <Typography gutterBottom variant="h6" component="div">
