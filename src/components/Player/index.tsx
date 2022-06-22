@@ -108,6 +108,7 @@ function VideoPlayer() {
                                 <CardMedia
                                     sx={commonStyles.CardMedia}
                                     component={VideoJS}
+                                    fullWidth={!isSmallWidth}
                                     options={{
                                         autoplay: true,
                                         controls: true,
@@ -120,7 +121,9 @@ function VideoPlayer() {
                                         ],
                                         fluid: false,
                                         poster: video.videoPreviewImage,
-                                        width: width * (isSmallWidth ? 1 : 0.7) - 80,
+                                        width: isSmallWidth
+                                            ? width - 80
+                                            : width * 0.7 - 70,
                                         height: isSmallWidth ? undefined : 450,
                                         bigPlayButton: true,
                                         playbackRates: [1, 1.5, 2, 3],

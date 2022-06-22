@@ -10,10 +10,11 @@ import "./videojs.scss";
 export const VideoJS = (props: {
     options: VideoJsPlayerOptions;
     onReady: (player: VideoJsPlayer) => void;
+    fullWidth?: boolean;
 }) => {
     const videoRef = React.useRef<HTMLVideoElement>(null);
     const [playerRef, setPlayerRef] = React.useState<VideoJsPlayer | null>(null);
-    const { options, onReady } = props;
+    const { options, onReady, fullWidth } = props;
 
     React.useEffect(() => {
         // Make sure Video.js player is only initialized once
@@ -59,6 +60,7 @@ export const VideoJS = (props: {
             <video
                 ref={videoRef}
                 className="video-js vjs-sublime-skin vjs-big-play-centered"
+                style={{ ...(fullWidth && { width: "100%" }) }}
             />
         </div>
     );
