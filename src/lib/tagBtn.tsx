@@ -12,6 +12,8 @@ export default function TagBtn(props: { tag: string; sx?: SxProps<Theme> }) {
                 textTransform: "none",
                 color: "#FCFCFC !important",
                 fontSize: 20,
+                margin: "4px",
+                height: "40px",
                 ...sx,
             }}
             component={Link}

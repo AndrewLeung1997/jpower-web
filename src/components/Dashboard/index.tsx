@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
 import {
+    Edit as EditIcon,
     InsertLink as InsertLinkIcon,
-    Publish as PublishIcon,
 } from "@mui/icons-material";
 import "../Player/style.css";
 import { useUser } from "../App";
@@ -59,7 +59,7 @@ function Dashboard() {
             }).then(() => {
                 alert("Category added!");
             });
-            setNewCategory("");
+        setNewCategory("");
     };
 
     useEffect(() => {
@@ -142,8 +142,11 @@ function Dashboard() {
                                         ))}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <IconButton component={Link} to={`/updateVideoInfo`}>
-                                        <PublishIcon color="primary" />
+                                    <IconButton
+                                        component={Link}
+                                        to={`/updateVideoInfo/${value.videoId}`}
+                                    >
+                                        <EditIcon color="primary" />
                                     </IconButton>
                                 </TableCell>
                                 <TableCell align="center">

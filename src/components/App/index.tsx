@@ -11,7 +11,7 @@ import Home from "../Home";
 import VideoPlayer from "../Player";
 import Filter from "../Filter";
 import Dashboard from "../Dashboard";
-/*import UpdateVideoInfo from "../UpdateVideoInfo";*/
+import UpdateVideoInfo from "../UpdateVideoInfo";
 import Tags from "../Tags";
 /*import Search from "../Search";*/
 import All from "../All";
@@ -98,11 +98,8 @@ export default function App() {
                                 element={<Filter />}
                             />
                             <Route path="/dashboard" element={<Dashboard />} />
-                            {/*<Route path="/search" element={Search} />
-                        <Route
-                            path="/updateVideoInfo"
-                            element={UpdateVideoInfo}
-            />*/}
+                            {/*<Route path="/search" element={Search} />*/}
+                            <Route path="/updateVideoInfo/:id" element={<UpdateVideoInfo />} />
                             <Route path="/Tags" element={<Tags />} />
                             {/*<Route path="/Search/tag/:tag" element={SearchByTag} />*/}
                             <Route path="/All" element={<All />} />

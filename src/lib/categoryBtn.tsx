@@ -17,6 +17,8 @@ export default function categoryBtn(props: { category: Category; sx?: SxProps<Th
                 textDecoration: "none",
                 textTransform: "none",
                 fontSize: 20,
+                margin: "4px",
+                height: "40px",
                 ...sx,
             }}
         >

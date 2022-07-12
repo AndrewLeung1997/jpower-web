@@ -19,11 +19,10 @@ import { Image, LockOutlined as LockOutlinedIcon, Upload } from "@mui/icons-mate
 import { Navigate, useNavigate } from "react-router-dom";
 import "../UpdateVideoInfo/style.css";
 import { useCategories, useUser } from "../App";
-import axios from "axios";
-import { cfUrl } from "../../config";
 import random from "random";
 import { api } from "../../api";
 import { commonStyles } from "../../lib/styles";
+import { uploadPreview, uploadVideo } from "../../lib/uploadFiles";
 
 const styles = {
     avatar: (theme: Theme) => ({
@@ -90,7 +89,7 @@ function FileUpload() {
                 <Typography component="h1" variant="h5">
                     上傳文件
                 </Typography>
-                <form onSubmit={onSubmit} style={{ width: "100%" }}>
+                <Box component="form" onSubmit={onSubmit} style={{ width: "100%" }}>
                     <TextField
                         label="標題"
                         {...commonProps}
@@ -198,7 +197,7 @@ function FileUpload() {
                     >
                         上傳
                     </Button>
-                </form>
+                </Box>
             </Paper>
         </Box>
     );
@@ -210,38 +209,26 @@ function FileUpload() {
         setUploadStatus(true);
 
         let videoPreviewImage: string = "",
-            videoUrl: string = "",
+            videoUrl: string | null = "",
             videoDuration = 0;
+
         const id = random.int(100000, 999999);
 
         if (preview) {
-            const formData = new FormData();
-            const name = `images/${id}-${preview.name}`;
-            formData.append("key", name);
-            formData.append("Content-Type", preview.type);
-            formData.append("file", preview);
-            try {
-                await upload(formData);
-                videoPreviewImage = `${cfUrl}/images/${id}-${encodeURIComponent(
-                    preview.name
-                )}`;
-            } catch (e) {
-                console.log(e);
-                alert(e);
+            const url = await uploadPreview({ preview, id });
+            if (!url) {
+                alert("預覽圖上傳失敗");
+                setUploadStatus(false);
+                return;
             }
+            videoPreviewImage = url;
         }
 
-        const formData = new FormData();
-        const name = `videos/${id}-${file.name}`;
-        formData.append("key", name);
-        formData.append("Content-Type", file.type);
-        formData.append(`file`, file);
-        try {
-            await upload(formData);
-            videoUrl = `${cfUrl}/videos/${id}-${encodeURIComponent(file.name)}`;
-        } catch (e) {
-            console.log(e);
-            alert(e);
+        videoUrl = await uploadVideo({ id, file, setProgress });
+        if (!videoUrl) {
+            alert("影片上傳失敗");
+            setUploadStatus(false);
+            return;
         }
 
         const vid = document.createElement("video");
@@ -280,23 +267,6 @@ function FileUpload() {
                 );
                 setUploadStatus(false);
             });
-    }
-
-    async function upload(formData: FormData) {
-        await axios.post(cfUrl, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Access-Control-Allow-Origin": "*",
-            },
-            onUploadProgress: (progressEvent: ProgressEvent) => {
-                if (progressEvent.lengthComputable) {
-                    const progress = Math.round(
-                        (progressEvent.loaded / progressEvent.total) * 100
-                    );
-                    setProgress(progress);
-                }
-            },
-        });
     }
 
     function handleTextFieldInput(e: React.ChangeEvent<HTMLInputElement>) {
