@@ -89,7 +89,11 @@ function UpdateProfile() {
 
     return (
         <Box sx={{ ...commonStyles.main, display: "flex", justifyContent: "center" }}>
-            <Paper sx={{ ...commonStyles.paper, width: "900px" }}>
+            <Paper
+                sx={{ ...commonStyles.paper, width: "900px" }}
+                component="form"
+                onSubmit={onSubmit}
+            >
                 <Typography component="h1" variant="h5" style={{ paddingBottom: "15px" }}>
                     更新影片資料
                 </Typography>
@@ -183,18 +187,33 @@ function UpdateProfile() {
 
                         <FormControl sx={{ marginTop: 1, marginBottom: 1 }}>
                             <label>預覽圖</label>
-                            <Button variant="contained">
-                                <Image />
-                                上傳預覽圖
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => {
-                                        setPreview(e.target?.files?.[0] || null);
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <Button
+                                    variant="contained"
+                                    component="label"
+                                    sx={{
+                                        marginTop: 1,
+                                        marginRight: 1,
                                     }}
-                                    hidden
-                                />
-                            </Button>
+                                >
+                                    <Image />
+                                    上傳預覽圖
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        hidden
+                                        onChange={(e) => {
+                                            setPreview(e.target?.files?.[0] || null);
+                                        }}
+                                    />
+                                </Button>
+                                {preview?.name}
+                            </Box>
                         </FormControl>
                     </Box>
                 )}
@@ -204,13 +223,11 @@ function UpdateProfile() {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        onClick={UpadateVideoInfo}
                         sx={styles.submit}
                     >
                         儲存
                     </Button>
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="secondary"
@@ -254,7 +271,8 @@ function UpdateProfile() {
         setTags((prevState) => prevState.filter((tag, i) => i !== index));
     }
 
-    async function UpadateVideoInfo() {
+    async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
         const id = random.int(100000, 999999);
         let previewUrl: string | null = null;
 

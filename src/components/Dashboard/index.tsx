@@ -14,10 +14,7 @@ import {
     Box,
 } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
-import {
-    Edit as EditIcon,
-    InsertLink as InsertLinkIcon,
-} from "@mui/icons-material";
+import { Edit as EditIcon, InsertLink as InsertLinkIcon } from "@mui/icons-material";
 import "../Player/style.css";
 import { useUser } from "../App";
 import { Delete } from "@mui/icons-material";
@@ -138,7 +135,11 @@ function Dashboard() {
                                 <TableCell align="center">
                                     {value.videoTag &&
                                         value.videoTag.map((value, index) => (
-                                            <TagBtn tag={value} key={index} />
+                                            <TagBtn
+                                                sx={{ color: "black", fontSize: 16 }}
+                                                tag={value}
+                                                key={index}
+                                            />
                                         ))}
                                 </TableCell>
                                 <TableCell align="center">
