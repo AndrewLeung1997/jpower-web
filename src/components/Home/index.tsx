@@ -38,6 +38,7 @@ function Home() {
           <div className="text-center">
             <a href="https://www.dchungmingvip666.com/" target="_blank">
               <img
+                alt="give"
                 src={give}
                 style={{
                   width: '70%',

@@ -62,6 +62,7 @@ function Player() {
               <div className="text-center">
                 <a href="https://www.dchungmingvip666.com/" target="_blank">
                   <img
+                    alt = "give"
                     src={draw}
                     style={{
                       width: '70%',
