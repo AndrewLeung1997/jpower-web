@@ -36,7 +36,7 @@ function Home() {
       <div className="row">
         <div className="col-md-12">
           <div className="text-center">
-            <a href="https://www.dchungmingvip666.com/" target="_blank">
+            <a href="https://www.dchungmingvip666.com/" target="_blank" rel="noreferrer">
               <img
                 alt="give"
                 src={give}
