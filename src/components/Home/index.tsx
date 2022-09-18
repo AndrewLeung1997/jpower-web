@@ -33,26 +33,7 @@ function Home() {
 
   return (
     <Box sx={commonStyles.main}>
-      <div className="row">
-        <div className="col-md-12">
-          <div className="text-center">
-            <a href="https://www.dchungmingvip666.com/" target="_blank" rel="noreferrer">
-              <img
-                alt="give"
-                src={give}
-                style={{
-                  width: '70%',
-                  height: 'auto',
-                  paddingTop: '20px',
-                  paddingLeft: '50px',
-                  paddingRight: '40px',
-                }}
-              ></img>
-            </a>
-          </div>
-        </div>
-      </div>
-
+     
       <div className="row">
         <CategoryList />
         <div className="col-md-9">
@@ -79,6 +60,28 @@ function Home() {
         dataRange={dataRange}
         totalDataCount={totalLatestVideo}
       />
+      <div style={{marginTop:'20px'}}>
+      <div className="row">
+        <div className="col-md-12">
+          <div className="text-center">
+            <a href="https://www.dchungmingvip666.com/" target="_blank" rel="noreferrer">
+              <img
+                alt="give"
+                src={give}
+                style={{
+                  width: '70%',
+                  height: 'auto',
+                  paddingTop: '20px',
+                  paddingLeft: '50px',
+                  paddingRight: '40px',
+                }}
+              ></img>
+            </a>
+          </div>
+        </div>
+      </div>
+      </div>
+
       <div className="row">
         <div className="col-md-3"></div>
         <div className="col-md-9">
