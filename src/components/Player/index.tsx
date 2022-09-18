@@ -9,7 +9,7 @@ import Loader from '../../lib/loader'
 import { commonStyles } from '../../lib/styles'
 import { useIsSmallWidth } from '../App'
 import VideoPlayer from '../VideoPlayer'
-import {draw} from '../../file/draw.jpeg'
+import draw from '../../file/draw.jpeg'
 
 const styles = {
   relatedVideoPaper: (theme: Theme) => ({

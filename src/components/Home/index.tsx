@@ -9,7 +9,7 @@ import Loader from '../../lib/loader'
 import CategoryList from '../categoryList'
 import PaginateButtons from '../../lib/paginateButtons'
 import { commonStyles } from '../../lib/styles'
-import {give} from '../../file/give.jpeg'
+import give from '../../file/give.jpeg'
 
 function Home() {
   const initialQueryString = queryString.parse(window.location.search)
